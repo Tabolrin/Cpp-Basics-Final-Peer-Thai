@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio cache folder (machine-specific)
+.vs/
+
+# Optional: ignore build output directories
+Debug/
+Release/
