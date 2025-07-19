@@ -6,7 +6,8 @@
 #include "Vector2.h"
 
 // Abstract base class for game objects
-class GameObject {
+class GameObject
+{
 private:
     std::string tag;          // Tag to identify the game object
     Vector2 worldLocation;    // 2D position in the game world
