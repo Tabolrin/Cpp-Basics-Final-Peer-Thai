@@ -1,6 +1,5 @@
 #pragma once
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+
 
 #include <string>
 #include "Vector2.h"
@@ -31,5 +30,3 @@ class GameObject
 
         Vector2 getWorldLocation() const { return worldLocation; }
 };
-
-#endif
