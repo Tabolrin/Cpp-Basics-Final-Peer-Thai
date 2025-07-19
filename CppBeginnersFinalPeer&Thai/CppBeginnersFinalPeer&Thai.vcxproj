@@ -129,7 +129,9 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapData.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Ui.cpp" />
     <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +140,9 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapData.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Ui.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>

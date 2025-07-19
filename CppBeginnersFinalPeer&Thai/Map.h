@@ -1,24 +1,37 @@
-#pragma once
+﻿#pragma once
 #include <unordered_map>
 #include <string>
 #include "Vector2.h"
 #include "GameObject.h"
-using namespace std;
+#include"MapData.h"
+#include "Unit.h"
 
-enum class MapType
-{
-	MAP_LEVEL1 = 1,
-	MAP_LEVEL2 = 2,
-	MAP_LEVEL3 = 3,
-};
+
 
 class Map
 {
-	public:
-	MapType mapType;
+private:
+	std::vector<std::vector<char>> mapArray;
+	std::vector<std::string> filePaths;
+	void SetFilePaths();
 
-	unordered_map<Vector2, GameObject> mapData;
 
-	Map(MapType type) : mapType(type) {}
+public:
+    static const char CLEAR = ' ';
+    static const char WALL = '▒';
+    static const char PLAYER = '¡';
+    static const char ENEMY = 'ö';
+    static const char FULL_CHEST = 'O';
+    static const char EMPTY_CHEST = 'Ø'; // Ø
+    static const char EXIT = 'E';
+    static const char KEY = '¬';
+
+    Map(MapType level);
+    void PrintMap() const;
+    void MoveUnit(Unit& unit, const Vector2<int>& target);
+    bool CheckIsPointInMap(const Vector2<int>& point) const;
+    void PlaceSignOnMap(char sign, const Vector2<int>& target);
+    bool IsTileClear(const Vector2<int>& tile) const; // Updated from Point to Vector2<int>
+    std::vector<std::vector<char>> GetMapArray() const;
 };
 
