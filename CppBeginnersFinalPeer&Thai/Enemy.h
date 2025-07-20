@@ -1,15 +1,16 @@
-#pragma once
-#include "Unit.h"
-#include <windows.h>
+#pragma once  
+#include "Unit.h"  
+#include <windows.h>  
+#include <string> 
+#include "Vector2.h" 
 
-static const char ENEMY_SYMBOL =  'ö';
+static const char ENEMY_SYMBOL = 'ö';  
 
-class Enemy : public Unit
-{
-public:
-	Enemy(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2<int>& location);
-	void AddPatrolPoint(COORD point);
-	void Patrol();
-	void FollowPlayer();
+class Enemy : public Unit  
+{  
+public:  
+    Enemy(int maxHp, int normalDmg, int elementalDmg, std::string element, const Vector2& location);  
+    void AddPatrolPoint(Vector2& point);
+    void Patrol();  
+    void FollowPlayer();  
 };
-

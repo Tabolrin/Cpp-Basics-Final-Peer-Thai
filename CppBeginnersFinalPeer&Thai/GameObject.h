@@ -10,10 +10,10 @@ class GameObject
 
     protected:
         std::string tag;
-        Vector2<int> position;
+        Vector2 position;
 
     public:
-        GameObject(const Vector2<int>& location) : tag(tag), position(location) {}
+        GameObject(const Vector2& location) : tag(tag), position(location) {}
 
         virtual void update() = 0;
 
@@ -21,9 +21,9 @@ class GameObject
 
         std::string getTag() const { return tag; }
 
-        Vector2<int> getPosition() const { return position; }
+        Vector2 getPosition() const { return position; }
 
-        void setPosition(const Vector2<int>& newLocation) { position = newLocation; }
+        void setPosition(const Vector2& newLocation) { position = newLocation; }
 
         void setTag(const std::string& newTag) { tag = newTag; }
 };

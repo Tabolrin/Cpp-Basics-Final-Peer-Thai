@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Enemy::Enemy(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2<int>& location) : Unit (maxHp, normalDmg, elementalDmg, element, location) {}
+Enemy::Enemy(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2& location) : Unit (maxHp, normalDmg, elementalDmg, element, location) {}
  
 
 void Enemy::AddPatrolPoint(COORD point)

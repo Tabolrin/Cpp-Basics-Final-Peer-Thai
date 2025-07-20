@@ -7,7 +7,7 @@
 
 std::queue<std::string> Ui::log;
 
-void Ui::PrintFrame(Level& currentLevel, Map::MapType level, Player& player) 
+void Ui::PrintFrame(Level& currentLevel, MapData::MapType level, Player& player) 
 {
     system("cls"); // Clear console (Windows-specific; use "clear" for Unix)
     currentLevel.GetCurrentMap().PrintMap();

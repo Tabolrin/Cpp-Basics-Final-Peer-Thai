@@ -5,8 +5,6 @@
 #include "GameObject.h"
 using namespace std;
 
-
-
 class MapData
 {
 public:
@@ -17,20 +15,19 @@ public:
 		MAP_LEVEL3 = 3,
 	};
 
-
 	MapData(MapType type) : mapType(type) {}
 
-	void addGameObject(const Vector2<int>& position, const GameObject& gameObject)
+	void addGameObject(const Vector2& position, const GameObject& gameObject)
 	{
 		mapData[position] = gameObject;
 	}
 
-	void removeGameObject(const Vector2<int>& position)
+	void removeGameObject(const Vector2& position)
 	{
 		mapData.erase(position);
 	}
 
-	GameObject* getGameObject(const Vector2<int>& position)
+	GameObject* getGameObject(const Vector2& position)
 	{
 		auto it = mapData.find(position);
 
@@ -45,6 +42,6 @@ public:
 protected:
 	MapType mapType;
 
-	unordered_map<Vector2<int>, GameObject> mapData;
+	unordered_map<Vector2, GameObject> mapData;
 };
-
+	

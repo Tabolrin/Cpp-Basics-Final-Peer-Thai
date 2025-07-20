@@ -5,7 +5,7 @@
 #include <iostream>
 #include <windows.h> // For console colors (Windows-specific)
 
-Map::Map(MapType type) 
+Map::Map(MapData::MapType type) 
 {
     SetFilePaths();
     std::ifstream file(filePaths[static_cast<int>(type) - 1]);
@@ -94,7 +94,7 @@ void Map::PrintMap() const
 }
 
 
-void Map::MoveObject(GameObject& object, const Vector2<int>& target)
+void Map::MoveObject(GameObject& object, const Vector2& target)
 {
     if (!IsTileClear(target)) 
     {
@@ -107,18 +107,18 @@ void Map::MoveObject(GameObject& object, const Vector2<int>& target)
     object.setPosition(target);
 }
 
-bool Map::CheckIsPointInMap(const Vector2<int>& point) const 
+bool Map::CheckIsPointInMap(const Vector2& point) const 
 {
     return point.x >= 0 && point.x < static_cast<int>(mapArray.size()) &&
         point.y >= 0 && point.y < static_cast<int>(mapArray[point.x].size());
 }
 
-void Map::PlaceSignOnMap(char sign, const Vector2<int>& target)
+void Map::PlaceSignOnMap(char sign, const Vector2& target)
 { 
     mapArray[target.x][target.y] = sign; 
 }
 
-bool Map::IsTileClear(const Vector2<int>& tile) const 
+bool Map::IsTileClear(const Vector2& tile) const 
 { 
     if (mapArray[tile.x][tile.y] != CLEAR) 
     { 

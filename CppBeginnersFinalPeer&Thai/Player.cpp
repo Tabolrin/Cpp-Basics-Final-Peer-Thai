@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Player::Player(const Vector2<int>& location) : GameObject(location) {}
+Player::Player(const Vector2& location) : GameObject(location) {}
 
-void Player::Move(Vector2 <int>& direction)
+void Player::Move(Vector2 & direction)
 {
 	position += direction;
 

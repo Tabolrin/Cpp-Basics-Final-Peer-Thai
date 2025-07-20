@@ -26,12 +26,12 @@ public:
     static const char EXIT = 'E';
     static const char KEY = '¬';
 
-    Map(MapType level);
+    Map(MapData::MapType level);
     void PrintMap() const;
-    void MoveObject(GameObject& object, const Vector2<int>& target);
-    bool CheckIsPointInMap(const Vector2<int>& point) const;
-    void PlaceSignOnMap(char sign, const Vector2<int>& target);
-    bool IsTileClear(const Vector2<int>& tile) const; 
+    void MoveObject(GameObject& object, const Vector2& target);
+    bool CheckIsPointInMap(const Vector2& point) const;
+    void PlaceSignOnMap(char sign, const Vector2& target);
+    bool IsTileClear(const Vector2& tile) const; 
     std::vector<std::vector<char>> GetMapArray() const;
 };
 

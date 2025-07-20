@@ -14,6 +14,6 @@ protected:
     string element;
 
 public:
-    Unit(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2<int>& location);
+    Unit(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2& location);
 };
 
