@@ -22,16 +22,16 @@ public:
     static const char PLAYER = '¡';
     static const char ENEMY = 'ö';
     static const char FULL_CHEST = 'O';
-    static const char EMPTY_CHEST = 'Ø'; // Ø
+    static const char EMPTY_CHEST = 'Ø';
     static const char EXIT = 'E';
     static const char KEY = '¬';
 
     Map(MapType level);
     void PrintMap() const;
-    void MoveUnit(Unit& unit, const Vector2<int>& target);
+    void MoveObject(GameObject& object, const Vector2<int>& target);
     bool CheckIsPointInMap(const Vector2<int>& point) const;
     void PlaceSignOnMap(char sign, const Vector2<int>& target);
-    bool IsTileClear(const Vector2<int>& tile) const; // Updated from Point to Vector2<int>
+    bool IsTileClear(const Vector2<int>& tile) const; 
     std::vector<std::vector<char>> GetMapArray() const;
 };
 

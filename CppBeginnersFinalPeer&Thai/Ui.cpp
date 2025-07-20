@@ -3,10 +3,11 @@
 #include <conio.h> 
 #include <iostream>
 #include <windows.h> 
+#include "Player.h"
 
 std::queue<std::string> Ui::log;
 
-void Ui::PrintFrame(Level& currentLevel, Map::MapType level, Unit& player) 
+void Ui::PrintFrame(Level& currentLevel, Map::MapType level, Player& player) 
 {
     system("cls"); // Clear console (Windows-specific; use "clear" for Unix)
     currentLevel.GetCurrentMap().PrintMap();
@@ -34,7 +35,7 @@ void Ui::PrintFrame(Level& currentLevel, Map::MapType level, Unit& player)
 
     std::cout << "Player coordinates: ";
     SetConsoleTextAttribute(hConsole, 1); // DarkBlue
-    std::cout << player.GetUnitLocation().GetX() << " , " << player.GetUnitLocation().GetY() << std::endl;
+    std::cout << player.getPosition().x << " , " << player.getPosition().y << std::endl;
     SetConsoleTextAttribute(hConsole, 7);
 
     std::cout << "Key On Player: ";
@@ -71,6 +72,7 @@ void Ui::AddToLog(const std::string& message)
     }
 }
 
+
 void Ui::PrintLog() 
 {
     std::queue<std::string> temp = log;
@@ -80,6 +82,7 @@ void Ui::PrintLog()
         temp.pop();
     }
 }
+
 
 void Ui::PrintOpeningAndTutorials() 
 {

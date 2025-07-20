@@ -6,17 +6,14 @@
 // Abstract base class for game objects
 class GameObject 
 {
-    private:
-        std::string tag;          
-        Vector2<int> worldLocation; // Specify the template argument for Vector2
+    private:         
 
     protected:
-        void setWorldLocation(const Vector2<int>& newLocation) { worldLocation = newLocation; }
-
-        void setTag(const std::string& newTag) { tag = newTag; }
+        std::string tag;
+        Vector2<int> position;
 
     public:
-        GameObject(const std::string& tag, const Vector2<int>& location) : tag(tag), worldLocation(location) {}
+        GameObject(const Vector2<int>& location) : tag(tag), position(location) {}
 
         virtual void update() = 0;
 
@@ -24,5 +21,9 @@ class GameObject
 
         std::string getTag() const { return tag; }
 
-        Vector2<int> getWorldLocation() const { return worldLocation; }
+        Vector2<int> getPosition() const { return position; }
+
+        void setPosition(const Vector2<int>& newLocation) { position = newLocation; }
+
+        void setTag(const std::string& newTag) { tag = newTag; }
 };

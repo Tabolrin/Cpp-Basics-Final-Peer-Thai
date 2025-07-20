@@ -1,5 +1,5 @@
 #pragma once
-#include <functional> // For std::hash
+#include <functional>
 
 template <typename T>
 struct Vector2
@@ -27,10 +27,20 @@ struct Vector2
         return Vector2(x - other.x, y - other.y);
     }
 
-    // Equality operator
+    
     bool operator==(const Vector2& other) const
     {
         return x == other.x && y == other.y;
+    }
+
+    Vector2 operator+=(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+
+    Vector2 operator-=(const Vector2& other) const
+    {
+        return Vector2(x - other.x, y - other.y);
     }
 };
 

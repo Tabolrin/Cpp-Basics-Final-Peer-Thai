@@ -6,9 +6,8 @@ static const char ENEMY_SYMBOL =  'ö';
 
 class Enemy : public Unit
 {
-	COORD enemyPos;
 public:
-	Enemy(int maxHp, int normalDmg, int elementalDmg, string element);
+	Enemy(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2<int>& location);
 	void AddPatrolPoint(COORD point);
 	void Patrol();
 	void FollowPlayer();

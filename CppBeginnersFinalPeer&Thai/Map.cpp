@@ -93,7 +93,8 @@ void Map::PrintMap() const
     SetConsoleTextAttribute(hConsole, 7); // Reset to white
 }
 
-void Map::MoveUnit(Unit& unit, const Vector2<int>& target)
+
+void Map::MoveObject(GameObject& object, const Vector2<int>& target)
 {
     if (!IsTileClear(target)) 
     {
@@ -101,9 +102,9 @@ void Map::MoveUnit(Unit& unit, const Vector2<int>& target)
         return;
     }
 
-    mapArray[target.x][target.y] = mapArray[unit.GetUnitLocation().x][unit.GetUnitLocation().y];
-    mapArray[unit.GetUnitLocation().x][unit.GetUnitLocation().y] = CLEAR;
-    unit.SetUnitLocation(target, *this);
+    mapArray[target.x][target.y] = mapArray[object.getPosition().x][object.getPosition().y];
+    mapArray[object.getPosition().x][object.getPosition().y] = CLEAR;
+    object.setPosition(target);
 }
 
 bool Map::CheckIsPointInMap(const Vector2<int>& point) const 

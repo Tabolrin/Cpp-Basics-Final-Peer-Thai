@@ -10,7 +10,7 @@ private:
     static const int MAX_LOG_SIZE = 6;
 
 public:
-    static void PrintFrame(Level& currentLevel, Map::MapLevel level, Unit& player);
+    static void PrintFrame(Level& currentLevel, Map::mapType level, Unit& player);
     static void AddToLog(const std::string& message);
     static void PrintOpeningAndTutorials();
     static void RequireEnterPressToProgress();
