@@ -4,13 +4,13 @@
 #include <iostream>
 #include <windows.h>
 #include "Player.h"
+#include "Levels.h"
 
 std::queue<std::string> Ui::log;
 
-void Ui::PrintFrame(Level& currentLevel, MapData::MapType level, Player& player)
+void Ui::PrintFrame(Level& currentLevel, Levels level, Player& player)
 {
-	system("cls"); // Clear console (Windows-specific; use "clear" for Unix)
-	currentLevel.GetCurrentMap().PrintMap();
+	system("cls"); 
 	std::cout << std::endl;
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -22,7 +22,7 @@ void Ui::PrintFrame(Level& currentLevel, MapData::MapType level, Player& player)
 	SetConsoleTextAttribute(hConsole, 6); // DarkYellow
 	std::cout << static_cast<int>(level) << std::endl;
 	SetConsoleTextAttribute(hConsole, 7);
-
+	/*
 	std::cout << "HP: ";
 	SetConsoleTextAttribute(hConsole, 4); // DarkRed
 	std::cout << player.GetCurrentHP() << " / " << player.GetMaxHP() << std::endl;
@@ -36,49 +36,38 @@ void Ui::PrintFrame(Level& currentLevel, MapData::MapType level, Player& player)
 	std::cout << "Player coordinates: ";
 	SetConsoleTextAttribute(hConsole, 1); // DarkBlue
 	std::cout << player.getPosition().x << " , " << player.getPosition().y << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
+	SetConsoleTextAttribute(hConsole, 7);*/
 
 	std::cout << "Key On Player: ";
-
-	if (player.GotKey())
+	/*
+	if ()//if player has key
 	{
 		SetConsoleTextAttribute(hConsole, 2); // Green
 		std::cout << "V" << std::endl;
 	}
-	else {
-		SetConsoleTextAttribute(hConsole, 4); // Red
-		std::cout << "X" << std::endl;
-	}
-	SetConsoleTextAttribute(hConsole, 7);
-
-	std::cout << std::endl;
-	SetConsoleTextAttribute(hConsole, 3);
-	std::cout << "-= Event Log =-" << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
-
-	PrintLog();
-}
-
-void Ui::AddToLog(const std::string& message)
-{
-	if (log.size() < MAX_LOG_SIZE)
-	{
-		log.push(message);
-	}
 	else
 	{
-		log.pop();
-		log.push(message);
-	}
+		SetConsoleTextAttribute(hConsole, 4); // Red
+		std::cout << "X" << std::endl;
+	}*/
+	SetConsoleTextAttribute(hConsole, 7);
 }
 
-void Ui::PrintLog()
+void Ui::InitialMapDraw(Map map) 
 {
-	std::queue<std::string> temp = log;
-	while (!temp.empty())
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	system("cls");
+
+	// Draw the whole map once at start
+	for (int x = 0; x < map.GetHeight(); ++x)
 	{
-		std::cout << temp.front() << std::endl;
-		temp.pop();
+		for (int y = 0; y <map. GetWidth(); ++y)
+		{
+			char ch = map.GetMapMatrix()[x][y];
+			SetConsoleTextAttribute(hConsole, map.GetColorForChar(ch));
+			std::cout << ch;
+		}
+		std::cout << std::endl;
 	}
 }
 

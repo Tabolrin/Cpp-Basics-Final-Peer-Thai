@@ -39,9 +39,6 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -71,21 +68,33 @@
     <ClInclude Include="Unit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapData.h">
+    <ClInclude Include="Ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ui.h">
+    <ClInclude Include="Colors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterTiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Levels.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Exit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Map1.txt">
+    <Text Include="Level1_Map.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Map2.txt">
+    <Text Include="Level2_Map.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Map3.txt">
+    <Text Include="Level3_Map.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Monster.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

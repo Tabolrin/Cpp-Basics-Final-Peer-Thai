@@ -6,3 +6,8 @@ void Player::Move(Vector2& direction)
 {
 	position += direction;
 }
+
+void Player:: Update() 
+{
+
+}

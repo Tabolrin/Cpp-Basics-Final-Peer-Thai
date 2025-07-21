@@ -1,32 +1,34 @@
 #pragma once
+#ifndef _ANIMALS_
+#define _ANIMALS_
+
 #include "Map.h"
-#include "MapData.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Wall.h"
-#include "Chest.h"
-#include "Key.h"
-#include "Exit.h"
 #include <vector>
 #include <string>
 
-class Level {
+
+
+class Level
+{
 private:
 	Map map;
-	MapData data;
 	Player& player;
-	std::vector<Enemy*> enemies;
-	Vector2 keyLocation;
+	Vector2 exitPos;
 	bool playerAtExit = false;
-	int levelNum;
+	Levels levelNum;
 	std::string filePath;
 	int mapWidth = 0, mapHeight = 0;
+	std::vector<Enemy*> enemies;
 
 	void LoadMapFile();
-	void PopulateObjects(char ch, const Vector2& pos);
+	void PopulateEnemies(char ch, const Vector2& pos);
 
 public:
-	Level(int num, Player& p);
+
+
+	Level(Levels mapLevel, Player& p);
 
 	void Update();
 
@@ -36,13 +38,10 @@ public:
 
 	void TransitionToNext();
 
-	Map& GetMap() { return map; }
-
-	MapData& GetData() { return data; }
-
-	void MovePlayer(const Vector2& dir);
+	Map& GetMap();
 
 	void UpdateEnemies();
 
-	void InitiateCombat(Unit& p, Unit& e);
+	void InitiateCombat(Player& p, Unit& e);
 };
+#endif

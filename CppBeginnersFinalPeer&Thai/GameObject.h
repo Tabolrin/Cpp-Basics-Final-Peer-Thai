@@ -15,7 +15,7 @@ protected:
 public:
 	GameObject(const Vector2& location) : tag(tag), position(location) {}
 
-	virtual void update() = 0;
+	virtual void Update() = 0;
 
 	virtual ~GameObject() {}
 

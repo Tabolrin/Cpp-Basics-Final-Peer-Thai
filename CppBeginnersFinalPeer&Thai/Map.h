@@ -1,13 +1,19 @@
 ﻿#pragma once
+#ifndef _MAP_
+#define _MAP_
 #include <vector>
+#include "Levels.h"
 #include <string>
 #include "Vector2.h"
-#include "MapData.h"
 #include <windows.h>
 
-class Map {
+
+
+class Map
+{
 private:
-	std::vector<std::vector<char>> mapArray;
+	Levels level;
+	std::vector<std::vector<char>> mapMat;
 	int width = 0, height = 0;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -21,13 +27,15 @@ public:
 	static const char EXIT = 'E';
 	static const char KEY = '¬';
 
-	Map() {}
+	Map(Levels level);
 
-	void Initialize(int w, int h) { width = w; height = h; mapArray.assign(h, std::vector<char>(w, CLEAR)); }
+	std::vector<std::vector<char>> GetMapMatrix() { return mapMat; }
 
-	void UpdateFromData(const MapData& data);
+	int GetWidth() const { return width; }
 
-	void InitialDraw() const;
+	int GetHeight() const { return height; }
+
+	void Initialize(int w, int h) { width = w; height = h; mapMat.assign(h, std::vector<char>(w, CLEAR)); }
 
 	void UpdatePosition(const Vector2& pos, char newChar, int color);
 
@@ -35,7 +43,6 @@ public:
 
 	bool CheckIsPointInMap(const Vector2& point) const;
 
-	char GetCharForObject(const GameObject* obj) const;
-
 	int GetColorForChar(char ch) const;
 };
+#endif

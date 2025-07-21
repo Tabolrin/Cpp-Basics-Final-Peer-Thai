@@ -1,4 +1,8 @@
 #pragma once
+#ifndef  _ENEMY_
+#define _ENEMY_
+
+
 #include "Unit.h"
 #include <windows.h>
 #include <string>
@@ -14,3 +18,4 @@ public:
 	void Patrol();
 	void FollowPlayer();
 };
+#endif 

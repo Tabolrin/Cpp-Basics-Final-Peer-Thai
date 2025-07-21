@@ -4,5 +4,5 @@
 class Key : public GameObject {
 public:
 	Key(const Vector2& loc) : GameObject(loc) { setTag("Key"); }
-	void update() override {}
+	void Update() override {}
 };

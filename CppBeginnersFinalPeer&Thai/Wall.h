@@ -4,5 +4,5 @@
 class Wall : public GameObject {
 public:
 	Wall(const Vector2& loc) : GameObject(loc) { setTag("Wall"); }
-	void update() override {}
+	void Update() override {}
 };

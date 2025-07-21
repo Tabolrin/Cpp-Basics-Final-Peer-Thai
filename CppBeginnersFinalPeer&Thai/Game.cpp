@@ -37,8 +37,10 @@ void Game::RunGameLoop() {
 
 			currentLevel->UpdateEnemies();
 
-			for (auto* e : currentLevel->enemies) {
-				if (e->getPosition() == player->getPosition() + Vector2(1, 0)) {
+			for (auto* e : currentLevel->enemies)
+			{
+				if (e->getPosition() == player->getPosition() + Vector2(1, 0)) 
+				{
 					currentLevel->InitiateCombat(*player, *e);
 				}
 			}
