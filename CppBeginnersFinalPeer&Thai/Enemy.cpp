@@ -6,10 +6,12 @@ using namespace std;
 
 Enemy::Enemy(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2& location) : Unit(maxHp, normalDmg, elementalDmg, element, location) {}
 
-void Enemy::AddPatrolPoint(COORD point)
+void Enemy::AddPatrolPoint(Vector2& point)
 {
 }
 
 void Enemy::Patrol()
 {
 }
+
+void Enemy::FollowPlayer(){}

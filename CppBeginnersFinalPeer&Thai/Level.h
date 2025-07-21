@@ -1,32 +1,32 @@
 #pragma once
-#ifndef _ANIMALS_
-#define _ANIMALS_
+#ifndef _LEVEL_
+#define _LEVEL_
 
 #include "Map.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Levels.h"
 #include <vector>
 #include <string>
-
 
 
 class Level
 {
 private:
-	Map map;
+	Map* map;
 	Player& player;
 	Vector2 exitPos;
 	bool playerAtExit = false;
 	Levels levelNum;
 	std::string filePath;
-	int mapWidth = 0, mapHeight = 0;
+	size_t mapWidth = 0, mapHeight = 0;
 	std::vector<Enemy*> enemies;
+	std::vector<std::string> mapLines;
 
 	void LoadMapFile();
 	void PopulateEnemies(char ch, const Vector2& pos);
 
 public:
-
 
 	Level(Levels mapLevel, Player& p);
 

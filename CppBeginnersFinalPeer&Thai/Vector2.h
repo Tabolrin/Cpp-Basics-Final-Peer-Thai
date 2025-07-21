@@ -1,4 +1,8 @@
 #pragma once
+#ifndef _VECTOR2_
+#define _VECTOR2_
+
+
 #include <functional>
 #include <type_traits>
 
@@ -6,11 +10,14 @@
 template <typename T>
 struct Vector2Impl
 {
-	static_assert(std::is_arithmetic_v<T>, "Vector2Impl requires a numeric type");
+	static_assert(std::is_arithmetic_v<T>,
+		"Vector2Impl requires a numeric type");
 
 	T x, y;
 
-	Vector2Impl(T x_, T y_) : x(x_), y(y_) {}
+	Vector2Impl()	: x(0), y(0) {}
+
+	Vector2Impl(T x_, T y_): x(x_), y(y_)	 {	}
 
 	void Randomize(int maxValue)
 	{
@@ -67,3 +74,4 @@ namespace std
 		}
 	};
 }
+#endif 

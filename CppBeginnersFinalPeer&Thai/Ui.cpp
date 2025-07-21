@@ -6,9 +6,8 @@
 #include "Player.h"
 #include "Levels.h"
 
-std::queue<std::string> Ui::log;
 
-void Ui::PrintFrame(Level& currentLevel, Levels level, Player& player)
+void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 {
 	system("cls"); 
 	std::cout << std::endl;
@@ -61,7 +60,7 @@ void Ui::InitialMapDraw(Map map)
 	// Draw the whole map once at start
 	for (int x = 0; x < map.GetHeight(); ++x)
 	{
-		for (int y = 0; y <map. GetWidth(); ++y)
+		for (int y = 0; y < map. GetWidth(); ++y)
 		{
 			char ch = map.GetMapMatrix()[x][y];
 			SetConsoleTextAttribute(hConsole, map.GetColorForChar(ch));

@@ -1,8 +1,8 @@
 #pragma once
-#ifndef _CHAR_TILES_
-#define _CHAR_TILES_
+#ifndef _SYMBOLS_
+#define _SYMBOLS_
 
-enum class CharacterTiles
+enum  Symbols
 {
 	 CLEAR = ' ',
 	 WALL = '#',

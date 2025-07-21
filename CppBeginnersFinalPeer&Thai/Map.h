@@ -6,6 +6,7 @@
 #include <string>
 #include "Vector2.h"
 #include <windows.h>
+#include "Symbols.h"
 
 
 
@@ -18,14 +19,7 @@ private:
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 public:
-	static const char CLEAR = ' ';
-	static const char WALL = '#';
-	static const char PLAYER = '¡';
-	static const char ENEMY = 'ö';
-	static const char FULL_CHEST = 'O';
-	static const char EMPTY_CHEST = 'Ø';
-	static const char EXIT = 'E';
-	static const char KEY = '¬';
+	Map() { level = Levels::MAP_LEVEL1; }
 
 	Map(Levels level);
 
@@ -35,7 +29,7 @@ public:
 
 	int GetHeight() const { return height; }
 
-	void Initialize(int w, int h) { width = w; height = h; mapMat.assign(h, std::vector<char>(w, CLEAR)); }
+	void Initialize(int w, int h);
 
 	void UpdatePosition(const Vector2& pos, char newChar, int color);
 

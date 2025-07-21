@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _UNIT_
+#define _UNIT_
 #include <string>
 #include "GameObject.h"
 
@@ -16,3 +18,4 @@ protected:
 public:
 	Unit(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2& location);
 };
+#endif

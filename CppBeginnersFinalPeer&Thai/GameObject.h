@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _GAME_OBJECT_
+#define _GAME_OBJECT_
 
 #include <string>
 #include "Vector2.h"
@@ -27,3 +29,5 @@ public:
 
 	void setTag(const std::string& newTag) { tag = newTag; }
 };
+
+#endif

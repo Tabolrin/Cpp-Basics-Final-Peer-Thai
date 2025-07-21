@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "Levels.h"
 #include "Ui.h"
 #include <fstream>
 #include <algorithm>
@@ -6,66 +7,70 @@
 #include <thread>
 #include "Map.h"
 #include <iostream>
+#include "Symbols.h"
 
-Level::Level(Levels mapLevel, Player& p)
+Level::Level(Levels mapLevel, Player& p) : levelNum(mapLevel), player(p)
 {
-	levelNum = mapLevel;
-	player = p;
-	map =  Map(levelNum);
+    map = new Map(levelNum);
 
-	// Pick file based on level
-	switch (levelNum)
+    // Pick file based on level
+    switch (levelNum)
+    {
+        case Levels::MAP_LEVEL1: 
+            filePath = "Level1_Map.txt";
+            break;
+        case Levels::MAP_LEVEL2:
+            filePath = "Level2_Map.txt"; 
+            break;
+        case Levels::MAP_LEVEL3:
+            filePath = "Level3_Map.txt";
+            break;
+    }
+
+    LoadMapFile();
+    (*map).Initialize(mapWidth, mapHeight);
+
+	for (size_t x = 0; x < mapHeight; ++x)
 	{
-		case 1: 
-			filePath = "Level1_Map.txt";
-			break;
-		case 2: 
-			filePath = "Level2_Map.txt"; 
-			break;
-		case 3:
-			filePath = "Level3_Map.txt";
-			break;
+		for (size_t y = 0; y < mapWidth; ++y)
+		{
+			char ch = mapLines[x][y];
+			int color = map->GetColorForChar(ch);
+			map->UpdatePosition(Vector2(x, y), ch, color);
+		}
 	}
 
-	LoadMapFile();
-	map.Initialize(mapWidth, mapHeight);
-	Ui::PrintFrame(*this, map.GetLevel(), player);
+    Ui::PrintFrame(*this, levelNum, player);
 }
 
 void Level::LoadMapFile()
 {
 	std::ifstream file(filePath);
 
-	if (!file) return;
+	if (!file)
+	{
+		std::cout << "Error opening map file: " << filePath << std::endl;
+		return;
+	}
 
 	std::string line;
-	std::vector<std::string> lines;
+	mapLines.clear();
 
 	while (std::getline(file, line))
 	{
-		lines.push_back(line);
-
-		if (line.length() < mapWidth)
-			mapWidth = line.length();
+		mapLines.push_back(line);
+		mapWidth = line.length();
 	}
 
-	mapHeight = lines.size();
+	mapHeight = mapLines.size();
 
-	for (int x = 0; x < mapHeight; ++x) 
+	/*for (int x = 0; x < mapHeight; ++x)
 	{
 		for (int y = 0; y < lines[x].length(); ++y) 
 		{
-			char ch = lines[x][y];
-			Vector2 pos(x, y);
-			if (ch == Map::ENEMY)
-				PopulateEnemies(ch, pos);
-		}
 
-		for (int y = lines[x].length(); y < mapWidth; ++y)
-		{
-			PopulateEnemies(Map::CLEAR, Vector2(x, y));
 		}
-	}
+	}*/
 }
 
 void Level::PopulateEnemies(char ch, const Vector2& pos)
@@ -102,9 +107,9 @@ void Level::UpdateEnemies()
 	}
 }
 
-Map& Level::GetMap() { return map; }
+Map& Level::GetMap() { return *map; }
 
 void Level::InitiateCombat(Player& p, Unit& e)
 {
-	Ui::AddToLog("Combat!");
+	
 }

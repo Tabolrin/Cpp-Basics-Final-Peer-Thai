@@ -74,13 +74,10 @@
     <ClInclude Include="Colors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterTiles.h">
+    <ClInclude Include="Symbols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Levels.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Exit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

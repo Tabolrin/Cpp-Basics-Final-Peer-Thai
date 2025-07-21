@@ -136,9 +136,8 @@
   <ItemGroup>
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="CharacterTiles.h" />
+    <ClInclude Include="Symbols.h" />
     <ClInclude Include="Levels.h" />
-    <ClInclude Include="Exit.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Level.h" />

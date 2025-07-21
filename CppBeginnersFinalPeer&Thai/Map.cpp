@@ -1,5 +1,6 @@
 #include "Map.h"
 #include "Levels.h"
+#include "Symbols.h"
 #include "Colors.h"
 #include <iostream>
 
@@ -37,6 +38,14 @@ Map::Map(Levels level)
 	}
 }
 
+void Map::Initialize(int w, int h)
+{
+	width = w;
+	height = h;
+	mapMat.clear();
+	mapMat.resize(height, std::vector<char>(width));
+}
+
 void Map::UpdatePosition(const Vector2& pos, char newChar, int color)
 {
 	// Change only one spot on screen
@@ -49,7 +58,7 @@ void Map::UpdatePosition(const Vector2& pos, char newChar, int color)
 
 bool Map::IsTileClear(const Vector2& tile) const
 {
-	return CheckIsPointInMap(tile) && mapMat[tile.x][tile.y] == CLEAR;
+	return CheckIsPointInMap(tile) && mapMat[tile.x][tile.y] == Symbols::CLEAR;
 }
 
 bool Map::CheckIsPointInMap(const Vector2& point) const
