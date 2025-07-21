@@ -1,38 +1,48 @@
 #pragma once
 #include "Map.h"
-#include "Unit.h"
-#include "Enemy.h"
+#include "MapData.h"
 #include "Player.h"
+#include "Enemy.h"
+#include "Wall.h"
+#include "Chest.h"
+#include "Key.h"
+#include "Exit.h"
 #include <vector>
+#include <string>
 
 class Level {
 private:
-    Map map;
-    Unit& player;
-    Vector2 keyLocation;
-    bool playerAtExit;
-    int enemyDamageMultiplier;
-    int enemyHPMultiplier;
-    std::vector<GameObject> chests;
-    std::vector<Enemy> enemies;
+	Map map;
+	MapData data;
+	Player& player;
+	std::vector<Enemy*> enemies;
+	Vector2 keyLocation;
+	bool playerAtExit = false;
+	int levelNum;
+	std::string filePath;
+	int mapWidth = 0, mapHeight = 0;
+
+	void LoadMapFile();
+	void PopulateObjects(char ch, const Vector2& pos);
 
 public:
-    static Vector2 SpawnLocation;
+	Level(int num, Player& p);
 
-    Level(MapData::MapType currentLevel, Player& player);
-    void ReadyInteractionLists();
-    void EnemyScanSequence(Unit& player);
-    bool InitiateCombatSequence(Map& map, Unit& player, Unit& enemy);
-    Unit FindEnemyAt(const Vector2& enemyLocation);
-    bool IsOnTrap();
-    //std::vector<SingleUseObject>& GetSingleUseObjectCollection(SingleUseObject::SingleUseObjectType type);
-    bool IsLevelWon(const Unit& player);
-    Map& GetCurrentMap();
-    Vector2 GetKeyLocation() const;
-    void PlacePlayerAtSpawn();
-   // SingleUseObject FindChestByLocation(const Vector2& location);
-    void SetPlayerAtExit(bool value);
+	void Update();
 
-private:
-    void PerformAttack(Unit& attacker, Unit& target);
+	bool CheckWin();
+
+	void SetPlayerAtExit(bool val) { playerAtExit = val; }
+
+	void TransitionToNext();
+
+	Map& GetMap() { return map; }
+
+	MapData& GetData() { return data; }
+
+	void MovePlayer(const Vector2& dir);
+
+	void UpdateEnemies();
+
+	void InitiateCombat(Unit& p, Unit& e);
 };

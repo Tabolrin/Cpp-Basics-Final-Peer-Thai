@@ -1,134 +1,71 @@
-#pragma once
 #include "Map.h"
-#include "Ui.h"
-#include <fstream>
 #include <iostream>
-#include <windows.h> // For console colors (Windows-specific)
 
-Map::Map(MapData::MapType type) 
-{
-    SetFilePaths();
-    std::ifstream file(filePaths[static_cast<int>(type) - 1]);
-   
-    if (!file.is_open())
-    {
-        throw std::runtime_error("Failed to open map file: " + filePaths[static_cast<int>(type) - 1]);
-    }
-
-    std::vector<std::string> lines;
-    std::string line;
-
-    while (std::getline(file, line)) 
-    {
-        lines.push_back(line);
-    }
-    file.close();
-
-    int rowCount = lines.size();
-    mapArray.resize(rowCount);
-
-    for (int row = 0; row < rowCount; ++row)
-    {
-        mapArray[row].resize(lines[row].length());
-
-        for (size_t col = 0; col < lines[row].length(); ++col) 
-        {
-            mapArray[row][col] = lines[row][col];
-        }
-    }
+void Map::UpdateFromData(const MapData& data) {
+	// Update the visual array from game data
+	for (const auto& pair : data.getAllObjects()) {
+		const Vector2& pos = pair.first;
+		if (!CheckIsPointInMap(pos)) continue;
+		GameObject* obj = pair.second;
+		char ch = GetCharForObject(obj);
+		mapArray[pos.x][pos.y] = ch;
+	}
 }
 
-void Map::SetFilePaths()
-{
-    filePaths = 
-    {
-        "Maps_Level1.txt",
-        "Maps_Level2.txt",
-        "Maps_Level3.txt",
-    };
+void Map::InitialDraw() const {
+	// Draw the whole map once at start
+	system("cls");
+	for (int x = 0; x < height; ++x) {
+		for (int y = 0; y < width; ++y) {
+			char ch = mapArray[x][y];
+			SetConsoleTextAttribute(hConsole, GetColorForChar(ch));
+			std::cout << ch;
+		}
+		std::cout << std::endl;
+	}
 }
 
-void Map::PrintMap() const 
-{
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    for (const auto& row : mapArray) 
-    {
-        for (char character : row) 
-        {
-            switch (character)
-            {
-                default:
-                    SetConsoleTextAttribute(hConsole, 7); // White
-                    std::cout << character;
-                    break;
-                case ENEMY:
-                    SetConsoleTextAttribute(hConsole, 4); // Red
-                    std::cout << character;
-                    break;
-                case PLAYER:
-                    SetConsoleTextAttribute(hConsole, 11); // Cyan
-                    std::cout << character;
-                    break;
-                case FULL_CHEST:
-                    SetConsoleTextAttribute(hConsole, 14); // Yellow
-                    std::cout << character;
-                    break;
-                case EMPTY_CHEST:
-                    SetConsoleTextAttribute(hConsole, 8); // DarkGray
-                    std::cout << character;
-                    break;
-                case EXIT:
-                    SetConsoleTextAttribute(hConsole, 1); // DarkBlue
-                    std::cout << character;
-                    break;
-                case KEY:
-                    SetConsoleTextAttribute(hConsole, 5); // Magenta
-                    std::cout << character;
-                    break;
-            }
-        }
-        std::cout << std::endl;
-    }
-    SetConsoleTextAttribute(hConsole, 7); // Reset to white
+void Map::UpdatePosition(const Vector2& pos, char newChar, int color) {
+	// Change only one spot on screen
+	COORD coord = { (SHORT)pos.y, (SHORT)pos.x };
+	SetConsoleCursorPosition(hConsole, coord);
+	SetConsoleTextAttribute(hConsole, color);
+	std::cout << newChar;
+	mapArray[pos.x][pos.y] = newChar;
 }
 
-
-void Map::MoveObject(GameObject& object, const Vector2& target)
-{
-    if (!IsTileClear(target)) 
-    {
-        Ui::AddToLog("cant go there!");
-        return;
-    }
-
-    mapArray[target.x][target.y] = mapArray[object.getPosition().x][object.getPosition().y];
-    mapArray[object.getPosition().x][object.getPosition().y] = CLEAR;
-    object.setPosition(target);
+bool Map::IsTileClear(const Vector2& tile) const {
+	return CheckIsPointInMap(tile) && mapArray[tile.x][tile.y] == CLEAR;
 }
 
-bool Map::CheckIsPointInMap(const Vector2& point) const 
-{
-    return point.x >= 0 && point.x < static_cast<int>(mapArray.size()) &&
-        point.y >= 0 && point.y < static_cast<int>(mapArray[point.x].size());
+bool Map::CheckIsPointInMap(const Vector2& point) const {
+	return point.x >= 0 && point.x < height && point.y >= 0 && point.y < width;
 }
 
-void Map::PlaceSignOnMap(char sign, const Vector2& target)
-{ 
-    mapArray[target.x][target.y] = sign; 
+char Map::GetCharForObject(const GameObject* obj) const {
+	if (!obj) return CLEAR;
+	std::string tag = obj->getTag();
+	if (tag == "Player") return PLAYER;
+	if (tag == "Enemy") return ENEMY;
+	if (tag == "Wall") return WALL;
+	if (tag == "Chest") {
+		Chest* c = (Chest*)obj;  // Simple cast for beginner
+		return c->IsEmpty() ? EMPTY_CHEST : FULL_CHEST;
+	}
+	if (tag == "Key") return KEY;
+	if (tag == "Exit") return EXIT;
+	return CLEAR;
 }
 
-bool Map::IsTileClear(const Vector2& tile) const 
-{ 
-    if (mapArray[tile.x][tile.y] != CLEAR) 
-    { 
-        Ui::AddToLog("Unable to execute command. The tile is occupied.");
-        return false;
-    }
-    return true;
-}
-
-std::vector<std::vector<char>> Map::GetMapArray() const 
-{
-    return mapArray;
+int Map::GetColorForChar(char ch) const {
+	// Pick color based on char
+	switch (ch) {
+	case ENEMY: return 4;
+	case PLAYER: return 11;
+	case FULL_CHEST: return 14;
+	case EMPTY_CHEST: return 8;
+	case EXIT: return 1;
+	case KEY: return 5;
+	default: return 7;
+	}
 }

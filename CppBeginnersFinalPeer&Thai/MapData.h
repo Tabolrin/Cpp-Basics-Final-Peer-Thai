@@ -17,31 +17,40 @@ public:
 
 	MapData(MapType type) : mapType(type) {}
 
-	void addGameObject(const Vector2& position, const GameObject& gameObject)
+	void addGameObject(const Vector2& position, GameObject* gameObject)
 	{
 		mapData[position] = gameObject;
 	}
 
 	void removeGameObject(const Vector2& position)
 	{
-		mapData.erase(position);
+		auto it = mapData.find(position);
+		if (it != mapData.end()) {
+			delete it->second;  // Clean up the object
+			mapData.erase(it);
+		}
 	}
 
 	GameObject* getGameObject(const Vector2& position)
 	{
 		auto it = mapData.find(position);
-
 		if (it != mapData.end())
-			return &it->second;
-
+			return it->second;
 		return nullptr;
 	}
 
+	const unordered_map<Vector2, GameObject*>& getAllObjects() const { return mapData; }
+
 	MapType getMapType() const { return mapType; }
+
+	~MapData()
+	{
+		for (auto& pair : mapData) {
+			delete pair.second;  // Free all objects when destroying
+		}
+	}
 
 protected:
 	MapType mapType;
-
-	unordered_map<Vector2, GameObject> mapData;
+	unordered_map<Vector2, GameObject*> mapData;
 };
-	

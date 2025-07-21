@@ -6,18 +6,16 @@
 #include "MapData.h"
 #include "Player.h"
 
-
 class Ui {
 private:
-    static std::queue<std::string> log;
-    static const int MAX_LOG_SIZE = 6;
+	static std::queue<std::string> log;
+	static const int MAX_LOG_SIZE = 6;
 
 public:
-    static void PrintFrame(Level& currentLevel, MapData::MapType level, Player& player);
-    static void AddToLog(const std::string& message);
-    static void PrintOpeningAndTutorials();
-    static void RequireEnterPressToProgress();
+	static void PrintFrame(Level& currentLevel, MapData::MapType level, Player& player);
+	static void AddToLog(const std::string& message);
+	static void PrintOpeningAndTutorials();
+	static void RequireEnterPressToProgress();
 private:
-    static void PrintLog();
+	static void PrintLog();
 };
-
