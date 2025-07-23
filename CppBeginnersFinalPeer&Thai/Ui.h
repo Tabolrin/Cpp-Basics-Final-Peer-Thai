@@ -20,5 +20,6 @@ public:
 	static void PrintOpeningAndTutorials();
 	static void RequireEnterPressToProgress();
 	static void InitialMapDraw(Map map);
+	static const int GetColorForChar(char ch) ;
 };
 #endif

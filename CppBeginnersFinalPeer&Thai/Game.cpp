@@ -33,22 +33,9 @@ void Game::RunGameLoop()
 		lastTime = now;
 		accumulator += delta;
 
-		/*
-		while (accumulator >= dt)
-		{
-			if (kbhit())
-			{
-				char key = getch();
-				Vector2 dir(0, 0);
+		player->Update(currentLevel->GetMap());
 
-				if (key == 'w') dir.x = -1;
-				else if (key == 's') dir.x = 1;
-				else if (key == 'a') dir.y = -1;
-				else if (key == 'd') dir.y = 1;
-				currentLevel->MovePlayer(dir);
-			}*/
-
-			currentLevel->UpdateEnemies();
+		currentLevel->UpdateEnemies();
 
 			/*for (auto* e : currentLevel->enemies)
 			{

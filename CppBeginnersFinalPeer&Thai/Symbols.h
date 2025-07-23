@@ -2,16 +2,16 @@
 #ifndef _SYMBOLS_
 #define _SYMBOLS_
 
-enum  Symbols
+enum Symbols : char
 {
-	 CLEAR = ' ',
-	 WALL = '#',
-	PLAYER = '¡',
-	ENEMY = 'ö',
+	CLEAR = ' ',
+	WALL = '#',
+	PLAYER = 'P',
+	ENEMY = 'M',
 	FULL_CHEST = 'O',
-	 EMPTY_CHEST = 'Ø',
-	 EXIT = 'E',
-	KEY = '¬',
+	EMPTY_CHEST = 'Ø',
+	EXIT = 'E',
+	KEY = 'K',
  };
 
 #endif

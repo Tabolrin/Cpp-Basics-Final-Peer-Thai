@@ -2,6 +2,7 @@
 #include "Levels.h"
 #include "Symbols.h"
 #include "Colors.h"
+#include "Ui.h"
 #include <iostream>
 
 /*void Map::Update(Vector2 pos1, Vector2 pos2)
@@ -51,7 +52,7 @@ void Map::UpdatePosition(const Vector2& pos, char newChar, int color)
 	// Change only one spot on screen
 	COORD coord = { (SHORT)pos.y, (SHORT)pos.x };
 	SetConsoleCursorPosition(hConsole, coord);
-	SetConsoleTextAttribute(hConsole, color);
+	SetConsoleTextAttribute(hConsole, Ui::GetColorForChar(newChar));
 	std::cout << newChar;
 	mapMat[pos.x][pos.y] = newChar;
 }
@@ -61,43 +62,15 @@ bool Map::IsTileClear(const Vector2& tile) const
 	return CheckIsPointInMap(tile) && mapMat[tile.x][tile.y] == Symbols::CLEAR;
 }
 
+Symbols Map::GetCharAt(Vector2& pos)
+{
+	if (CheckIsPointInMap(pos))
+		return static_cast<Symbols>(mapMat[pos.x][pos.y]);
+}
+
 bool Map::CheckIsPointInMap(const Vector2& point) const
 {
 	return point.x >= 0 && point.x < height && point.y >= 0 && point.y < width;
 }
 
 
-int Map::GetColorForChar(char ch) const
-{
-	// Pick color based on char
-	switch (ch) 
-	{
-	case ENEMY:
-		return static_cast<int>(Colors::DARK_RED);
-		break;
-
-	case PLAYER:
-		return static_cast<int>(Colors::DARK_CYAN);
-		break;
-
-	case FULL_CHEST:
-		return static_cast<int>(Colors::LIGHT_YELLOW);
-		break;
-
-	case EMPTY_CHEST:
-		return static_cast<int>(Colors::GRAY);
-		break;
-
-	case EXIT: 
-		return static_cast<int>(Colors::DARK_BLUE);
-		break;
-
-	case KEY:
-		return static_cast<int>(Colors::MAGENTA);
-		break;
-
-	default:
-		return static_cast<int>(Colors::BRIGHT_WHITE);
-		break;
-	}
-}

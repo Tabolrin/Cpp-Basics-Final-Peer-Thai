@@ -9,7 +9,7 @@
 #include <iostream>
 #include "Symbols.h"
 
-Level::Level(Levels mapLevel, Player& p) : levelNum(mapLevel), player(p)
+Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(player)
 {
     map = new Map(levelNum);
 
@@ -35,8 +35,11 @@ Level::Level(Levels mapLevel, Player& p) : levelNum(mapLevel), player(p)
 		for (size_t y = 0; y < mapWidth; ++y)
 		{
 			char ch = mapLines[x][y];
-			int color = map->GetColorForChar(ch);
-			map->UpdatePosition(Vector2(x, y), ch, color);
+
+			if (ch == Symbols::PLAYER)
+				player.setPosition(Vector2(x, y));
+
+			map->UpdatePosition(Vector2(x, y), ch, Ui::GetColorForChar(ch));
 		}
 	}
 

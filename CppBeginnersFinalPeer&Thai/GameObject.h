@@ -4,12 +4,12 @@
 
 #include <string>
 #include "Vector2.h"
+#include "Map.h"
+
 
 // Abstract base class for game objects
 class GameObject
 {
-private:
-
 protected:
 	std::string tag;
 	Vector2 position;
@@ -17,7 +17,7 @@ protected:
 public:
 	GameObject(const Vector2& location) : tag(tag), position(location) {}
 
-	virtual void Update() = 0;
+	virtual void Update(Map map) = 0;
 
 	virtual ~GameObject() {}
 
@@ -29,5 +29,4 @@ public:
 
 	void setTag(const std::string& newTag) { tag = newTag; }
 };
-
 #endif

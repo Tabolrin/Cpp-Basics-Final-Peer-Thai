@@ -2,7 +2,7 @@
 #ifndef _COLORS_
 #define _COLORS_
 
-enum class Colors
+enum class Colors : int
 {
     // Foreground colors
     BLACK = 0, // Black

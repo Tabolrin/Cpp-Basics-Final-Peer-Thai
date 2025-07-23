@@ -9,10 +9,7 @@
 
 int main()
 {
-	//Game game;
-	//game.RunGameLoop();
-	Player player(Vector2{ 0, 0 });
-	Level level(Levels::MAP_LEVEL1, player);
-	Ui::InitialMapDraw(level.GetMap());
+	Game game;
+	game.RunGameLoop();
 	return 0;
 }

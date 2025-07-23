@@ -7,6 +7,7 @@
 #include "Vector2.h"
 #include <windows.h>
 #include "Symbols.h"
+#include <winnt.h>
 
 
 
@@ -35,8 +36,8 @@ public:
 
 	bool IsTileClear(const Vector2& tile) const;
 
-	bool CheckIsPointInMap(const Vector2& point) const;
+	Symbols GetCharAt(Vector2& pos);
 
-	int GetColorForChar(char ch) const;
+	bool CheckIsPointInMap(const Vector2& point) const;
 };
 #endif

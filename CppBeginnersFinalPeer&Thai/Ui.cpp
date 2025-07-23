@@ -10,6 +10,9 @@
 void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 {
 	system("cls"); 
+
+	// Draw the whole map once at start
+	InitialMapDraw(LevelObj.GetMap());
 	std::cout << std::endl;
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -55,15 +58,14 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 void Ui::InitialMapDraw(Map map) 
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	system("cls");
+	//system("cls");
 
-	// Draw the whole map once at start
 	for (int x = 0; x < map.GetHeight(); ++x)
 	{
-		for (int y = 0; y < map. GetWidth(); ++y)
+		for (int y = 0; y < map.GetWidth(); ++y)
 		{
 			char ch = map.GetMapMatrix()[x][y];
-			SetConsoleTextAttribute(hConsole, map.GetColorForChar(ch));
+			SetConsoleTextAttribute(hConsole, Ui::GetColorForChar(ch));
 			std::cout << ch;
 		}
 		std::cout << std::endl;
@@ -113,4 +115,39 @@ void Ui::RequireEnterPressToProgress()
 	{
 		input = _getch();
 	} while (input != '\r');
+}
+
+const int Ui::GetColorForChar(char ch)
+{
+	// Pick color based on char
+	switch (ch)
+	{
+	case ENEMY:
+		return static_cast<int>(Colors::DARK_RED);
+		break;
+
+	case PLAYER:
+		return static_cast<int>(Colors::DARK_CYAN);
+		break;
+
+	case FULL_CHEST:
+		return static_cast<int>(Colors::LIGHT_YELLOW);
+		break;
+
+	case EMPTY_CHEST:
+		return static_cast<int>(Colors::GRAY);
+		break;
+
+	case EXIT:
+		return static_cast<int>(Colors::DARK_BLUE);
+		break;
+
+	case KEY:
+		return static_cast<int>(Colors::MAGENTA);
+		break;
+
+	default:
+		return static_cast<int>(Colors::BRIGHT_WHITE);
+		break;
+	}
 }
