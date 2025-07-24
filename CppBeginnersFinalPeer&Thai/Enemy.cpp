@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include <string>
 #include <windows.h>
+#include <cstdlib>
 
 #define REACTION_RANGE 2
 #define BATTLE_RANGE 1
@@ -13,15 +14,13 @@ Enemy::Enemy(int maxHp, int normalDmg, int elementalDmg, Elements element, const
     speed = 1;
 }
 
-void Enemy::AddPatrolPoint(Map map, Vector2 point)
+void Enemy::AddPatrolPoint(const Map& map, Vector2 point)
 {
     if (IsPointValid(map, point))
         patrolRoute.push_back(point);
-    else
-        int x;
 }
 
-void Enemy::Patrol(Map map)
+void Enemy::Patrol(Map& map)
 {
     GoToPoint(map, patrolRoute.at(currentPoint));
 
@@ -33,7 +32,7 @@ void Enemy::Patrol(Map map)
     }
 }
 
-void Enemy::GoToPoint(Map map, Vector2 point)
+void Enemy::GoToPoint(Map& map, Vector2 point)
 {
     Vector2 nextPos;
 
@@ -92,7 +91,7 @@ void Enemy::GoToPoint(Map map, Vector2 point)
     return;
 }
 
-bool Enemy::IsPointValid(Map map, Vector2 point)
+bool Enemy::IsPointValid(const Map& map, const Vector2& point)
 {
     if (map.CheckIsPointInMap(point))
         if (map.GetCharAt(point) == Symbols::CLEAR)
@@ -100,7 +99,7 @@ bool Enemy::IsPointValid(Map map, Vector2 point)
     return false;
 }
 
-void Enemy::ChangePosition(Map map, Vector2 nextPos)
+void Enemy::ChangePosition(Map& map, const Vector2& nextPos)
 {
     map.UpdatePosition(nextPos, Symbols::ENEMY,
         map.GetCharAt(nextPos) == Symbols::ENEMY); //move enemy char to new position
@@ -112,7 +111,7 @@ void Enemy::ChangePosition(Map map, Vector2 nextPos)
     return;
 }
 
-void Enemy::Update(Map map, Player player)
+void Enemy::Update(Map& map, const Player& player)
 {
     if (IsInRange(player.GetPlayerPos(), REACTION_RANGE))
     {
@@ -138,8 +137,8 @@ bool Enemy::IsInRange(Vector2 targetPosition, int range)
     }
     */
 
-    if ((position.x - targetPosition.x <= range || targetPosition.x - position.x <= range)
-        && position.y - targetPosition.y <= range || targetPosition.y - position.y <= range)
-        return true;
-    return false;
+    int dx = abs(position.x - targetPosition.x);
+    int dy = abs(position.y - targetPosition.y);
+
+    return dx <= range && dy <= range;
 }

@@ -33,7 +33,7 @@ void Game::RunGameLoop()
 		lastTime = now;
 		accumulator += delta;
 
-		player->Update(currentLevel->GetMap(), *player);
+                player->Update(currentLevel->GetMap());
 
 		//currentLevel->UpdateEnemies();
 
@@ -82,7 +82,7 @@ while (running)
 	auto startTime = high_resolution_clock::now();
 
 	// === Update Player ===
-	player->Update(currentLevel->GetMap(), *player);
+    player->Update(currentLevel->GetMap());
 
 	// === Update Enemies ===
 	currentLevel->Update();

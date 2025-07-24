@@ -8,10 +8,10 @@ Player::Player(const Vector2& pos) : GameObject(position)
 {
 	position = pos;
 	keyAcquired = false;
-	Inventory* inventory = new Inventory();
+        // inventory managed as a member; no need for dynamic allocation
 }
 
-void Player::Move(Map map, Vector2& direction)
+void Player::Move(Map& map, Vector2& direction)
 {
 	bool isDirectionValid = false;
 	Vector2 tempPos = position + direction;
@@ -42,7 +42,7 @@ void Player::Move(Map map, Vector2& direction)
 
 }
 
-void Player:: Update(Map map, Player player)
+void Player::Update(Map& map)
 {
 	Vector2 direction = Vector2 (0,0);
 	char playerInput;

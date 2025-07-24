@@ -36,7 +36,7 @@ public:
 
 	bool IsTileClear(const Vector2& tile) const;
 
-	Symbols GetCharAt(Vector2& pos);
+        Symbols GetCharAt(const Vector2& pos) const;
 
 	bool CheckIsPointInMap(const Vector2& point) const;
 };

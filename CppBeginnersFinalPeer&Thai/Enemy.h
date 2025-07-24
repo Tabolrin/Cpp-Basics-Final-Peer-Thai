@@ -18,14 +18,14 @@ private:
 	int speed;
 	int currentPoint;
 	std::vector<Vector2> patrolRoute;
-	void GoToPoint(Map map, Vector2 point);
-	bool IsPointValid(Map map, Vector2 point);
-	void ChangePosition(Map map, Vector2 nextPos);
-	bool IsInRange(Vector2 playerLocation, int range);
+        void GoToPoint(Map& map, Vector2 point);
+        bool IsPointValid(const Map& map, const Vector2& point);
+        void ChangePosition(Map& map, const Vector2& nextPos);
+        bool IsInRange(Vector2 playerLocation, int range);
 public:
 	Enemy(int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
-	void AddPatrolPoint(Map map, Vector2 point);
-	void Patrol(Map map);
-	void Update(Map map, Player player);
+        void AddPatrolPoint(const Map& map, Vector2 point);
+        void Patrol(Map& map);
+        void Update(Map& map, const Player& player);
 };
 #endif 

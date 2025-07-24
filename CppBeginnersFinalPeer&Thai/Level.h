@@ -28,7 +28,8 @@ private:
 
 public:
 
-	Level(Levels mapLevel, Player& p);
+        Level(Levels mapLevel, Player& p);
+        ~Level();
 
 	void Update();
 

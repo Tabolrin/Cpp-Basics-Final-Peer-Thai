@@ -50,10 +50,11 @@ bool Map::IsTileClear(const Vector2& tile) const
 	return CheckIsPointInMap(tile) && mapMat[tile.x][tile.y] == Symbols::CLEAR;
 }
 
-Symbols Map::GetCharAt(Vector2& pos)
+Symbols Map::GetCharAt(const Vector2& pos) const
 {
-	if (CheckIsPointInMap(pos))
-		return static_cast<Symbols>(mapMat[pos.x][pos.y]);
+        if (CheckIsPointInMap(pos))
+                return static_cast<Symbols>(mapMat[pos.x][pos.y]);
+        return Symbols::CLEAR;
 }
 
 bool Map::CheckIsPointInMap(const Vector2& point) const

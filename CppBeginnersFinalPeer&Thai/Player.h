@@ -20,8 +20,8 @@ private:
 public:
 	bool keyAcquired;
 	Player(const Vector2& location);
-	void Move(Map map, Vector2& direction);
-	void Update(Map map, Player player);
+        void Move(Map& map, Vector2& direction);
+        void Update(Map& map);
 	bool IsKeyAcquired();
 	void NewLevel();
 	Vector2 GetPlayerPos();
