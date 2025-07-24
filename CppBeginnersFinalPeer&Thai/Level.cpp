@@ -57,10 +57,10 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 
 		}
 	}
-	Enemy temp = Enemy(10, 5, 5, Elements::FIRE, Vector2(5, 10));
-	temp.AddPatrolPoint(*map, Vector2(2, 11));
-	temp.AddPatrolPoint(*map, Vector2(7, 11));
-	enemies.push_back(&temp);
+	Enemy* temp = new Enemy(10, 5, 5, Elements::FIRE, Vector2(5, 10));
+	(*temp).AddPatrolPoint(*map, Vector2(2, 11));
+	(*temp).AddPatrolPoint(*map, Vector2(7, 11));
+	enemies.push_back(temp);
 	//Debug print
 	//map->UpdatePosition(Vector2(2, 11), 'G', Ui::GetColorForChar('G'));
 	//map->UpdatePosition(Vector2(7, 11), '8', Ui::GetColorForChar('G'));
