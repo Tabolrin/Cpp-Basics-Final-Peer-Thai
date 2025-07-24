@@ -2,12 +2,12 @@
 #ifndef _LEVEL_
 #define _LEVEL_
 
-#include "Map.h"
-#include "Player.h"
 #include "Enemy.h"
 #include "Levels.h"
-#include <vector>
+#include "Map.h"
+#include "Player.h"
 #include <string>
+#include <vector>
 
 
 class Level

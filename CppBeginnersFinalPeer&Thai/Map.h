@@ -1,13 +1,13 @@
 ﻿#pragma once
 #ifndef _MAP_
 #define _MAP_
-#include <vector>
+
 #include "Levels.h"
-#include <string>
-#include "Vector2.h"
-#include <windows.h>
 #include "Symbols.h"
-#include <winnt.h>
+#include "Vector2.h"
+#include <vector>
+#include <windows.h>
+
 
 
 

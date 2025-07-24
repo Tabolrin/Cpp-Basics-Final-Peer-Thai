@@ -1,14 +1,14 @@
+#include "Elements.h"
 #include "Level.h"
 #include "Levels.h"
+#include "Map.h"
+#include "Symbols.h"
 #include "Ui.h"
-#include <fstream>
 #include <algorithm>
 #include <chrono>
-#include <thread>
-#include "Map.h"
+#include <fstream>
 #include <iostream>
-#include "Symbols.h"
-#include "Elements.h"
+#include <thread>
 
 Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(player)
 {

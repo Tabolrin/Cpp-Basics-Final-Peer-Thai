@@ -1,7 +1,7 @@
+#include "Inventory.h" 
 #include "Player.h"
 #include "Ui.h"
 #include <conio.h> 
-#include "Inventory.h" 
 #include <iostream>
 
 Player::Player(const Vector2& pos) : GameObject(position)

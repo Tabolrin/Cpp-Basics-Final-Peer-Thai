@@ -3,13 +3,12 @@
 #define _ENEMY_
 
 
+#include "Elements.h"
+#include "Player.h"
 #include "Unit.h"
 #include "Vector2.h"
 #include <string>
 #include <vector>
-#include <windows.h>
-#include "Player.h"
-#include "Elements.h"
 
 
 class Enemy : public Unit

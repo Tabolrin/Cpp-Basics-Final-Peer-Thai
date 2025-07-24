@@ -1,12 +1,12 @@
 #include "Game.h"
-#include "Player.h"
-#include "Levels.h"
 #include "Level.h"
-#include "Ui.h"
+#include "Levels.h"
 #include "Map.h"
+#include "Player.h"
+#include "Ui.h"
+#include <chrono>
 #include <conio.h>
 #include <iostream>
-#include <chrono>
 #include <thread>
 
 using namespace std::chrono;
@@ -69,7 +69,7 @@ void Game::RunGameLoop()
 		delete player;
 }
 
-//akternate update
+//alternate update
 /*
 // Configurable frame duration (100ms = 10 FPS)
 const int FRAME_DURATION_MS = 100;

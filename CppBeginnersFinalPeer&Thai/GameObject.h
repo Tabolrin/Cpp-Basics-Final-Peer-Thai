@@ -2,9 +2,9 @@
 #ifndef _GAME_OBJECT_
 #define _GAME_OBJECT_
 
-#include <string>
-#include "Vector2.h"
 #include "Map.h"
+#include "Vector2.h"
+#include <string>
 
 
 // Abstract base class for game objects

@@ -1,10 +1,10 @@
-#include "Ui.h"
+#include "Levels.h"
 #include "Map.h"
+#include "Player.h"
+#include "Ui.h"
 #include <conio.h>
 #include <iostream>
 #include <windows.h>
-#include "Player.h"
-#include "Levels.h"
 
 
 void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)

@@ -1,10 +1,10 @@
 #pragma once
 #ifndef _PLAYER_
 #define _PLAYER_
-#include "GameObject.h"
-#include "Map.h"
 #include "Colors.h"
+#include "GameObject.h"
 #include "Inventory.h"
+#include "Map.h"
 
 class Player : public GameObject
 {

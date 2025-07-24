@@ -1,7 +1,7 @@
-#include "Map.h"
-#include "Levels.h"
-#include "Symbols.h"
 #include "Colors.h"
+#include "Levels.h"
+#include "Map.h"
+#include "Symbols.h"
 #include "Ui.h"
 #include <iostream>
 
@@ -12,18 +12,18 @@ Map::Map(Levels level)
 	// Initialize map with default size
 	switch (level)
 	{
-	case Levels::MAP_LEVEL1:
-		Initialize(20, 20);
-		break;
-	case  Levels::MAP_LEVEL2:
-		Initialize(30, 30);
-		break;
-	case  Levels::MAP_LEVEL3:
-		Initialize(40, 40);
-		break;
-	default:
-		Initialize(20, 20);
-		break;
+		case Levels::MAP_LEVEL1:
+			Initialize(20, 20);
+			break;
+		case  Levels::MAP_LEVEL2:
+			Initialize(30, 30);
+			break;
+		case  Levels::MAP_LEVEL3:
+			Initialize(40, 40);
+			break;
+		default:
+			Initialize(20, 20);
+			break;
 	}
 }
 

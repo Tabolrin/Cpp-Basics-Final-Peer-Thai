@@ -1,7 +1,7 @@
+#include "Elements.h"
 #include "Enemy.h"
 #include <string>
 #include <windows.h>
-#include "Elements.h"
 
 #define REACTION_RANGE 2
 #define BATTLE_RANGE 1
