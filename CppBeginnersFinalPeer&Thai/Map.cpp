@@ -5,18 +5,6 @@
 #include "Ui.h"
 #include <iostream>
 
-/*void Map::Update(Vector2 pos1, Vector2 pos2)
-{
-		const Vector2& pos = pair.first;
-
-		if (!CheckIsPointInMap(pos))
-			continue;
-
-		GameObject* obj = pair.second;
-		char ch = GetCharForObject(obj);
-		mapArray[pos.x][pos.y] = ch;
-	}
-}*/
 
 Map::Map(Levels level)
 {

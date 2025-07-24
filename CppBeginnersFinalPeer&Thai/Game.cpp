@@ -33,38 +33,92 @@ void Game::RunGameLoop()
 		lastTime = now;
 		accumulator += delta;
 
-		player->Update(currentLevel->GetMap());
+		player->Update(currentLevel->GetMap(), *player);
 
-		currentLevel->UpdateEnemies();
+		//currentLevel->UpdateEnemies();
 
-			/*for (auto* e : currentLevel->enemies)
+		/*for (auto* e : currentLevel->GetEnemiesList())
+		{
+			if (e->getPosition() == player->getPosition() + Vector2(1, 0)) 
 			{
-				if (e->getPosition() == player->getPosition() + Vector2(1, 0)) 
-				{
-					currentLevel->InitiateCombat(*player, *e);
-				}
-			}*/
-
-			currentLevel->Update();
-
-			if (currentLevel->CheckWin()) 
-			{
-				currentLevel->TransitionToNext();
-				delete currentLevel;
-
-				int intCurLvl = static_cast<int>(currentLevelNum);
-				intCurLvl += 1;
-				currentLevelNum = static_cast<Levels>(intCurLvl);
-
-				if (currentLevelNum > 3) running = false;
-				else currentLevel = new Level(currentLevelNum, *player);
+				currentLevel->InitiateCombat(*player, *e);
 			}
+		}*/
 
-			accumulator -= dt;
+		currentLevel->Update();
+
+		if (currentLevel->CheckWin()) 
+		{
+			currentLevel->TransitionToNext();
+			delete currentLevel;
+
+			int intCurLvl = static_cast<int>(currentLevelNum);
+			intCurLvl += 1;
+			currentLevelNum = static_cast<Levels>(intCurLvl);
+
+			if (currentLevelNum > 3) running = false;
+			else currentLevel = new Level(currentLevelNum, *player);
 		}
+
+		accumulator -= dt;
+	}
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		delete currentLevel;
 		delete player;
+}
+
+//akternate update
+/*
+// Configurable frame duration (100ms = 10 FPS)
+const int FRAME_DURATION_MS = 100;
+
+Levels currentLevelNum = Levels::MAP_LEVEL1;
+bool running = true;
+
+while (running)
+{
+	auto startTime = high_resolution_clock::now();
+
+	// === Update Player ===
+	player->Update(currentLevel->GetMap(), *player);
+
+	// === Update Enemies ===
+	currentLevel->Update();
+
+	// === Check Win ===
+	if (currentLevel->CheckWin())
+	{
+		currentLevel->TransitionToNext();
+		delete currentLevel;
+
+		int intCurLvl = static_cast<int>(currentLevelNum);
+		intCurLvl += 1;
+		currentLevelNum = static_cast<Levels>(intCurLvl);
+
+		if (currentLevelNum > 3)
+		{
+			running = false;
+			break;
+		}
+		else
+		{
+			currentLevel = new Level(currentLevelNum, *player);
+		}
 	}
+
+	// === Sleep for remaining frame time ===
+	auto endTime = high_resolution_clock::now();
+	auto elapsed = duration_cast<milliseconds>(endTime - startTime);
+
+	int sleepTime = FRAME_DURATION_MS - static_cast<int>(elapsed.count());
+	if (sleepTime > 0)
+	{
+		this_thread::sleep_for(milliseconds(sleepTime));
+	}
+}
+
+// Cleanup
+delete currentLevel;
+delete player;*/

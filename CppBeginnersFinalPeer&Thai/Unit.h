@@ -3,19 +3,22 @@
 #define _UNIT_
 #include <string>
 #include "GameObject.h"
+#include "Elements.h"
+#include "Map.h"
+#include "Player.h"
 
 using namespace std;
 
-class Unit abstract : public GameObject
+class Unit : public GameObject
 {
 protected:
 	int maxHp;
 	int hp;
 	int normalDmg;
 	int elementalDmg;
-	string element;
+	Elements element;
 
 public:
-	Unit(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2& location);
+	Unit(int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
 };
 #endif

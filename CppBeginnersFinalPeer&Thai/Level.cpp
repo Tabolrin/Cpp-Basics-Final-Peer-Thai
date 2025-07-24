@@ -8,6 +8,7 @@
 #include "Map.h"
 #include <iostream>
 #include "Symbols.h"
+#include "Elements.h"
 
 Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(player)
 {
@@ -39,10 +40,30 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 			if (ch == Symbols::PLAYER)
 				player.setPosition(Vector2(x, y));
 
+
+			/*
+			else if (ch == Symbols::ENEMY)
+			{
+				Enemy temp = Enemy(10, 5, 5, Elements::FIRE, Vector2(x, y));
+				temp.AddPatrolPoint(*map, Vector2(2, 11));
+				
+				temp.AddPatrolPoint(*map, Vector2(7, 11));
+				
+				enemies.push_back(&temp);
+			}
+			*/
+
 			map->UpdatePosition(Vector2(x, y), ch, Ui::GetColorForChar(ch));
+
 		}
 	}
-
+	Enemy temp = Enemy(10, 5, 5, Elements::FIRE, Vector2(5, 10));
+	temp.AddPatrolPoint(*map, Vector2(2, 11));
+	temp.AddPatrolPoint(*map, Vector2(7, 11));
+	enemies.push_back(&temp);
+	//Debug print
+	//map->UpdatePosition(Vector2(2, 11), 'G', Ui::GetColorForChar('G'));
+	//map->UpdatePosition(Vector2(7, 11), '8', Ui::GetColorForChar('G'));
     Ui::PrintFrame(*this, levelNum, player);
 }
 
@@ -66,20 +87,8 @@ void Level::LoadMapFile()
 	}
 
 	mapHeight = mapLines.size();
-
-	/*for (int x = 0; x < mapHeight; ++x)
-	{
-		for (int y = 0; y < lines[x].length(); ++y) 
-		{
-
-		}
-	}*/
 }
 
-void Level::PopulateEnemies(char ch, const Vector2& pos)
-{
-		//add new enemy with relevant coordinates
-}
 
 void Level::Update()
 {
@@ -106,7 +115,7 @@ void Level::UpdateEnemies()
 {
 	for (auto* e : enemies)
 	{
-		Vector2 dir(0, 1);
+		e->Update(*map, player);
 	}
 }
 

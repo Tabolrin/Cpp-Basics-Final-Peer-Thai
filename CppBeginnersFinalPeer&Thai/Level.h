@@ -23,8 +23,8 @@ private:
 	std::vector<Enemy*> enemies;
 	std::vector<std::string> mapLines;
 
+
 	void LoadMapFile();
-	void PopulateEnemies(char ch, const Vector2& pos);
 
 public:
 
@@ -33,6 +33,8 @@ public:
 	void Update();
 
 	bool CheckWin();
+
+	std::vector<Enemy*> GetEnemiesList() { return enemies; }
 
 	void SetPlayerAtExit(bool val) { playerAtExit = val; }
 

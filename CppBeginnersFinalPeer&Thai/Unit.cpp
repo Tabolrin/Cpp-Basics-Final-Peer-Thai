@@ -1,4 +1,11 @@
 #include "Unit.h"
 #include <windows.h>
 
-Unit::Unit(int maxHp, int normalDmg, int elementalDmg, string element, const Vector2& location) : GameObject(location) {}
+Unit::Unit(int maxHpIn, int normalDmgIn, int elementalDmgIn, Elements elementIn, const Vector2& location) : GameObject(location)
+{
+	maxHp = maxHpIn;
+	hp = maxHp;
+	elementalDmg = elementalDmgIn;
+	normalDmg = normalDmgIn;
+	element = elementIn;
+}

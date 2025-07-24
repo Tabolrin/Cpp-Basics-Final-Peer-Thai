@@ -17,8 +17,6 @@ protected:
 public:
 	GameObject(const Vector2& location) : tag(tag), position(location) {}
 
-	virtual void Update(Map map) = 0;
-
 	virtual ~GameObject() {}
 
 	std::string getTag() const { return tag; }

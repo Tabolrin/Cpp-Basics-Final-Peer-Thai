@@ -1,10 +1,14 @@
 #include "Player.h"
 #include "Ui.h"
 #include <conio.h> 
+#include "Inventory.h" 
+#include <iostream>
 
 Player::Player(const Vector2& pos) : GameObject(position)
 {
 	position = pos;
+	keyAcquired = false;
+	Inventory* inventory = new Inventory();
 }
 
 void Player::Move(Map map, Vector2& direction)
@@ -21,22 +25,24 @@ void Player::Move(Map map, Vector2& direction)
 
 		switch (map.GetCharAt(tempPos))
 		{
-		case Symbols::KEY:
-		{
-			break;
-		}
+			case Symbols::KEY:
+			{
+				keyAcquired = true;
+				inventory.AddItem(Items::LEVEL_KEY);
+				break;
+			}
 
 
-		case Symbols::FULL_CHEST:
-		{
-			break;
-		}
+			case Symbols::FULL_CHEST:
+			{
+				break;
+			}
 		}
 	}
 
 }
 
-void Player:: Update(Map map)
+void Player:: Update(Map map, Player player)
 {
 	Vector2 direction = Vector2 (0,0);
 	char playerInput;
@@ -67,6 +73,24 @@ void Player:: Update(Map map)
 
 		Move(map, direction);
 	}
+}
 
+bool Player::IsKeyAcquired()
+{
+	return keyAcquired;
+}
+
+void Player::NewLevel()
+{
+	keyAcquired = false;
+}
+
+Vector2 Player::GetPlayerPos()
+{
+	return position;
+}
+
+Player::~Player()
+{
 
 }

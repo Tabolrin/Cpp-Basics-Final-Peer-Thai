@@ -41,6 +41,8 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 	SetConsoleTextAttribute(hConsole, 7);*/
 
 	std::cout << "Key On Player: ";
+	if (player.IsKeyAcquired())
+		std::cout << "1";
 	/*
 	if ()//if player has key
 	{
