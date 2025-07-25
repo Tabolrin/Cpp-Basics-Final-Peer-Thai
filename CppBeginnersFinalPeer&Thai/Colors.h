@@ -1,6 +1,4 @@
 #pragma once
-#ifndef _COLORS_
-#define _COLORS_
 
 enum class Colors : int
 {
@@ -42,4 +40,4 @@ enum class Colors : int
 };
 
 
-#endif 
+

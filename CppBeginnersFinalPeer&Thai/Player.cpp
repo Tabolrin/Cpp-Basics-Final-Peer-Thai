@@ -8,8 +8,10 @@ Player::Player(const Vector2& pos) : GameObject(position)
 {
 	position = pos;
 	keyAcquired = false;
-	Inventory* inventory = new Inventory();
+	inventory = new Inventory();
+	Party = new PlayerParty();
 }
+
 
 void Player::Move(Map map, Vector2& direction)
 {
@@ -28,7 +30,7 @@ void Player::Move(Map map, Vector2& direction)
 			case Symbols::KEY:
 			{
 				keyAcquired = true;
-				inventory.AddItem(Items::LEVEL_KEY);
+				(*inventory).AddItem(Items::LEVEL_KEY);
 				break;
 			}
 

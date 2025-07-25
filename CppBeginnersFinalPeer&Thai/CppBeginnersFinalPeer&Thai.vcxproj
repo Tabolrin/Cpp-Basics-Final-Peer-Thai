@@ -123,7 +123,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CombatSystem.cpp" />
     <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="NameGenerator.cpp" />
+    <ClCompile Include="PlayerParty.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -136,10 +139,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="Elements.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="HitResult.h" />
+    <ClInclude Include="NameGenerator.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Items.h" />
+    <ClInclude Include="PlayerChoice.h" />
+    <ClInclude Include="PlayerParty.h" />
     <ClInclude Include="Symbols.h" />
     <ClInclude Include="Levels.h" />
     <ClInclude Include="Game.h" />
@@ -152,10 +160,13 @@
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="FireNames.txt" />
     <Text Include="Level1_Map.txt" />
     <Text Include="Level2_Map.txt" />
     <Text Include="Level3_Map.txt" />
     <Text Include="Monster.txt" />
+    <Text Include="GrassNames.txt" />
+    <Text Include="WaterNames.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

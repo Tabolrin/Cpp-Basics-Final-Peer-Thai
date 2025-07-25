@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include <string>
 #include <windows.h>
+#include "CombatSystem.h"
 
 #define REACTION_RANGE 2
 #define BATTLE_RANGE 1
@@ -112,14 +113,15 @@ void Enemy::ChangePosition(Map map, Vector2 nextPos)
     return;
 }
 
-void Enemy::Update(Map map, Player player)
+void Enemy::Update(Map& map, Player& player)
 {
+
     if (IsInRange(player.GetPlayerPos(), REACTION_RANGE))
     {
         GoToPoint(map, player.GetPlayerPos());
         if (IsInRange(player.GetPlayerPos(), BATTLE_RANGE))
         {
-            //////////////////////////////////FIGHT/////////////////////////////////////
+            CombatSystem::StartCombat(*player.GetParty(), *this, *player.GetInventory());
         } 
     }
     else

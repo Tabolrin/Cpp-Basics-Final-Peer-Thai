@@ -1,6 +1,4 @@
 ﻿#pragma once
-#ifndef _MAP_
-#define _MAP_
 
 #include "Levels.h"
 #include "Symbols.h"
@@ -40,4 +38,3 @@ public:
 
 	bool CheckIsPointInMap(const Vector2& point) const;
 };
-#endif

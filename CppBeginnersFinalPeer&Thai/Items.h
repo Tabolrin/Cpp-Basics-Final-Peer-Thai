@@ -1,6 +1,4 @@
 #pragma once
-#ifndef  _ITEMS_
-#define _ITEMS_
 
 enum Items 
 {
@@ -10,5 +8,3 @@ enum Items
 	SMOKE_BOMB,
 	LEVEL_KEY
 };
-
-#endif

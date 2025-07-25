@@ -1,7 +1,4 @@
 #pragma once
-#ifndef _VECTOR2_
-#define _VECTOR2_
-
 
 #include <functional>
 #include <type_traits>
@@ -74,4 +71,3 @@ namespace std
 		}
 	};
 }
-#endif 

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef _LEVEL_
-#define _LEVEL_
 
 #include "Enemy.h"
 #include "Levels.h"
@@ -46,4 +44,3 @@ public:
 
 	void InitiateCombat(Player& p, Unit& e);
 };
-#endif

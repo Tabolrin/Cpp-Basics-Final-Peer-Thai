@@ -1,6 +1,5 @@
 #pragma once
-#ifndef _UI_
-#define _UI_
+
 #include "Level.h"
 #include "Levels.h"
 #include "Unit.h"
@@ -14,7 +13,6 @@ class Ui
 private:
 	static const int MAX_LOG_SIZE = 6;
 
-
 public:
 	static void PrintFrame(Level& LevelObj, Levels level, Player& player);
 	static void PrintOpeningAndTutorials();
@@ -22,4 +20,3 @@ public:
 	static void InitialMapDraw(Map map);
 	static const int GetColorForChar(char ch) ;
 };
-#endif

@@ -45,6 +45,15 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CombatSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerParty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NameGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -92,6 +101,21 @@
     <ClInclude Include="Elements.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CombatSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerParty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NameGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HitResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerChoice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Level1_Map.txt">
@@ -104,6 +128,15 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Monster.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="GrassNames.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="FireNames.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="WaterNames.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

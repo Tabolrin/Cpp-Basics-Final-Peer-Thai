@@ -1,8 +1,4 @@
 #pragma once
-#ifndef  _ENEMY_
-#define _ENEMY_
-
-
 #include "Elements.h"
 #include "Player.h"
 #include "Unit.h"
@@ -26,6 +22,5 @@ public:
 	Enemy(int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
 	void AddPatrolPoint(Map map, Vector2 point);
 	void Patrol(Map map);
-	void Update(Map map, Player player);
+	void Update(Map& map, Player& player);
 };
-#endif 

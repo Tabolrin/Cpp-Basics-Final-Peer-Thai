@@ -1,6 +1,5 @@
 #pragma once
-#ifndef _SYMBOLS_
-#define _SYMBOLS_
+
 
 enum Symbols : char
 {
@@ -13,5 +12,3 @@ enum Symbols : char
 	EXIT = 'E',
 	KEY = 'K',
  };
-
-#endif
