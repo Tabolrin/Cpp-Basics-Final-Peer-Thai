@@ -17,6 +17,6 @@ public:
 	static void PrintFrame(Level& LevelObj, Levels level, Player& player);
 	static void PrintOpeningAndTutorials();
 	static void RequireEnterPressToProgress();
-	static void InitialMapDraw(Map map);
+	static void MapDraw(Map map);
 	static const int GetColorForChar(char ch) ;
 };

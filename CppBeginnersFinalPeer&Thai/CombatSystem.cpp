@@ -5,6 +5,8 @@
 #include "PlayerChoice.h"
 #include <iostream>
 #include <cstdlib>
+#include <limits>      // for std::numeric_limits
+#include <vector>      // if PlayerParty::GetAll returns a vector
 
 float GetElementMultiplier(Elements attacker, Elements defender)
 {
@@ -56,16 +58,9 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             std::cin >> attackType;
 
             HitResult result = currentUnit->HitOrMiss();
-            int baseDamage = 0;
-            if (attackType == 1)
-            {
-                baseDamage = currentUnit->GetNormalDmg();
-            }
-            else if (attackType == 2)
-            {
-                float multiplier = GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement());
-                baseDamage = static_cast<int>(currentUnit->GetElementalDmg() * multiplier);
-            }
+            int baseDamage = (attackType == 1)
+                ? currentUnit->GetNormalDmg()
+                : static_cast<int>(currentUnit->GetElementalDmg() * GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement()));
 
             switch (result)
             {
@@ -89,6 +84,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
                 int expReward = 10 + enemy.GetLevel() * 5;
                 std::cout << currentUnit->GetName() << " gains " << expReward << " EXP!\n";
                 currentUnit->AddExp(expReward);
+
                 if (currentUnit->GetLevel() * 10 <= currentUnit->GetExp())
                 {
                     currentUnit->PlayerLevelUp();
@@ -117,12 +113,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             HitResult result = enemy.HitOrMiss();
             std::cout << enemy.GetName() << " attacks " << member.GetName() << "! ";
 
-            int baseDamage = enemy.GetNormalDmg();
-            float multiplier = GetElementMultiplier(enemy.GetElement(), member.GetElement());
-            int elementalDamage = static_cast<int>(enemy.GetElementalDmg() * multiplier);
-
-            int totalDamage = baseDamage + elementalDamage;
-
+            int totalDamage = enemy.GetNormalDmg() + static_cast<int>(enemy.GetElementalDmg() * GetElementMultiplier(enemy.GetElement(), member.GetElement()));
             switch (result)
             {
             case HitResult::CRIT:
@@ -138,7 +129,6 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
                 continue;
             }
             std::cout << member.GetName() << " HP: " << member.GetHp() << "\n";
-
             if (party.IsDefeated())
             {
                 std::cout << "\n💀 Your party was defeated!\n";
@@ -152,17 +142,31 @@ Unit* CombatSystem::ChoosePartyUnit(PlayerParty& party)
 {
     std::cout << "\nAvailable Units:\n";
     auto& members = party.GetAll();
-    for (size_t i = 0; i < members.size(); ++i)
-    {
-        std::cout << i + 1 << ". " << members[i].GetName() << " (HP: " << members[i].GetHp() << ")\n";
-    }
 
     int choice;
+    bool validChoice = false;  // fixed typo here
+
     do
     {
+        char ch;
         std::cout << "Choose unit index: ";
         std::cin >> choice;
-    } while (choice < 1 || choice > members.size() || members[choice - 1].GetHp() <= 0);
+        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(members.size()))
+        {
+            std::cin.clear();
+            while (std::cin.get(ch) && ch != '\n');
+            std::cout << "Invalid choice. Please try again.\n";
+        }
+        else if (members[choice - 1].GetHp() <= 0)
+        {
+            std::cout << "This unit is down. Please choose another unit.\n";
+        }
+        else
+        {
+            validChoice = true;
+            while (std::cin.get(ch) && ch != '\n');
+        }
+    } while (!validChoice);
 
     return &members[choice - 1];
 }
@@ -171,7 +175,7 @@ void CombatSystem::UseItemMenu(Inventory& inventory, Unit* target)
 {
     std::cout << "\nChoose item to use:\n";
     std::cout << static_cast<int>(Items::HP_POTION) << ". Heal (HP_POTION)\n"
-        << static_cast<int>(Items::NORAML_ATTACK_POTION) << ". Power Boost (NORAML_ATTACK_POTION)\n"
+        << static_cast<int>(Items::NORMAL_ATTACK_POTION) << ". Power Boost (NORMAL_ATTACK_POTION)\n"
         << static_cast<int>(Items::SMOKE_BOMB) << ". Smoke Bomb (SMOKE_BOMB)\n"
         << "Choice: ";
 
@@ -188,17 +192,19 @@ void CombatSystem::UseItemMenu(Inventory& inventory, Unit* target)
             inventory.UseItem(Items::HP_POTION);
             std::cout << "Healed 25 HP. Current HP: " << target->GetHp() << "\n";
         }
-        else std::cout << "No health potions left!\n";
+        else
+            std::cout << "No health potions left!\n";
         break;
 
-    case Items::NORAML_ATTACK_POTION:
-        if (inventory.IsInInventory(Items::NORAML_ATTACK_POTION))
+    case Items::NORMAL_ATTACK_POTION:
+        if (inventory.IsInInventory(Items::NORMAL_ATTACK_POTION))
         {
             target->IncreaseNormalDmg(5);
-            inventory.UseItem(Items::NORAML_ATTACK_POTION);
+            inventory.UseItem(Items::NORMAL_ATTACK_POTION);
             std::cout << "Increased normal damage by 5.\n";
         }
-        else std::cout << "No power potions left!\n";
+        else
+            std::cout << "No power potions left!\n";
         break;
 
     case Items::SMOKE_BOMB:
@@ -206,9 +212,10 @@ void CombatSystem::UseItemMenu(Inventory& inventory, Unit* target)
         {
             inventory.UseItem(Items::SMOKE_BOMB);
             std::cout << "You escaped using a smoke bomb!\n";
-            exit(0);
+            std::exit(0);
         }
-        else std::cout << "No smoke bombs left!\n";
+        else
+            std::cout << "No smoke bombs left!\n";
         break;
 
     default:

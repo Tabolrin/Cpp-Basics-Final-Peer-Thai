@@ -103,11 +103,9 @@ bool Enemy::IsPointValid(Map map, Vector2 point)
 
 void Enemy::ChangePosition(Map map, Vector2 nextPos)
 {
-    map.UpdatePosition(nextPos, Symbols::ENEMY,
-        map.GetCharAt(nextPos) == Symbols::ENEMY); //move enemy char to new position
+    map.UpdatePosition(nextPos, Symbols::ENEMY, map.GetCharAt(nextPos) == Symbols::ENEMY); //move enemy char to new position
 
-    map.UpdatePosition(position, Symbols::CLEAR,
-        map.GetCharAt(nextPos) == Symbols::CLEAR);//delete enemy char from old position
+    map.UpdatePosition(position, Symbols::CLEAR, map.GetCharAt(nextPos) == Symbols::CLEAR);//delete enemy char from old position
 
     position = nextPos;
     return;
@@ -115,7 +113,6 @@ void Enemy::ChangePosition(Map map, Vector2 nextPos)
 
 void Enemy::Update(Map& map, Player& player)
 {
-
     if (IsInRange(player.GetPlayerPos(), REACTION_RANGE))
     {
         GoToPoint(map, player.GetPlayerPos());

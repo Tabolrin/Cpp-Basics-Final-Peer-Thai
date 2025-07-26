@@ -24,21 +24,22 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 	SetConsoleTextAttribute(hConsole, 6); // DarkYellow
 	std::cout << static_cast<int>(level) << std::endl;
 	SetConsoleTextAttribute(hConsole, 7);
-	/*
+	
 	std::cout << "HP: ";
 	SetConsoleTextAttribute(hConsole, 4); // DarkRed
 	std::cout << player.GetCurrentHP() << " / " << player.GetMaxHP() << std::endl;
 	SetConsoleTextAttribute(hConsole, 7);
 
-	std::cout << "Attack Power: ";
-	SetConsoleTextAttribute(hConsole, 5); // Magenta
-	std::cout << player.GetDamageOutput() << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
+	//---------------Replace with player part units statatus using their display 
+	//std::cout << "Attack Power: ";
+	//SetConsoleTextAttribute(hConsole, 5); // Magenta
+	//std::cout << player.GetDamageOutput() << std::endl;
+	//SetConsoleTextAttribute(hConsole, 7);
 
 	std::cout << "Player coordinates: ";
 	SetConsoleTextAttribute(hConsole, 1); // DarkBlue
 	std::cout << player.getPosition().x << " , " << player.getPosition().y << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);*/
+	SetConsoleTextAttribute(hConsole, 7);
 
 	std::cout << "Key On Player: ";
 	if (player.IsKeyAcquired())
@@ -57,7 +58,7 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 	SetConsoleTextAttribute(hConsole, 7);
 }
 
-void Ui::InitialMapDraw(Map map) 
+void Ui::MapDraw(Map map) 
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	//system("cls");

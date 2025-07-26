@@ -9,37 +9,12 @@ class PlayerParty
 	std::vector<Unit> partyMembers;
 
 public:
-	PlayerParty()
-	{
-		partyMembers.emplace_back("Fire Warrior", 100, 20, Elements::FIRE, Vector2(0, 0));
-		partyMembers.emplace_back("Water Mage", 80, 15, Elements::WATER, Vector2(1, 0));
-		partyMembers.emplace_back("Grass Druid", 90, 18, Elements::GRASS, Vector2(2, 0));
-	}
+	PlayerParty();
 
-	void PrintParty() const
-	{
-		for (const auto& member : partyMembers)
-		{
-			std::cout << member.GetName()
-				<< ", Element: " << member.GetElementString()
-				<< ", Level: " << member.GetLevel()
-				<< ", HP: " << member.GetHp() << "/" << member.GetMaxHp()
-				<< std::endl;
-		}
-	}
+	void PrintParty() const;
 
-	std::vector<Unit>& GetAll()
-	{
-		return partyMembers;
-	}
+	std::vector<Unit>& GetAll();
 
-	bool IsDefeated() const
-	{
-		for (const auto& member : partyMembers)
-		{
-			if (member.GetHp() > 0)
-				return false;
-		}
-		return true;
-	}
+	bool IsDefeated() const;
+
 };
