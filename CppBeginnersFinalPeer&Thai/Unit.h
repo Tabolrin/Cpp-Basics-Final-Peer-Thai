@@ -22,7 +22,7 @@ protected:
 	void setHp(int hp) { this->hp = hp; }
 
 public:
-	Unit(int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
+	Unit(std::string name, int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
 
 	int GetMaxHp() const { return maxHp; }
 
@@ -40,21 +40,8 @@ public:
 
 	Elements GetElement() const { return element; }
 
-	std::string GetElementString() const 
-	{ 
-		switch (element)
-		{
-			case Elements::FIRE:
-				return "Fire";
-			case Elements::WATER:
-				return "Water";
-			case Elements::GRASS:
-				return "Grass";
-			default:
-				return "Unknown";
-		}
-	}
-
+	std::string GetElementString() const;
+	
 	int GetLevel() const { return level; }
 
 	std::string GetName() const { return name; }

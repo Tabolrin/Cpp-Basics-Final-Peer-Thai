@@ -3,6 +3,7 @@
 #include "Levels.h"
 #include "Map.h"
 #include "Symbols.h"
+#include "NameGenerator.h"
 #include "Ui.h"
 #include <algorithm>
 #include <chrono>
@@ -42,7 +43,8 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 
 			else if (ch == Symbols::ENEMY)
 			{
-				Enemy temp = Enemy(10, 5, 5, Elements::FIRE, Vector2(x, y));
+				NameGenerator nameGen;
+				Enemy temp = Enemy(nameGen.GetRandomName(Elements::FIRE), 100, 5, 5, Elements::FIRE, Vector2(x, y));
 				temp.AddPatrolPoint(*map, Vector2(2, 11));
 				temp.AddPatrolPoint(*map, Vector2(7, 11));
 				
@@ -53,7 +55,7 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 
 		}
 	}
-	Enemy temp = Enemy(10, 5, 5, Elements::FIRE, Vector2(5, 10));
+	Enemy temp = Enemy("name" ,10, 5, 5, Elements::FIRE, Vector2(5, 10));
 	temp.AddPatrolPoint(*map, Vector2(2, 11));
 	temp.AddPatrolPoint(*map, Vector2(7, 11));
 	enemies.push_back(&temp);

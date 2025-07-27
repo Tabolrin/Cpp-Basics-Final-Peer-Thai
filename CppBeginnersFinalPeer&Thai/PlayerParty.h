@@ -6,6 +6,7 @@
 
 class PlayerParty
 {
+private:
 	std::vector<Unit> partyMembers;
 
 public:

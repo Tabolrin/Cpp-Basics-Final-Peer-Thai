@@ -7,8 +7,7 @@
 template <typename T>
 struct Vector2Impl
 {
-	static_assert(std::is_arithmetic_v<T>,
-		"Vector2Impl requires a numeric type");
+	static_assert(std::is_arithmetic_v<T>,	"Vector2Impl requires a numeric type");
 
 	T x, y;
 

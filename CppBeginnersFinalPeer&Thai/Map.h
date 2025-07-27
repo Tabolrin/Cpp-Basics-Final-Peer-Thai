@@ -7,8 +7,6 @@
 #include <windows.h>
 
 
-
-
 class Map
 {
 private:

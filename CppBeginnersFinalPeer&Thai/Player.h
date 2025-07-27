@@ -16,12 +16,13 @@ private:
 	char downButton = 's';
 	char leftButton = 'a';
 	char rightButton = 'd';
+	void PickUpChest(Map map);
 
 
 public:
 	bool keyAcquired;
 	Player(const Vector2& location);
-	void Move(Map map, Vector2& direction);
+	void Move(Map map, Vector2& direction);///////////////
 	void Update(Map map, Player player);
 	PlayerParty* GetParty() const { return party; }
 	Inventory* GetInventory() const { return inventory; }

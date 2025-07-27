@@ -5,9 +5,9 @@
 PlayerParty::PlayerParty()
 {
 	NameGenerator nameGen;
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::FIRE), 100, 20, Elements::FIRE, Vector2(-1, -1));
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::WATER), 80, 15, Elements::WATER, Vector2(-1, -1));
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::GRASS), 90, 18, Elements::GRASS, Vector2(-1, -1));
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::FIRE), 100, 15, 20, Elements::FIRE, Vector2(-1, -1));
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::WATER), 80, 17, 17, Elements::WATER, Vector2(-1, -1));
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::GRASS), 90, 22, 18, Elements::GRASS, Vector2(-1, -1));
 }
 
 void PlayerParty::PrintParty() const

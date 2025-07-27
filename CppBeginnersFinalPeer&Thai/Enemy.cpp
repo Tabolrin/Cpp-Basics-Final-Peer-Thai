@@ -7,8 +7,8 @@
 #define REACTION_RANGE 2
 #define BATTLE_RANGE 1
 
-Enemy::Enemy(int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location) :
-    Unit(maxHp, normalDmg, elementalDmg, element, location)
+Enemy::Enemy(std::string name, int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location) :
+    Unit(name, maxHp, normalDmg, elementalDmg, element, location)
 {
     currentPoint = 0;
     speed = 1;
@@ -38,10 +38,10 @@ void Enemy::GoToPoint(Map map, Vector2 point)
 {
     Vector2 nextPos;
 
-    if (position.x < point.x)
+    if ((position).x < point.x)
     {
-        nextPos.x = position.x + speed;
-        nextPos.y = position.y;
+        nextPos.x = (position).x + speed;
+        nextPos.y = (position).y;
 
         if (IsPointValid(map, nextPos))
         {
@@ -54,10 +54,10 @@ void Enemy::GoToPoint(Map map, Vector2 point)
         }
     }
 
-    else if (position.x > point.x)
+    else if ((position).x > point.x)
     {
-        nextPos.x = position.x - speed;
-        nextPos.y = position.y;
+        nextPos.x = (position).x - speed;
+        nextPos.y = (position).y;
 
         if (IsPointValid(map, nextPos))
         {
@@ -66,10 +66,10 @@ void Enemy::GoToPoint(Map map, Vector2 point)
         }
     }
 
-    if (position.y < point.y)
+    if ((position).y < point.y)
     {
-        nextPos.x = position.x;
-        nextPos.y = position.y + speed;
+        nextPos.x = (position).x;
+        nextPos.y = (position).y + speed;
 
         if (IsPointValid(map, nextPos))
         {
@@ -78,10 +78,10 @@ void Enemy::GoToPoint(Map map, Vector2 point)
         }
     }
 
-    else if (position.y > point.y)
+    else if ((position).y > point.y)
     {
-        nextPos.x = position.x;
-        nextPos.y = position.y - speed;
+        nextPos.x = (position).x;
+        nextPos.y = (position).y - speed;
 
         if (IsPointValid(map, nextPos))
         {
@@ -105,9 +105,9 @@ void Enemy::ChangePosition(Map map, Vector2 nextPos)
 {
     map.UpdatePosition(nextPos, Symbols::ENEMY, map.GetCharAt(nextPos) == Symbols::ENEMY); //move enemy char to new position
 
-    map.UpdatePosition(position, Symbols::CLEAR, map.GetCharAt(nextPos) == Symbols::CLEAR);//delete enemy char from old position
+    map.UpdatePosition((position), Symbols::CLEAR, map.GetCharAt(nextPos) == Symbols::CLEAR);//delete enemy char from old position
 
-    position = nextPos;
+    (position) = nextPos;
     return;
 }
 
@@ -126,7 +126,6 @@ void Enemy::Update(Map& map, Player& player)
 
 bool Enemy::IsInRange(Vector2 targetPosition, int range)
 {
-
     /*
     if (((playerLocation.x - position.x >= 0 && playerLocation.x - position.x <= range)
         || (playerLocation.x - position.x < 0 && position.x - playerLocation.x <= range))
@@ -137,8 +136,8 @@ bool Enemy::IsInRange(Vector2 targetPosition, int range)
     }
     */
 
-    if ((position.x - targetPosition.x <= range || targetPosition.x - position.x <= range)
-        && position.y - targetPosition.y <= range || targetPosition.y - position.y <= range)
+    if (((position).x - targetPosition.x <= range || targetPosition.x - (position).x <= range)
+        && (position).y - targetPosition.y <= range || targetPosition.y - (position).y <= range)
         return true;
     return false;
 }

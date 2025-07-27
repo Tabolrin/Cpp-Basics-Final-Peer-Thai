@@ -13,5 +13,7 @@ public:
 	bool IsInInventory(Items item);
 	void AddItem(Items item);
 	void UseItem(Items item);
+	Items GetRandomItemFromChest() const;
+
 };
 

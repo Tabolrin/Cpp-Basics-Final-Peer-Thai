@@ -41,3 +41,14 @@ void Inventory::UseItem(Items item)
 		std::cout << "Item Not In Inventory" << std::endl;
 	
 }
+
+
+Items Inventory::GetRandomItemFromChest() const
+{
+	if (inventory.empty())
+		return Items::NONE;
+
+	auto it = inventory.begin();
+	std::advance(it, rand() % 4); 
+	return it->first; 
+}

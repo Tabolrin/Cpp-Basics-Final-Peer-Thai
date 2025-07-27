@@ -16,16 +16,17 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 	std::cout << std::endl;
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 3); // DarkCyan
+	SetConsoleTextAttribute(hConsole, Colors::DARK_CYAN); // DarkCyan
 	std::cout << "-= Game Status =-" << std::endl;
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE); // White
 
 	std::cout << "Current Level: ";
-	SetConsoleTextAttribute(hConsole, 6); // DarkYellow
+	SetConsoleTextAttribute(hConsole, Colors::DARK_YELLOW); // DarkYellow
 	std::cout << static_cast<int>(level) << std::endl;
 	SetConsoleTextAttribute(hConsole, 7);
 
-	//---------------Replace with player part units statatus using their display 
+	// TODO:
+	//---------------Replace with player party units status using their display 
 	//std::cout << "Attack Power: ";
 	//SetConsoleTextAttribute(hConsole, 5); // Magenta
 	//std::cout << player.GetDamageOutput() << std::endl;

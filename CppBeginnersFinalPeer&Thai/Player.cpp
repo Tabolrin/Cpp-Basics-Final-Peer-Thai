@@ -3,10 +3,11 @@
 #include "Ui.h"
 #include <conio.h> 
 #include <iostream>
+#include "Items.h"
 
 Player::Player(const Vector2& pos) : GameObject(position)
 {
-	position = pos;
+	position =  pos;
 	keyAcquired = false;
 	inventory = new Inventory();
 	party = new PlayerParty();
@@ -47,7 +48,22 @@ void Player::Move(Map map, Vector2& direction)
 			}
 		}
 	}
+}
 
+void Player::PickUpChest(Map map)
+{ 
+	if (map.GetMapMatrix()[((position).x + 1)][(position).y] == Symbols::FULL_CHEST)
+	{
+		map.GetMapMatrix()[((position).x + 1)][ (position).y] = Symbols::EMPTY_CHEST;
+
+		Items item = Items::NONE;
+		while(item == Items::NONE)
+		{
+			item = inventory->GetRandomItemFromChest();
+		}
+
+		(*inventory).AddItem(item);
+	}
 }
 
 void Player:: Update(Map map, Player player)

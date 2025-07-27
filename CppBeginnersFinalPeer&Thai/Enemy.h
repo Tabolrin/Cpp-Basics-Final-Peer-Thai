@@ -17,9 +17,9 @@ private:
 	bool IsPointValid(Map map, Vector2 point);
 	void ChangePosition(Map map, Vector2 nextPos);
 	bool IsInRange(Vector2 playerLocation, int range);
-public:
-	Enemy(int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
-	void AddPatrolPoint(Map map, Vector2 point);
 	void Patrol(Map map);
+public:
+	Enemy(std::string name, int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
+	void AddPatrolPoint(Map map, Vector2 point);
 	void Update(Map& map, Player& player);
 };
