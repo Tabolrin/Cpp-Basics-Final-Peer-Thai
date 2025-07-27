@@ -113,13 +113,12 @@ void Enemy::ChangePosition(Map map, Vector2 nextPos)
 
 void Enemy::Update(Map& map, Player& player)
 {
-    if (IsInRange(player.GetPlayerPos(), REACTION_RANGE))
+    if (IsInRange(player.GetPlayerPos(), REACTION_RANGE)) // TODO: changed a bit - go over with thai 
     {
-        GoToPoint(map, player.GetPlayerPos());
-        if (IsInRange(player.GetPlayerPos(), BATTLE_RANGE))
-        {
+        if (!IsInRange(player.GetPlayerPos(), BATTLE_RANGE))
+            GoToPoint(map, player.GetPlayerPos());
+        else
             CombatSystem::StartCombat(*player.GetParty(), *this, *player.GetInventory());
-        } 
     }
     else
         Patrol(map);
@@ -127,6 +126,7 @@ void Enemy::Update(Map& map, Player& player)
 
 bool Enemy::IsInRange(Vector2 targetPosition, int range)
 {
+
     /*
     if (((playerLocation.x - position.x >= 0 && playerLocation.x - position.x <= range)
         || (playerLocation.x - position.x < 0 && position.x - playerLocation.x <= range))

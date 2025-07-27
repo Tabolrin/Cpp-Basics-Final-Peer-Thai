@@ -10,7 +10,6 @@
 class Enemy : public Unit
 {
 private:
-
 	int speed;
 	int currentPoint;
 	std::vector<Vector2> patrolRoute;

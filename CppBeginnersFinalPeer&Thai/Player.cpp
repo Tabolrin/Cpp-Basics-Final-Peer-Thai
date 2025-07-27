@@ -9,7 +9,7 @@ Player::Player(const Vector2& pos) : GameObject(position)
 	position = pos;
 	keyAcquired = false;
 	inventory = new Inventory();
-	Party = new PlayerParty();
+	party = new PlayerParty();
 }
 
 
@@ -17,7 +17,7 @@ void Player::Move(Map map, Vector2& direction)
 {
 	bool isDirectionValid = false;
 	Vector2 tempPos = position + direction;
-
+	// TODO: Check if the new position is within the bounds of the map and make sure player cant step on a chest (discuss with Thai
 	if (map.GetCharAt(tempPos) == Symbols::CLEAR || map.GetCharAt(tempPos) == Symbols::FULL_CHEST
 		|| map.GetCharAt(tempPos) == Symbols::KEY)
 	{
@@ -34,9 +34,15 @@ void Player::Move(Map map, Vector2& direction)
 				break;
 			}
 
-
 			case Symbols::FULL_CHEST:
 			{
+				// Random item (HP_POTION..SMOKE_BOMB)
+				Items randomItem = static_cast<Items>(rand() % 4);
+				inventory->AddItem(randomItem);
+				std::cout << "You found item #" << static_cast<int>(randomItem) << "!\n";
+
+				// Turn chest to empty
+				map.UpdatePosition(position, Symbols::EMPTY_CHEST, Ui::GetColorForChar(Symbols::EMPTY_CHEST));
 				break;
 			}
 		}

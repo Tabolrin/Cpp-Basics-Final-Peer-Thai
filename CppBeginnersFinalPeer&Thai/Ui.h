@@ -18,5 +18,5 @@ public:
 	static void PrintOpeningAndTutorials();
 	static void RequireEnterPressToProgress();
 	static void MapDraw(Map map);
-	static const int GetColorForChar(char ch) ;
+	static const WORD GetColorForChar(char ch) ;
 };

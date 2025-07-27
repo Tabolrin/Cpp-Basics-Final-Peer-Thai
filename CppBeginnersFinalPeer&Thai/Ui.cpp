@@ -12,22 +12,17 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 	system("cls"); 
 
 	// Draw the whole map once at start
-	InitialMapDraw(LevelObj.GetMap());
+	MapDraw(LevelObj.GetMap());
 	std::cout << std::endl;
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, 3); // DarkCyan
 	std::cout << "-= Game Status =-" << std::endl;
-	SetConsoleTextAttribute(hConsole, 7); // White
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE); // White
 
 	std::cout << "Current Level: ";
 	SetConsoleTextAttribute(hConsole, 6); // DarkYellow
 	std::cout << static_cast<int>(level) << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
-	
-	std::cout << "HP: ";
-	SetConsoleTextAttribute(hConsole, 4); // DarkRed
-	std::cout << player.GetCurrentHP() << " / " << player.GetMaxHP() << std::endl;
 	SetConsoleTextAttribute(hConsole, 7);
 
 	//---------------Replace with player part units statatus using their display 
@@ -37,25 +32,22 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 	//SetConsoleTextAttribute(hConsole, 7);
 
 	std::cout << "Player coordinates: ";
-	SetConsoleTextAttribute(hConsole, 1); // DarkBlue
-	std::cout << player.getPosition().x << " , " << player.getPosition().y << std::endl;
+	SetConsoleTextAttribute(hConsole, Colors::DARK_BLUE); // DarkBlue
+	std::cout << player.GetPosition().x << " , " << player.GetPosition().y << std::endl;
 	SetConsoleTextAttribute(hConsole, 7);
 
 	std::cout << "Key On Player: ";
-	if (player.IsKeyAcquired())
-		std::cout << "1";
-	/*
-	if ()//if player has key
+	if (player.IsKeyAcquired())//if player has key
 	{
-		SetConsoleTextAttribute(hConsole, 2); // Green
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN); // Green
 		std::cout << "V" << std::endl;
 	}
 	else
 	{
-		SetConsoleTextAttribute(hConsole, 4); // Red
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED); // Red
 		std::cout << "X" << std::endl;
-	}*/
-	SetConsoleTextAttribute(hConsole, 7);
+	}
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 }
 
 void Ui::MapDraw(Map map) 
@@ -77,15 +69,15 @@ void Ui::MapDraw(Map map)
 
 void Ui::PrintOpeningAndTutorials()
 {
-	std::cout << "Dimensional Mayhem\n"
-		<< "Created by - Pe'er Malul\n\n"
-		<< "Welcome to my game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
+	std::cout << "Elementum Prime\n"
+		<< "Created by - Pe'er Malul & Thai L azover Besher\n\n"
+		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 4 | (7 << 4)); // DarkRed on Gray
+	/*SetConsoleTextAttribute(hConsole, 4 | (7 << 4)); // DarkRed on Gray
 	std::cout << "-=IMPORTANT!=-\n"
 		<< "Please maximize the window to fill the screen for the game to work properly.\n"
-		<< "Thank you for understanding. (press ENTER to continue)\n";
+		<< "Thank you for understanding. (press ENTER to continue)\n";*/
 	SetConsoleTextAttribute(hConsole, 7);
 
 	RequireEnterPressToProgress();
@@ -94,16 +86,13 @@ void Ui::PrintOpeningAndTutorials()
 		<< "Movement: W,A,S,D/arrow keys.\n"
 		<< "To interact with an object just stand right next to it from the right, left, top or beneath.\n"
 		<< "Sign legend:\n"
-		<< "+ = Wall.\n"
-		<< "X = Your avatar.\n"
-		<< "W = Enemy.\n"
-		<< "+ = Wall (you can't walk through it).\n"
-		<< "K = Key - you must take the key in order for the passage to the next level to work!\n"
-		<< "S = Spawn point.\n"
-		<< "E = Exit point - if you have the key it will send you to the next level.\n"
-		<< "O = Full Chest - will let you choose a reward.\n"
-		<< "Ø = Empty chest - a chest that was already used - useless to you now.\n"
-		<< "¤ = Trap - a trap that you have already stepped on. Will not reduce more of your HP on touch.\n\n"
+		<< Symbols::PLAYER << " = Your avatar.\n"
+		<< Symbols::ENEMY << " = Enemy.\n"
+		<< Symbols::WALL << " = Wall (you can't walk through it).\n"
+		<< Symbols::KEY << " = Key - you must take the key in order for the passage to the next level to work!\n"
+		<< Symbols::EXIT << " = Exit point - if you have the key it will send you to the next level.\n"
+		<< Symbols::FULL_CHEST << " = Full Chest - will let you choose a reward.\n"
+		<< Symbols::EMPTY_CHEST << " = Empty chest - a chest that was already used - useless to you now.\n"
 		<< "Your goal is to survive all 10 levels. Good luck and choose carefully! (;\n\n"
 		<< "Furthermore, I recommend not to make long presses for continuous movement. Too long of a press will result in a long lag.\n"
 		<< "....Oh, almost forgot! - press Enter to start the game.";
@@ -120,37 +109,37 @@ void Ui::RequireEnterPressToProgress()
 	} while (input != '\r');
 }
 
-const int Ui::GetColorForChar(char ch)
+const WORD Ui::GetColorForChar(char ch)
 {
 	// Pick color based on char
 	switch (ch)
 	{
-	case ENEMY:
-		return static_cast<int>(Colors::DARK_RED);
-		break;
+		case ENEMY:
+			return Colors::DARK_RED;
+			break;
 
-	case PLAYER:
-		return static_cast<int>(Colors::DARK_CYAN);
-		break;
+		case PLAYER:
+			return Colors::DARK_CYAN;
+			break;
 
-	case FULL_CHEST:
-		return static_cast<int>(Colors::LIGHT_YELLOW);
-		break;
+		case FULL_CHEST:
+			return Colors::LIGHT_YELLOW;
+			break;
 
-	case EMPTY_CHEST:
-		return static_cast<int>(Colors::GRAY);
-		break;
+		case EMPTY_CHEST:
+			return Colors::GRAY;
+			break;
 
-	case EXIT:
-		return static_cast<int>(Colors::DARK_BLUE);
-		break;
+		case EXIT:
+			return Colors::DARK_BLUE;
+			break;
 
-	case KEY:
-		return static_cast<int>(Colors::MAGENTA);
-		break;
+		case KEY:
+			return Colors::MAGENTA;
+			break;
 
-	default:
-		return static_cast<int>(Colors::BRIGHT_WHITE);
-		break;
+		default:
+			return Colors::BRIGHT_WHITE ;
+			break;
 	}
 }

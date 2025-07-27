@@ -5,8 +5,8 @@
 #include "PlayerChoice.h"
 #include <iostream>
 #include <cstdlib>
-#include <limits>      // for std::numeric_limits
-#include <vector>      // if PlayerParty::GetAll returns a vector
+#include <limits>      
+#include <vector>      
 
 float GetElementMultiplier(Elements attacker, Elements defender)
 {

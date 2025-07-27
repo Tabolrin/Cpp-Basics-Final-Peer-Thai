@@ -33,6 +33,7 @@ void Inventory::UseItem(Items item)
 	{
 		int itemAmount = inventory.at(item);
 		inventory[item] = --itemAmount;
+
 		if (itemAmount == 0)
 			inventory.erase(item);
 	}

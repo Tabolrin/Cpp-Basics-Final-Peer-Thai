@@ -8,7 +8,7 @@
 class Player : public GameObject
 {
 private:
-	Colors playerColor = Colors::DARK_CYAN;
+	const Colors playerColor = Colors::DARK_CYAN;
 	PlayerParty* party;
 	Inventory* inventory;
 	int speed = 1;

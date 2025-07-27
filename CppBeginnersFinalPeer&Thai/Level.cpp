@@ -38,20 +38,16 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 			char ch = mapLines[x][y];
 
 			if (ch == Symbols::PLAYER)
-				player.setPosition(Vector2(x, y));
+				player.SetPosition(Vector2(x, y));
 
-
-			/*
 			else if (ch == Symbols::ENEMY)
 			{
 				Enemy temp = Enemy(10, 5, 5, Elements::FIRE, Vector2(x, y));
 				temp.AddPatrolPoint(*map, Vector2(2, 11));
-				
 				temp.AddPatrolPoint(*map, Vector2(7, 11));
 				
 				enemies.push_back(&temp);
 			}
-			*/
 
 			map->UpdatePosition(Vector2(x, y), ch, Ui::GetColorForChar(ch));
 

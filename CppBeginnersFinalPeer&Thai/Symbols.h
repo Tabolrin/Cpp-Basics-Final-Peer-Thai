@@ -1,6 +1,5 @@
 #pragma once
 
-
 enum Symbols : char
 {
 	CLEAR = ' ',

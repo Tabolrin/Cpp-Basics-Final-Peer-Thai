@@ -1,6 +1,7 @@
 #pragma once
+#include <wtypes.h>
 
-enum class Colors : int
+enum Colors : WORD
 {
     // Foreground colors
     BLACK = 0, // Black
@@ -20,7 +21,7 @@ enum class Colors : int
     LIGHT_YELLOW = 14, // Light Yellow
     BRIGHT_WHITE = 15, // Bright White
 
-    // Background colors (shifted into the high 4 bits)
+    // Background colors
     BKG_BLACK = 0 << 4, // Background Black
     BKG_DARK_BLUE = 1 << 4, // Background Dark Blue
     BKG_DARK_GREEN = 2 << 4, // Background Dark Green
@@ -37,7 +38,6 @@ enum class Colors : int
     BKG_LIGHT_MAGENTA = 13 << 4, // Background Light Magenta (Bright Purple)
     BKG_LIGHT_YELLOW = 14 << 4, // Background Light Yellow
     BKG_BRIGHT_WHITE = 15 << 4, // Background Bright White
+
+    ALL_WHITE = BRIGHT_WHITE | BKG_BRIGHT_WHITE
 };
-
-
-
