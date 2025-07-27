@@ -113,7 +113,7 @@ void Enemy::ChangePosition(Map map, Vector2 nextPos)
 
 void Enemy::Update(Map& map, Player& player)
 {
-    if (IsInRange(player.GetPlayerPos(), REACTION_RANGE)) // TODO: changed a bit - go over with thai 
+    if (IsInRange(player.GetPlayerPos(), REACTION_RANGE)) // TODO: changed a bit - go over with thai   .
     {
         if (!IsInRange(player.GetPlayerPos(), BATTLE_RANGE))
             GoToPoint(map, player.GetPlayerPos());
