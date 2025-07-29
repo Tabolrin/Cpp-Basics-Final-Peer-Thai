@@ -22,6 +22,8 @@ protected:
 	void setHp(int hp) { this->hp = hp; }
 
 public:
+	Unit(Vector2& location) : GameObject (location) {}
+
 	Unit(std::string name, int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location);
 
 	int GetMaxHp() const { return maxHp; }

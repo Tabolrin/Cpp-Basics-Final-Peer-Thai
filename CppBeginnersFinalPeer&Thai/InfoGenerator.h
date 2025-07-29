@@ -4,10 +4,12 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "UnitInfo.h"
 
-class NameGenerator
+class InfoGenerator
 {
 private:
+
     std::unordered_map<Elements, std::vector<std::string>> namePools;
 	const std::string fireNamesFile = "FireNames.txt";
     const std::string waterNamesFile = "WaterNames.txt";
@@ -18,8 +20,12 @@ private:
     void LoadAllFiles();
 
 public:
-    NameGenerator();
+    InfoGenerator();
 
-    std::string GetRandomName(const Elements element);
+   UnitInfo GetRandomEnemyInfo(const int level);
+
+   std::string GetRandomName(const Elements element);
+
+    
   
 };

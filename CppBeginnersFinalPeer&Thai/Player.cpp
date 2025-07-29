@@ -14,7 +14,7 @@ Player::Player(const Vector2& pos) : GameObject(position)
 }
 
 
-void Player::Move(Map map, Vector2& direction)
+void Player::Move(Map& map, Vector2& direction)
 {
 	bool isDirectionValid = false;
 	Vector2 tempPos = position + direction;
@@ -50,7 +50,7 @@ void Player::Move(Map map, Vector2& direction)
 	}
 }
 
-void Player::PickUpChest(Map map)
+void Player::PickUpChest(Map& map)
 { 
 	if (map.GetMapMatrix()[((position).x + 1)][(position).y] == Symbols::FULL_CHEST)
 	{
@@ -66,7 +66,7 @@ void Player::PickUpChest(Map map)
 	}
 }
 
-void Player:: Update(Map map, Player player)
+void Player:: Update(Map& map, Player& player)
 {
 	Vector2 direction = Vector2 (0,0);
 	char playerInput;

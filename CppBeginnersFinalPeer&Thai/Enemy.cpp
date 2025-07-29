@@ -1,28 +1,38 @@
 #include "Elements.h"
 #include "Enemy.h"
+#include "Player.h"
 #include <string>
 #include <windows.h>
 #include "CombatSystem.h"
+#include "InfoGenerator.h"
+#include "UnitInfo.h"
 
 #define REACTION_RANGE 2
 #define BATTLE_RANGE 1
 
-Enemy::Enemy(std::string name, int maxHp, int normalDmg, int elementalDmg, Elements element, const Vector2& location) :
-    Unit(name, maxHp, normalDmg, elementalDmg, element, location)
+Enemy::Enemy(int level, const Vector2& location) : Unit(position)
 {
-    currentPoint = 0;
-    speed = 1;
+    InfoGenerator infoGen;
+    UnitInfo info = infoGen.GetRandomEnemyInfo(level);
+    name = info.name;
+    maxHp = info.maxHp;
+    hp = info.hp;
+    normalDmg = info.normalDmg;
+    elementalDmg = info.elementalDmg;
+    element = info.element;
+    position = location;
+
+    speed = 1; 
+	currentPoint = 0;
 }
 
-void Enemy::AddPatrolPoint(Map map, Vector2 point)
+void Enemy::AddPatrolPoint(Map& map, Vector2& point)
 {
     if (IsPointValid(map, point))
         patrolRoute.push_back(point);
-    else
-        int x;
 }
 
-void Enemy::Patrol(Map map)
+void Enemy::Patrol(Map& map)
 {
     GoToPoint(map, patrolRoute.at(currentPoint));
 
@@ -34,7 +44,7 @@ void Enemy::Patrol(Map map)
     }
 }
 
-void Enemy::GoToPoint(Map map, Vector2 point)
+void Enemy::GoToPoint(Map& map, Vector2& point)
 {
     Vector2 nextPos;
 
@@ -45,10 +55,8 @@ void Enemy::GoToPoint(Map map, Vector2 point)
 
         if (IsPointValid(map, nextPos))
         {
-            map.UpdatePosition(nextPos, Symbols::ENEMY,
-                map.GetCharAt(nextPos) == Symbols::ENEMY); //move enemy char to new position
-            map.UpdatePosition(position, Symbols::CLEAR,
-                map.GetCharAt(nextPos) == Symbols::CLEAR);//delete enemy char from old position
+            map.UpdatePosition(nextPos, Symbols::ENEMY,  map.GetCharAt(nextPos) == Symbols::ENEMY); 
+            map.UpdatePosition(position, Symbols::CLEAR, map.GetCharAt(nextPos) == Symbols::CLEAR);
             position = nextPos;
             return;
         }
@@ -93,7 +101,7 @@ void Enemy::GoToPoint(Map map, Vector2 point)
     return;
 }
 
-bool Enemy::IsPointValid(Map map, Vector2 point)
+bool Enemy::IsPointValid(Map& map, Vector2& point)
 {
     if (map.CheckIsPointInMap(point))
         if (map.GetCharAt(point) == Symbols::CLEAR)
@@ -101,7 +109,7 @@ bool Enemy::IsPointValid(Map map, Vector2 point)
     return false;
 }
 
-void Enemy::ChangePosition(Map map, Vector2 nextPos)
+void Enemy::ChangePosition(Map& map, Vector2& nextPos)
 {
     map.UpdatePosition(nextPos, Symbols::ENEMY, map.GetCharAt(nextPos) == Symbols::ENEMY); //move enemy char to new position
 
@@ -113,10 +121,11 @@ void Enemy::ChangePosition(Map map, Vector2 nextPos)
 
 void Enemy::Update(Map& map, Player& player)
 {
-    if (IsInRange(player.GetPlayerPos(), REACTION_RANGE)) // TODO: changed a bit - go over with thai   .
+	Vector2 playerPos = player.GetPlayerPos();
+    if (IsInRange(playerPos, REACTION_RANGE))
     {
-        if (!IsInRange(player.GetPlayerPos(), BATTLE_RANGE))
-            GoToPoint(map, player.GetPlayerPos());
+        if (!IsInRange(playerPos, BATTLE_RANGE))
+            GoToPoint(map, playerPos);
         else
             CombatSystem::StartCombat(*player.GetParty(), *this, *player.GetInventory());
     }
@@ -124,7 +133,7 @@ void Enemy::Update(Map& map, Player& player)
         Patrol(map);
 }
 
-bool Enemy::IsInRange(Vector2 targetPosition, int range)
+bool Enemy::IsInRange(const Vector2& targetPosition, int range)
 {
     /*
     if (((playerLocation.x - position.x >= 0 && playerLocation.x - position.x <= range)

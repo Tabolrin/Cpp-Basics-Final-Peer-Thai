@@ -3,7 +3,7 @@
 #include "Levels.h"
 #include "Map.h"
 #include "Symbols.h"
-#include "NameGenerator.h"
+#include "InfoGenerator.h"
 #include "Ui.h"
 #include <algorithm>
 #include <chrono>
@@ -43,9 +43,9 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 
 			else if (ch == Symbols::ENEMY)
 			{
-				NameGenerator nameGen;
-				Enemy temp = Enemy(nameGen.GetRandomName(Elements::FIRE), 100, 5, 5, Elements::FIRE, Vector2(x, y));
-				temp.AddPatrolPoint(*map, Vector2(2, 11));
+				InfoGenerator infoGen;
+				Enemy temp = Enemy(levelNum, Vector2(x, y));
+				temp.AddPatrolPoint(*map, Vector2(2, 11));/// help with thai how to appoint patrol points
 				temp.AddPatrolPoint(*map, Vector2(7, 11));
 				
 				enemies.push_back(&temp);
@@ -55,10 +55,7 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 
 		}
 	}
-	Enemy temp = Enemy("name" ,10, 5, 5, Elements::FIRE, Vector2(5, 10));
-	temp.AddPatrolPoint(*map, Vector2(2, 11));
-	temp.AddPatrolPoint(*map, Vector2(7, 11));
-	enemies.push_back(&temp);
+
 	//Debug print
 	//map->UpdatePosition(Vector2(2, 11), 'G', Ui::GetColorForChar('G'));
 	//map->UpdatePosition(Vector2(7, 11), '8', Ui::GetColorForChar('G'));

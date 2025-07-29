@@ -51,7 +51,7 @@
     <ClCompile Include="PlayerParty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NameGenerator.cpp">
+    <ClCompile Include="InfoGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,13 +107,16 @@
     <ClInclude Include="PlayerParty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NameGenerator.h">
+    <ClInclude Include="InfoGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HitResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerChoice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

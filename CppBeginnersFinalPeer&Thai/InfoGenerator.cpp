@@ -1,4 +1,4 @@
-#include "NameGenerator.h"
+#include "InfoGenerator.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -8,8 +8,9 @@
 #include <ctime>
 #include "Elements.h"
 
+#define ELEMENT_AMOUNT 3
 
-void NameGenerator::LoadNamesFromFile(const Elements& element, const std::string& filename)
+void InfoGenerator::LoadNamesFromFile(const Elements& element, const std::string& filename)
 {
     std::ifstream file(filename);
     std::string line;
@@ -31,7 +32,7 @@ void NameGenerator::LoadNamesFromFile(const Elements& element, const std::string
     namePools[element] = names;
 }
 
-void NameGenerator::LoadAllFiles()
+void InfoGenerator::LoadAllFiles()
 {
     LoadNamesFromFile(Elements::FIRE, "fire_names.txt");
     LoadNamesFromFile(Elements::WATER, "water_names.txt");
@@ -40,14 +41,36 @@ void NameGenerator::LoadAllFiles()
 
 
 
-NameGenerator::NameGenerator()
+InfoGenerator::InfoGenerator()
 {
     std::srand(static_cast<unsigned>(std::time(nullptr))); // Seed RNG once
     LoadAllFiles();
 }
 
 
-std::string NameGenerator::GetRandomName(const Elements element)
+UnitInfo InfoGenerator::GetRandomEnemyInfo(const int level)
+{
+    UnitInfo info;
+
+    info.level = level;
+    info.maxHp = 10 + level * 10;
+    info.normalDmg = 5 + level;
+    info.elementalDmg = 3 + level; 
+    info.element = static_cast<Elements>(rand() % ELEMENT_AMOUNT);
+
+    // Get a random name from the corresponding pool
+    if (namePools.find(info.element) == namePools.end() || namePools[info.element].empty())
+    {
+        std::cerr << "No names available for element: " << static_cast<int>(info.element) << std::endl;
+        info.name = "Unknown";
+        return info;
+	}
+
+    info.name = GetRandomName(info.element);
+	return info;
+}
+
+std::string InfoGenerator::GetRandomName(const Elements element)
 {
     auto& pool = namePools[element];
 
@@ -56,7 +79,7 @@ std::string NameGenerator::GetRandomName(const Elements element)
 
     int index = rand() % pool.size();
     std::string selectedName = pool[index];
-    pool.erase(pool.begin() + index); // Remove used name
+    pool.erase(pool.begin() + index); 
 
     return selectedName;
 }
