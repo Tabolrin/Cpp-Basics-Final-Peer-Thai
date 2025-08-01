@@ -1,13 +1,14 @@
 #include "PlayerParty.h"
-#include "NameGenerator.h"
+#include "InfoGenerator.h"
 #include "Elements.h"
 
 PlayerParty::PlayerParty()
 {
-	NameGenerator nameGen;
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::FIRE), 100, 15, 20, Elements::FIRE, Vector2(-1, -1));
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::WATER), 80, 17, 17, Elements::WATER, Vector2(-1, -1));
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::GRASS), 90, 22, 18, Elements::GRASS, Vector2(-1, -1));
+	InfoGenerator nameGen;
+	Vector2 partyMemberPosition(-1, -1); // Placeholder position
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::FIRE), 100, 15, 20, Elements::FIRE, partyMemberPosition);
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::WATER), 80, 17, 17, Elements::WATER, partyMemberPosition);
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::GRASS), 90, 22, 18, Elements::GRASS, partyMemberPosition);
 }
 
 void PlayerParty::PrintParty() const

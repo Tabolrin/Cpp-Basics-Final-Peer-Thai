@@ -8,7 +8,7 @@
 Player::Player(const Vector2& pos) : GameObject(position)
 {
 	position =  pos;
-	keyAcquired = false;
+	KeyAcquired = false;
 	inventory = new Inventory();
 	party = new PlayerParty();
 }
@@ -30,7 +30,7 @@ void Player::Move(Map& map, Vector2& direction)
 		{
 			case Symbols::KEY:
 			{
-				keyAcquired = true;
+				KeyAcquired = true;
 				(*inventory).AddItem(Items::LEVEL_KEY);
 				break;
 			}
@@ -99,14 +99,14 @@ void Player:: Update(Map& map, Player& player)
 	}
 }
 
-bool Player::IsKeyAcquired()
+bool Player::IsKeyAcquired() const
 {
-	return keyAcquired;
+	return KeyAcquired;
 }
 
 void Player::NewLevel()
 {
-	keyAcquired = false;
+	KeyAcquired = false;
 }
 
 Vector2 Player::GetPlayerPos()

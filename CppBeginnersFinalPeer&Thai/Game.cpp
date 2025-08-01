@@ -1,4 +1,4 @@
-#include "Game.h"
+﻿#include "Game.h"
 #include "Level.h"
 #include "Levels.h"
 #include "Map.h"
@@ -19,53 +19,45 @@ Game::Game()
 
 void Game::RunGameLoop()
 {
-	auto lastTime = high_resolution_clock::now();
-	float accumulator = 0.0f;
-	const float dt = 0.1f;
-	bool running = true;
-	Levels currentLevelNum = Levels::MAP_LEVEL1;
+    using Clock = std::chrono::high_resolution_clock;
 
-	while (running) 
-	{
-		auto now = high_resolution_clock::now();
-		float delta = duration<float>(now - lastTime).count();
+    auto lastUpdateTime = Clock::now();          // wall-clock time at last frame
+    float timeAccumulator = 0.0f;                  // how much un-processed time we’ve gathered
+    constexpr float fixedTimeStep = 0.75f;          // ←– change this to alter tick rate (in seconds)
+    bool  isRunning = true;
+    Levels currentLevelId = Levels::MAP_LEVEL1;
 
-		lastTime = now;
-		accumulator += delta;
+    while (isRunning)
+    {
+        // 1) Measure elapsed time since last frame
+        auto   currentTime = Clock::now();
+        float  frameTime = std::chrono::duration<float>(currentTime - lastUpdateTime).count();
+        lastUpdateTime = currentTime;
+        timeAccumulator += frameTime;
 
-		player->Update(currentLevel->GetMap(), *player);
+        // 2) Immediate player input/action every frame
+        player->Update(currentLevel->GetMap(), *player);
 
-		//currentLevel->UpdateEnemies();
+        // 3) Fixed-timestep world update: runs when we've accumulated ≥ fixedTimeStep
+        while (timeAccumulator >= fixedTimeStep)
+        {
+            currentLevel->Update();            // your existing map/AI/physics tick
+            timeAccumulator -= fixedTimeStep;  // consume that slice of time
+        }
 
-		/*for (auto* e : currentLevel->GetEnemiesList())
-		{
-			if (e->getPosition() == player->getPosition() + Vector2(1, 0)) 
-			{
-				currentLevel->InitiateCombat(*player, *e);
-			}
-		}*/
+        // 4) Check win/level-flow here...
+        if (currentLevel->CheckWin())
+        {
+            /* …transition… */ 
+        }
 
-		currentLevel->Update();
+        // 5) Tiny sleep so CPU isn’t pegged at 100%
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
 
-		if (currentLevel->CheckWin()) 
-		{
-			currentLevel->TransitionToNext();
-			delete currentLevel;
-
-			int intCurLvl = static_cast<int>(currentLevelNum);
-			intCurLvl += 1;
-			currentLevelNum = static_cast<Levels>(intCurLvl);
-
-			if (currentLevelNum > 3) running = false;
-			else currentLevel = new Level(currentLevelNum, *player);
-		}
-
-		accumulator -= dt;
-	}
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-		delete currentLevel;
-		delete player;
+    // Cleanup…
+    delete currentLevel;
+    delete player;
 }
+
 

@@ -53,7 +53,9 @@ bool Map::IsTileClear(const Vector2& tile) const
 Symbols Map::GetCharAt(Vector2& pos)
 {
 	if (CheckIsPointInMap(pos))
-		return static_cast<Symbols>(mapMat[pos.x][pos.y]);
+		return (static_cast<Symbols>(mapMat[pos.x][pos.y]));
+	else 
+		return Symbols::INVALID; // Return an invalid symbol if out of bounds
 }
 
 bool Map::CheckIsPointInMap(const Vector2& point) const

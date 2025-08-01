@@ -10,4 +10,5 @@ enum Symbols : char
 	EMPTY_CHEST = 'Ø',
 	EXIT = 'E',
 	KEY = 'K',
+	INVALID = '5'
  };

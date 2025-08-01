@@ -20,13 +20,14 @@ private:
 
 
 public:
-	bool keyAcquired;
+	bool KeyAcquired = false;
+	bool InCombat = false;
 	Player(const Vector2& location);
 	void Move(Map& map, Vector2& direction);
 	void Update(Map& map, Player& player);
 	PlayerParty* GetParty() const { return party; }
 	Inventory* GetInventory() const { return inventory; }
-	bool IsKeyAcquired();
+	bool IsKeyAcquired() const;
 	void NewLevel();
 	Vector2 GetPlayerPos();
 	~Player();

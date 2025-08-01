@@ -21,6 +21,6 @@ private:
 	void Patrol(Map& map);
 public:
 	Enemy(int level, const Vector2& location);
-	void AddPatrolPoint(Map& map, Vector2& point);
+	void AddPatrolPoint(Map& map, Vector2 point);
 	void Update(Map& map, Player& player);
 };

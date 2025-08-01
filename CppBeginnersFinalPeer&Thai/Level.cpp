@@ -32,33 +32,42 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
     LoadMapFile();
     (*map).Initialize(mapWidth, mapHeight);
 
+	Vector2 pos;
+
+	for (size_t x = 0; x < mapHeight; ++x)
+		for (size_t y = 0; y < mapWidth; ++y)
+		{
+			pos = Vector2(x, y);
+			char ch = mapLines[x][y];
+			map->UpdatePosition(pos, ch, Ui::GetColorForChar(ch));
+		}
+	
+
 	for (size_t x = 0; x < mapHeight; ++x)
 	{
 		for (size_t y = 0; y < mapWidth; ++y)
 		{
-			char ch = mapLines[x][y];
+			pos = Vector2(x, y);
+			char ch = map->GetCharAt(pos);
 
 			if (ch == Symbols::PLAYER)
-				player.SetPosition(Vector2(x, y));
+				player.SetPosition(pos);
 
 			else if (ch == Symbols::ENEMY)
 			{
 				InfoGenerator infoGen;
-				Enemy temp = Enemy(levelNum, Vector2(x, y));
-				temp.AddPatrolPoint(*map, Vector2(2, 11));/// help with thai how to appoint patrol points
-				temp.AddPatrolPoint(*map, Vector2(7, 11));
+				Enemy* temp = new Enemy(levelNum, pos);
+				(*temp).AddPatrolPoint(*map, Vector2(2, 10));
+				(*temp).AddPatrolPoint(*map, Vector2(7, 10));
 				
-				enemies.push_back(&temp);
+				enemies.push_back(temp);
 			}
-
-			map->UpdatePosition(Vector2(x, y), ch, Ui::GetColorForChar(ch));
-
 		}
 	}
 
 	//Debug print
-	//map->UpdatePosition(Vector2(2, 11), 'G', Ui::GetColorForChar('G'));
-	//map->UpdatePosition(Vector2(7, 11), '8', Ui::GetColorForChar('G'));
+	//map->UpdatePosition(Vector2(2, 10), 'A', Ui::GetColorForChar('G'));
+	//map->UpdatePosition(Vector2(7, 10), 'B', Ui::GetColorForChar('G'));
     Ui::PrintFrame(*this, levelNum, player);
 }
 

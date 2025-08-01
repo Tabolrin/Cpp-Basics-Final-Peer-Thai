@@ -34,9 +34,9 @@ void InfoGenerator::LoadNamesFromFile(const Elements& element, const std::string
 
 void InfoGenerator::LoadAllFiles()
 {
-    LoadNamesFromFile(Elements::FIRE, "fire_names.txt");
-    LoadNamesFromFile(Elements::WATER, "water_names.txt");
-    LoadNamesFromFile(Elements::GRASS, "grass_names.txt");
+    LoadNamesFromFile(Elements::FIRE, "FireNames.txt");
+    LoadNamesFromFile(Elements::WATER, "WaterNames.txt");
+    LoadNamesFromFile(Elements::GRASS, "GrassNames.txt");
 }
 
 

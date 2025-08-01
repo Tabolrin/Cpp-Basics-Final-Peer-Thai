@@ -2,12 +2,13 @@
 #include "Enemy.h"
 #include "Player.h"
 #include <string>
+#include < cmath >
 #include <windows.h>
 #include "CombatSystem.h"
 #include "InfoGenerator.h"
 #include "UnitInfo.h"
 
-#define REACTION_RANGE 2
+#define REACTION_RANGE 4
 #define BATTLE_RANGE 1
 
 Enemy::Enemy(int level, const Vector2& location) : Unit(position)
@@ -16,7 +17,7 @@ Enemy::Enemy(int level, const Vector2& location) : Unit(position)
     UnitInfo info = infoGen.GetRandomEnemyInfo(level);
     name = info.name;
     maxHp = info.maxHp;
-    hp = info.hp;
+    hp = info.maxHp;
     normalDmg = info.normalDmg;
     elementalDmg = info.elementalDmg;
     element = info.element;
@@ -26,10 +27,12 @@ Enemy::Enemy(int level, const Vector2& location) : Unit(position)
 	currentPoint = 0;
 }
 
-void Enemy::AddPatrolPoint(Map& map, Vector2& point)
+void Enemy::AddPatrolPoint(Map& map, Vector2 point)
 {
     if (IsPointValid(map, point))
         patrolRoute.push_back(point);
+    else
+		std::cout << "Invalid patrol point: " << point.x << ", " << point.y << std::endl;
 }
 
 void Enemy::Patrol(Map& map)
@@ -39,6 +42,7 @@ void Enemy::Patrol(Map& map)
     if (position == patrolRoute.at(currentPoint))
     {
         ++currentPoint;
+
         if (currentPoint >= patrolRoute.size())
             currentPoint = 0;
     }
@@ -106,6 +110,7 @@ bool Enemy::IsPointValid(Map& map, Vector2& point)
     if (map.CheckIsPointInMap(point))
         if (map.GetCharAt(point) == Symbols::CLEAR)
             return true;
+
     return false;
 }
 
@@ -122,6 +127,7 @@ void Enemy::ChangePosition(Map& map, Vector2& nextPos)
 void Enemy::Update(Map& map, Player& player)
 {
 	Vector2 playerPos = player.GetPlayerPos();
+
     if (IsInRange(playerPos, REACTION_RANGE))
     {
         if (!IsInRange(playerPos, BATTLE_RANGE))
@@ -145,8 +151,9 @@ bool Enemy::IsInRange(const Vector2& targetPosition, int range)
     }
     */
 
-    if (((position).x - targetPosition.x <= range || targetPosition.x - (position).x <= range)
-        && (position).y - targetPosition.y <= range || targetPosition.y - (position).y <= range)
+    if (abs((position).x - targetPosition.x) <= range /* || targetPosition.x - (position).x <= range)*/
+        && (abs((position).y - targetPosition.y) <= range ))/*|| targetPosition.y - (position).y <= range)*/
         return true;
+
     return false;
 }

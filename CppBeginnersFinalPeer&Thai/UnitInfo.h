@@ -9,7 +9,6 @@ public:
 	int level = 1;
 	int exp = 0;
 	int maxHp = 0;
-	int hp = 0;
 	int normalDmg = 0;
 	int elementalDmg = 0;
 	Elements element = Elements::FIRE;
@@ -17,5 +16,5 @@ public:
 	UnitInfo() {}
 
 	UnitInfo(std::string name,int level, int maxHp, int normalDmg, int elementalDmg, Elements element)
-		: name(std::move(name)),level(level), maxHp(maxHp), hp(maxHp), normalDmg(normalDmg), elementalDmg(elementalDmg), element(element){	}
+		: name(std::move(name)),level(level), maxHp(maxHp), normalDmg(normalDmg), elementalDmg(elementalDmg), element(element){	}
 };

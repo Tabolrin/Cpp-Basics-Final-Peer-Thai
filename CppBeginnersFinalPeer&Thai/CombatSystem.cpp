@@ -1,5 +1,4 @@
-﻿// CombatSystem.cpp
-#include "CombatSystem.h"
+﻿#include "CombatSystem.h"
 #include "HitResult.h"
 #include "Items.h"
 #include "PlayerChoice.h"
@@ -30,9 +29,10 @@ float GetElementMultiplier(Elements attacker, Elements defender)
 
 void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
 {
-    std::cout << "\n⚔️  Combat started between your party and " << enemy.GetName() << "!\n\n";
+    std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";
 
     std::cout << "Choose your starting unit:\n";
+	//todo: print party members with their index usint ui
     Unit* currentUnit = ChoosePartyUnit(party);
 
     while (!party.IsDefeated() && enemy.GetHp() > 0)
@@ -44,7 +44,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             continue;
         }
 
-        std::cout << "\n🧍 " << currentUnit->GetName() << "'s turn:\n";
+        std::cout << "\n " << currentUnit->GetName() << "'s turn:\n";
         std::cout << "Choose action:\n1. Attack\n2. Use Item\n3. Switch Unit\nChoice: ";
         int choice;
         std::cin >> choice;
@@ -58,9 +58,8 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             std::cin >> attackType;
 
             HitResult result = currentUnit->HitOrMiss();
-            int baseDamage = (attackType == 1)
-                ? currentUnit->GetNormalDmg()
-                : static_cast<int>(currentUnit->GetElementalDmg() * GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement()));
+
+            int baseDamage = (attackType == 1) ? currentUnit->GetNormalDmg() : static_cast<int>(currentUnit->GetElementalDmg() * GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement()));
 
             switch (result)
             {
@@ -80,7 +79,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
 
             if (enemy.GetHp() <= 0)
             {
-                std::cout << "\n🎉 Enemy defeated!\n";
+                std::cout << "\n Enemy defeated!\n";
                 int expReward = 10 + enemy.GetLevel() * 5;
                 std::cout << currentUnit->GetName() << " gains " << expReward << " EXP!\n";
                 currentUnit->AddExp(expReward);
@@ -105,7 +104,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             break;
         }
 
-        std::cout << "\n💀 Enemy's turn:\n";
+        std::cout << "\nEnemy's turn:\n";
         for (Unit& member : party.GetAll())
         {
             if (member.GetHp() <= 0) continue;
@@ -131,7 +130,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             std::cout << member.GetName() << " HP: " << member.GetHp() << "\n";
             if (party.IsDefeated())
             {
-                std::cout << "\n💀 Your party was defeated!\n";
+                std::cout << "\n Your party was defeated!\n";
                 return;
             }
         }

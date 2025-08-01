@@ -9,6 +9,9 @@
 
 void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 {
+	//if the player is in combat- skip frame print
+	if (player.InCombat) return;
+	
 	system("cls"); 
 
 	// Draw the whole map once at start
@@ -54,7 +57,7 @@ void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
 void Ui::MapDraw(Map map) 
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	//system("cls");
+	//SetCur
 
 	for (int x = 0; x < map.GetHeight(); ++x)
 	{

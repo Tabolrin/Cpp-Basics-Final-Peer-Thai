@@ -60,6 +60,7 @@ public:
 
 	void Heal(int amount);
 
-	void Attack(Unit* target);
+	void NormalAttack(Unit* target);
 
+	void ElementalAttack(Unit* target);
 };

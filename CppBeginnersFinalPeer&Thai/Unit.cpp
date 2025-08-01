@@ -57,13 +57,19 @@ void Unit::Heal(int amount)
 		hp = maxHp;
 }
 
-void Unit::Attack(Unit* target)
+void Unit::ElementalAttack(Unit* target)
 {
 	if (target)
 	{
-		int damage = normalDmg + elementalDmg; // Combine normal and elemental damage
+		int damage = elementalDmg; // Combine normal and elemental damage
 		target->TakeDamage(damage);
 	}
+}
+
+void Unit::NormalAttack(Unit* target)
+{
+	if (target)
+			target->TakeDamage(normalDmg);
 }
 
 
