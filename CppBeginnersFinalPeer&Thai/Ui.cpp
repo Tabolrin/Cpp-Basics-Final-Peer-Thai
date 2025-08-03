@@ -1,4 +1,4 @@
-#include "Levels.h"
+#include "Scenes.h"
 #include "Map.h"
 #include "Player.h"
 #include "Ui.h"
@@ -7,7 +7,7 @@
 #include <windows.h>
 
 
-void Ui::PrintFrame(Level& LevelObj, Levels level, Player& player)
+void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 {
 	//if the player is in combat- skip frame print
 	if (player.InCombat) return;
@@ -71,18 +71,20 @@ void Ui::MapDraw(Map map)
 	}
 }
 
-void Ui::PrintOpeningAndTutorials()
+void Ui::Tutorials()
 {
-	std::cout << "Elementum Prime\n"
-		<< "Created by - Pe'er Malul & Thai L azover Besher\n\n"
+	system("cls");
+
+	std::cout << "Elementia\n"
+		<< "Created by - Pe'er Malul & Thai Lazover Besher\n\n"
 		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
 
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	/*SetConsoleTextAttribute(hConsole, 4 | (7 << 4)); // DarkRed on Gray
 	std::cout << "-=IMPORTANT!=-\n"
 		<< "Please maximize the window to fill the screen for the game to work properly.\n"
 		<< "Thank you for understanding. (press ENTER to continue)\n";*/
-	SetConsoleTextAttribute(hConsole, 7);
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	RequireEnterPressToProgress();
 
@@ -112,6 +114,7 @@ void Ui::RequireEnterPressToProgress()
 		input = _getch();
 	} while (input != '\r');
 }
+
 
 const WORD Ui::GetColorForChar(char ch)
 {
@@ -146,4 +149,110 @@ const WORD Ui::GetColorForChar(char ch)
 			return Colors::BRIGHT_WHITE ;
 			break;
 	}
+}
+
+
+void Ui::PrintOpeningScreen()
+{
+	system("cls");
+
+	std::cout << "Elementia\n"
+		<< "Created by - Pe'er Malul & Thai Lazover Besher\n\n"
+		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
+
+	std::string input;
+	do
+	{
+		input = "";
+		std::cout << "Press S to start, or T to see tutorials:\n";
+		std::cin >> input;
+
+		if (input == "T" || input == "t")
+		{
+			Tutorials();
+			return;
+		}
+		else if (input == "S" || input == "s")
+		{
+
+			return; // Start the game
+		}
+		else
+		{
+			std::cout << "Invalid input. Please try again.\n";
+		}
+	} while (input != "S" && input != "s" && input != "T" && input != "t");
+}
+
+
+void Ui::PrintCombatVisual()
+{
+	system("cls");
+	std::cout << "message" << std::endl;
+	std::cout << "Press Enter to continue..." << std::endl;
+	RequireEnterPressToProgress();
+}
+
+
+void Ui::PrintWinScreen()
+{
+	system("cls");
+	std::cout << "message" << std::endl;
+	std::cout << "Press Enter to continue..." << std::endl;
+	RequireEnterPressToProgress();
+}
+
+
+void Ui::PrintLoseScreen()
+{
+	system("cls");
+	std::cout << "message" << std::endl;
+	std::cout << "Press Enter to continue..." << std::endl;
+	RequireEnterPressToProgress();
+}
+
+
+void Ui::PrintLevelTransition()
+{
+	system("cls");
+	for(int i = 0; i < 20; ++i)
+	{
+		std::cout << "Loading next level...\n";
+		Sleep(200);
+		std::cout << "###############################################" << std::endl;
+	}
+}
+
+
+void Ui::PrintNotification(const Items Item)
+{
+	switch (Item)
+	{
+		case Items::HP_POTION:
+		std::cout << "You have acquired a Health Potion! Use it wisely.";
+		break;
+
+		case Items::NORMAL_ATTACK_POTION:
+			std::cout << "You have acquired a Normal Attack Potion! Use it wisely.";
+			break;
+
+		case Items::ELEMENTAL_ATTACK_POTION:
+			std::cout << "You have acquired an Elemental Attack Potion! Use it wisely.";
+			break;
+
+		case Items::LEVEL_KEY:
+			std::cout << "You have acquired a Key! Use it to unlock the exit.";
+			break;
+
+		case Items::SMOKE_BOMB:
+			std::cout << "You have acquired a Smoke Bomb! Use it to escape from combat.";
+			break;
+
+		default:
+			break;
+	}
+	Sleep(2500);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hConsole, { 0, NOTIFICATION_LINE_INDEX });
+	std::cout << "                                                                                                                  "; // Clear the notification line
 }

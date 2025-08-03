@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Levels.h"
+#include "Scenes.h"
 #include "Symbols.h"
 #include "Vector2.h"
 #include <vector>
@@ -10,15 +10,15 @@
 class Map
 {
 private:
-	Levels level;
+	Scenes level;
 	std::vector<std::vector<char>> mapMat;
 	int width = 0, height = 0;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 public:
-	Map() { level = Levels::MAP_LEVEL1; }
+	Map() { level = Scenes::LEVEL_1; }
 
-	Map(Levels level);
+	Map(Scenes level);
 
 	std::vector<std::vector<char>> GetMapMatrix() { return mapMat; }
 

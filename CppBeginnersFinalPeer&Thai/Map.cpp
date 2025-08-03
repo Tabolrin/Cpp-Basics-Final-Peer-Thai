@@ -1,24 +1,24 @@
 #include "Colors.h"
-#include "Levels.h"
+#include "Scenes.h"
 #include "Map.h"
 #include "Symbols.h"
 #include "Ui.h"
 #include <iostream>
 
 
-Map::Map(Levels level)
+Map::Map(Scenes level)
 {
 	this->level = level;
 	// Initialize map with default size
 	switch (level)
 	{
-		case Levels::MAP_LEVEL1:
+		case Scenes::LEVEL_1:
 			Initialize(20, 20);
 			break;
-		case  Levels::MAP_LEVEL2:
+		case  Scenes::LEVEL_2:
 			Initialize(30, 30);
 			break;
-		case  Levels::MAP_LEVEL3:
+		case  Scenes::LEVEL_3:
 			Initialize(40, 40);
 			break;
 		default:

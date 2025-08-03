@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Enemy.h"
-#include "Levels.h"
+#include "Scenes.h"
 #include "Map.h"
 #include "Player.h"
 #include <string>
@@ -15,7 +15,7 @@ private:
 	Player& player;
 	Vector2 exitPos;
 	bool playerAtExit = false;
-	Levels levelNum;
+	Scenes levelNum;
 	std::string filePath;
 	size_t mapWidth = 0, mapHeight = 0;
 	std::vector<Enemy*> enemies;
@@ -26,7 +26,7 @@ private:
 
 public:
 
-	Level(Levels mapLevel, Player& p);
+	Level(Scenes mapLevel, Player& p);
 
 	void Update();
 

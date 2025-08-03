@@ -1,6 +1,6 @@
 #include "Elements.h"
 #include "Level.h"
-#include "Levels.h"
+#include "Scenes.h"
 #include "Map.h"
 #include "Symbols.h"
 #include "InfoGenerator.h"
@@ -11,20 +11,20 @@
 #include <iostream>
 #include <thread>
 
-Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(player)
+Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(player)
 {
     map = new Map(levelNum);
 
     // Pick file based on level
     switch (levelNum)
     {
-        case Levels::MAP_LEVEL1: 
+        case Scenes::LEVEL_1:
             filePath = "Level1_Map.txt";
             break;
-        case Levels::MAP_LEVEL2:
+        case Scenes::LEVEL_2:
             filePath = "Level2_Map.txt"; 
             break;
-        case Levels::MAP_LEVEL3:
+        case Scenes::LEVEL_3:
             filePath = "Level3_Map.txt";
             break;
     }
@@ -56,7 +56,7 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 			else if (ch == Symbols::ENEMY)
 			{
 				InfoGenerator infoGen;
-				Enemy* temp = new Enemy(levelNum, pos);
+				Enemy* temp = new Enemy(static_cast<int>(levelNum), pos);
 				(*temp).AddPatrolPoint(*map, Vector2(2, 10));
 				(*temp).AddPatrolPoint(*map, Vector2(7, 10));
 				
@@ -68,7 +68,7 @@ Level::Level(Levels mapLevel, Player& player) : levelNum(mapLevel), player(playe
 	//Debug print
 	//map->UpdatePosition(Vector2(2, 10), 'A', Ui::GetColorForChar('G'));
 	//map->UpdatePosition(Vector2(7, 10), 'B', Ui::GetColorForChar('G'));
-    Ui::PrintFrame(*this, levelNum, player);
+    Ui::PrintLevel(*this, levelNum, player);
 }
 
 void Level::LoadMapFile()

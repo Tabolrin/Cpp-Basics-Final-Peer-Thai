@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 #include "Level.h"
-#include "Levels.h"
+#include "Scenes.h"
 #include "Map.h"
 #include "Player.h"
 #include "Ui.h"
@@ -14,7 +14,7 @@ using namespace std::chrono;
 Game::Game() 
 {
 	player = new Player(Vector2(0, 0));
-	currentLevel = new Level(Levels::MAP_LEVEL1, *player);
+	currentLevel = new Level(Scenes::LEVEL_1, *player);
 }
 
 void Game::RunGameLoop()
@@ -25,33 +25,28 @@ void Game::RunGameLoop()
     float timeAccumulator = 0.0f;                  // how much un-processed time we’ve gathered
     constexpr float fixedTimeStep = 0.75f;          // ←– change this to alter tick rate (in seconds)
     bool  isRunning = true;
-    Levels currentLevelId = Levels::MAP_LEVEL1;
+    Scenes currentLevelId = Scenes::LEVEL_1;
 
     while (isRunning)
     {
-        // 1) Measure elapsed time since last frame
         auto   currentTime = Clock::now();
         float  frameTime = std::chrono::duration<float>(currentTime - lastUpdateTime).count();
         lastUpdateTime = currentTime;
         timeAccumulator += frameTime;
 
-        // 2) Immediate player input/action every frame
         player->Update(currentLevel->GetMap(), *player);
 
-        // 3) Fixed-timestep world update: runs when we've accumulated ≥ fixedTimeStep
         while (timeAccumulator >= fixedTimeStep)
         {
             currentLevel->Update();            // your existing map/AI/physics tick
             timeAccumulator -= fixedTimeStep;  // consume that slice of time
         }
 
-        // 4) Check win/level-flow here...
         if (currentLevel->CheckWin())
         {
             /* …transition… */ 
         }
 
-        // 5) Tiny sleep so CPU isn’t pegged at 100%
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 

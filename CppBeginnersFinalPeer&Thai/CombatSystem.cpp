@@ -1,6 +1,7 @@
 ﻿#include "CombatSystem.h"
 #include "HitResult.h"
 #include "Items.h"
+#include "Ui.h"
 #include "PlayerChoice.h"
 #include <iostream>
 #include <cstdlib>
@@ -29,14 +30,19 @@ float GetElementMultiplier(Elements attacker, Elements defender)
 
 void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
 {
+	Ui::PrintCombatVisual();
+
     std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";
 
     std::cout << "Choose your starting unit:\n";
-	//todo: print party members with their index usint ui
+	//todo: print party members with their index using ui
     Unit* currentUnit = ChoosePartyUnit(party);
 
     while (!party.IsDefeated() && enemy.GetHp() > 0)
     {
+		system("cls");
+        Ui::PrintCombatVisual();
+
         if (currentUnit->GetHp() <= 0)
         {
             std::cout << currentUnit->GetName() << " is down. Please switch to another unit.\n";
@@ -201,6 +207,17 @@ void CombatSystem::UseItemMenu(Inventory& inventory, Unit* target)
             target->IncreaseNormalDmg(5);
             inventory.UseItem(Items::NORMAL_ATTACK_POTION);
             std::cout << "Increased normal damage by 5.\n";
+        }
+        else
+            std::cout << "No power potions left!\n";
+        break;
+
+    case Items::ELEMENTAL_ATTACK_POTION:
+        if (inventory.IsInInventory(Items::ELEMENTAL_ATTACK_POTION))
+        {
+            target->IncreaseElementalDmg(5);
+            inventory.UseItem(Items::ELEMENTAL_ATTACK_POTION);
+            std::cout << "Increased elemental damage by 5.\n";
         }
         else
             std::cout << "No power potions left!\n";
