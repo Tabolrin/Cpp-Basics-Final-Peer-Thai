@@ -10,7 +10,7 @@ Map::Map(Scenes level)
 {
 	this->level = level;
 	// Initialize map with default size
-	switch (level)
+	/*switch (level)
 	{
 		case Scenes::LEVEL_1:
 			Initialize(20, 20);
@@ -24,7 +24,7 @@ Map::Map(Scenes level)
 		default:
 			Initialize(20, 20);
 			break;
-	}
+	}*///----------------------------------------------delete
 }
 
 void Map::Initialize(int w, int h)
@@ -32,12 +32,11 @@ void Map::Initialize(int w, int h)
 	width = w;
 	height = h;
 	mapMat.clear();
-	mapMat.resize(height, std::vector<char>(width));
+	mapMat.resize(height, std::string(width, Symbols::CLEAR));
 }
 
 void Map::UpdatePosition(const Vector2& pos, char newChar, int color)
 {
-	// Change only one spot on screen
 	COORD coord = { (SHORT)pos.y, (SHORT)pos.x };
 	SetConsoleCursorPosition(hConsole, coord);
 	SetConsoleTextAttribute(hConsole, Ui::GetColorForChar(newChar));
@@ -55,12 +54,10 @@ Symbols Map::GetCharAt(Vector2& pos)
 	if (CheckIsPointInMap(pos))
 		return (static_cast<Symbols>(mapMat[pos.x][pos.y]));
 	else 
-		return Symbols::INVALID; // Return an invalid symbol if out of bounds
+		return Symbols::INVALID; 
 }
 
 bool Map::CheckIsPointInMap(const Vector2& point) const
 {
 	return point.x >= 0 && point.x < height && point.y >= 0 && point.y < width;
 }
-
-

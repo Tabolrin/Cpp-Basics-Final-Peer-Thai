@@ -42,5 +42,5 @@ public:
 
 	void UpdateEnemies();
 
-	void InitiateCombat(Player& p, Unit& e);
+	//void InitiateCombat(Player& p, Unit& e);
 };

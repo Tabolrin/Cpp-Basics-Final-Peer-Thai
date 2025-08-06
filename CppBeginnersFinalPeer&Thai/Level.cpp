@@ -1,5 +1,6 @@
 #include "Elements.h"
 #include "Level.h"
+#include "FileIO.h" 
 #include "Scenes.h"
 #include "Map.h"
 #include "Symbols.h"
@@ -35,13 +36,14 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
 	Vector2 pos;
 
 	for (size_t x = 0; x < mapHeight; ++x)
+	{
 		for (size_t y = 0; y < mapWidth; ++y)
 		{
 			pos = Vector2(x, y);
 			char ch = mapLines[x][y];
 			map->UpdatePosition(pos, ch, Ui::GetColorForChar(ch));
 		}
-	
+	}
 
 	for (size_t x = 0; x < mapHeight; ++x)
 	{
@@ -65,38 +67,44 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
 		}
 	}
 
-	//Debug print
-	//map->UpdatePosition(Vector2(2, 10), 'A', Ui::GetColorForChar('G'));
-	//map->UpdatePosition(Vector2(7, 10), 'B', Ui::GetColorForChar('G'));
     Ui::PrintLevel(*this, levelNum, player);
 }
 
 void Level::LoadMapFile()
 {
-	std::ifstream file(filePath);
+	auto lines = FileIO::LoadFileLines(filePath);
 
-	if (!file)
+	if (lines.empty()) 
 	{
 		std::cout << "Error opening map file: " << filePath << std::endl;
 		return;
 	}
 
-	std::string line;
-	mapLines.clear();
+	mapLines = std::move(lines);
 
-	while (std::getline(file, line))
+	//  Compute mapHeight as the number of lines
+	mapHeight = static_cast<size_t>(mapLines.size());
+
+	// Compute mapWidth as the longest line
+	mapWidth = 0;
+	for (const auto& line : mapLines)
 	{
-		mapLines.push_back(line);
-		mapWidth = line.length();
+		if (line.size() > mapWidth) 
+			mapWidth = line.size();
 	}
 
-	mapHeight = mapLines.size();
+	// Pad any shorter lines with 'CLEAR' symbol so all rows have equal length
+	for (auto& line : mapLines)
+	{
+		if (line.size() < mapWidth)
+			line.append(mapWidth - line.size(), static_cast<char>(Symbols::CLEAR));
+	}
 }
-
 
 void Level::Update()
 {
-	UpdateEnemies();
+	if(!player.InCombat)
+		UpdateEnemies();
 }
 
 bool Level::CheckWin() 
@@ -124,8 +132,3 @@ void Level::UpdateEnemies()
 }
 
 Map& Level::GetMap() { return *map; }
-
-void Level::InitiateCombat(Player& p, Unit& e)
-{
-	
-}

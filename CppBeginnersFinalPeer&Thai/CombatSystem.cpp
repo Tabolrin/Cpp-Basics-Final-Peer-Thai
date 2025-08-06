@@ -30,6 +30,7 @@ float GetElementMultiplier(Elements attacker, Elements defender)
 
 void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
 {
+
 	Ui::PrintCombatVisual();
 
     std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";

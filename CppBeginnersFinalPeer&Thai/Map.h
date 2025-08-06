@@ -4,6 +4,7 @@
 #include "Symbols.h"
 #include "Vector2.h"
 #include <vector>
+#include <string>
 #include <windows.h>
 
 
@@ -11,7 +12,7 @@ class Map
 {
 private:
 	Scenes level;
-	std::vector<std::vector<char>> mapMat;
+	std::vector<std::string> mapMat;
 	int width = 0, height = 0;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -20,7 +21,7 @@ public:
 
 	Map(Scenes level);
 
-	std::vector<std::vector<char>> GetMapMatrix() { return mapMat; }
+	std::vector<std::string> GetMapMatrix() { return mapMat; }
 
 	int GetWidth() const { return width; }
 

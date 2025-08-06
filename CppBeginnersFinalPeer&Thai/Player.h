@@ -18,7 +18,6 @@ private:
 	char rightButton = 'd';
 	void PickUpChest(Map& map);
 
-
 public:
 	bool KeyAcquired = false;
 	bool InCombat = false;

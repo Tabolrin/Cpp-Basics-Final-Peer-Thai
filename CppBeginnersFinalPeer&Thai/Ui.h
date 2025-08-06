@@ -11,10 +11,8 @@
 class Ui
 {
 private:
-	static const int NOTIFICATION_LINE_INDEX = 6;
-	static void MapDraw(Map map);
-	static HANDLE hConsole ;
-
+	static const int NOTIFICATION_LINE_INDEX = 50;
+	static void MapDraw(Map& map);
 
 public:
 	static void PrintLevel(Level& LevelObj, Scenes level, Player& player);
@@ -27,4 +25,5 @@ public:
 	static void PrintLoseScreen();
 	static void PrintLevelTransition();
 	static void PrintNotification(const Items Item);
+	static void PrintPlayerPartyInfo(Player& player);
 };

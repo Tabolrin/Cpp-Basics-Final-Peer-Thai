@@ -23,14 +23,14 @@ void Game::RunGameLoop()
 
     auto lastUpdateTime = Clock::now();          // wall-clock time at last frame
     float timeAccumulator = 0.0f;                  // how much un-processed time we’ve gathered
-    constexpr float fixedTimeStep = 0.75f;          // ←– change this to alter tick rate (in seconds)
+    constexpr float fixedTimeStep = 0.75f;          // tick rate (in seconds)
     bool  isRunning = true;
-    Scenes currentLevelId = Scenes::LEVEL_1;
+    Scenes currentScene = Scenes::LEVEL_1;
 
     while (isRunning)
     {
         auto   currentTime = Clock::now();
-        float  frameTime = std::chrono::duration<float>(currentTime - lastUpdateTime).count();
+        float  frameTime = std::chrono::duration<float>(currentTime - lastUpdateTime).count(); //how long the last frame took in seconds,
         lastUpdateTime = currentTime;
         timeAccumulator += frameTime;
 
@@ -50,7 +50,7 @@ void Game::RunGameLoop()
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    // Cleanup…
+ 
     delete currentLevel;
     delete player;
 }

@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Ui.h"
+#include "FileIO.h"
 #include <conio.h>
 #include <iostream>
 #include <windows.h>
@@ -19,57 +20,55 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 	std::cout << std::endl;
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, Colors::DARK_CYAN); // DarkCyan
+	SetConsoleTextAttribute(hConsole, Colors::DARK_CYAN);
 	std::cout << "-= Game Status =-" << std::endl;
-	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE); // White
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::cout << "Current Level: ";
 	SetConsoleTextAttribute(hConsole, Colors::DARK_YELLOW); // DarkYellow
 	std::cout << static_cast<int>(level) << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
-
-	// TODO:
-	//---------------Replace with player party units status using their display 
-	//std::cout << "Attack Power: ";
-	//SetConsoleTextAttribute(hConsole, 5); // Magenta
-	//std::cout << player.GetDamageOutput() << std::endl;
-	//SetConsoleTextAttribute(hConsole, 7);
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::cout << "Player coordinates: ";
-	SetConsoleTextAttribute(hConsole, Colors::DARK_BLUE); // DarkBlue
+	SetConsoleTextAttribute(hConsole, Colors::DARK_BLUE);
 	std::cout << player.GetPosition().x << " , " << player.GetPosition().y << std::endl;
 	SetConsoleTextAttribute(hConsole, 7);
 
 	std::cout << "Key On Player: ";
-	if (player.IsKeyAcquired())//if player has key
+	if (player.IsKeyAcquired())
 	{
-		SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN); // Green
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN); 
 		std::cout << "V" << std::endl;
 	}
 	else
 	{
-		SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED); // Red
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED); 
 		std::cout << "X" << std::endl;
 	}
+
+	// TODO:
+//---------------Replace with player party units status using their display 
+	PlayerParty party = *player.GetParty();
+	std::cout << "Player Party Info:\n";
+	party.PrintParty();
+
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 }
 
-void Ui::MapDraw(Map map) 
+void Ui::MapDraw(Map& map) 
 {
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	//SetCur
-
-	for (int x = 0; x < map.GetHeight(); ++x)
-	{
-		for (int y = 0; y < map.GetWidth(); ++y)
-		{
-			char ch = map.GetMapMatrix()[x][y];
-			SetConsoleTextAttribute(hConsole, Ui::GetColorForChar(ch));
-			std::cout << ch;
-		}
-		std::cout << std::endl;
-	}
+	FileIO::PrintLines(map.GetMapMatrix());
 }
+
+
+void Ui::PrintPlayerPartyInfo(Player& player)
+{
+	PlayerParty party =  *player.GetParty();
+	std::cout << "Player Party Info:\n";
+
+	party.PrintParty();
+}
+
 
 void Ui::Tutorials()
 {
@@ -79,11 +78,7 @@ void Ui::Tutorials()
 		<< "Created by - Pe'er Malul & Thai Lazover Besher\n\n"
 		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
 
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	/*SetConsoleTextAttribute(hConsole, 4 | (7 << 4)); // DarkRed on Gray
-	std::cout << "-=IMPORTANT!=-\n"
-		<< "Please maximize the window to fill the screen for the game to work properly.\n"
-		<< "Thank you for understanding. (press ENTER to continue)\n";*/
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	RequireEnterPressToProgress();
@@ -104,11 +99,14 @@ void Ui::Tutorials()
 		<< "....Oh, almost forgot! - press Enter to start the game.";
 
 	RequireEnterPressToProgress();
+
+	PrintOpeningScreen();
 }
 
 void Ui::RequireEnterPressToProgress()
 {
 	char input;
+
 	do
 	{
 		input = _getch();
@@ -161,6 +159,7 @@ void Ui::PrintOpeningScreen()
 		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
 
 	std::string input;
+
 	do
 	{
 		input = "";
@@ -190,6 +189,7 @@ void Ui::PrintCombatVisual()
 	system("cls");
 	std::cout << "message" << std::endl;
 	std::cout << "Press Enter to continue..." << std::endl;
+
 	RequireEnterPressToProgress();
 }
 
@@ -197,8 +197,7 @@ void Ui::PrintCombatVisual()
 void Ui::PrintWinScreen()
 {
 	system("cls");
-	std::cout << "message" << std::endl;
-	std::cout << "Press Enter to continue..." << std::endl;
+	FileIO::PrintLines(FileIO::LoadFileLines("WinScreen.txt"));
 	RequireEnterPressToProgress();
 }
 
@@ -206,8 +205,7 @@ void Ui::PrintWinScreen()
 void Ui::PrintLoseScreen()
 {
 	system("cls");
-	std::cout << "message" << std::endl;
-	std::cout << "Press Enter to continue..." << std::endl;
+	FileIO::PrintLines(FileIO::LoadFileLines("LoseScreen.txt"));
 	RequireEnterPressToProgress();
 }
 
@@ -251,6 +249,7 @@ void Ui::PrintNotification(const Items Item)
 		default:
 			break;
 	}
+
 	Sleep(2500);
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsole, { 0, NOTIFICATION_LINE_INDEX });

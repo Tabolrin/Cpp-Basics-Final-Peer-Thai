@@ -18,6 +18,7 @@ void Player::Move(Map& map, Vector2& direction)
 {
 	bool isDirectionValid = false;
 	Vector2 tempPos = position + direction;
+
 	// TODO: Check if the new position is within the bounds of the map and make sure player cant step on a chest (discuss with Thai
 	if (map.GetCharAt(tempPos) == Symbols::CLEAR || map.GetCharAt(tempPos) == Symbols::FULL_CHEST
 		|| map.GetCharAt(tempPos) == Symbols::KEY)
@@ -40,7 +41,7 @@ void Player::Move(Map& map, Vector2& direction)
 				// Random item (HP_POTION..SMOKE_BOMB)
 				Items randomItem = static_cast<Items>(rand() % 4);
 				inventory->AddItem(randomItem);
-				std::cout << "You found item #" << static_cast<int>(randomItem) << "!\n";
+				Ui::PrintNotification(randomItem);
 
 				// Turn chest to empty
 				map.UpdatePosition(position, Symbols::EMPTY_CHEST, Ui::GetColorForChar(Symbols::EMPTY_CHEST));
@@ -71,9 +72,11 @@ void Player:: Update(Map& map, Player& player)
 	Vector2 direction = Vector2 (0,0);
 	char playerInput;
 
-	if (_kbhit())
+	if (_kbhit())// if a key was pressed
 	{
 		playerInput = _getch();
+
+		// check each movement key (allow lowercase and uppercase)
 
 		if (playerInput == upButton || playerInput == upButton - 32)
 		{
@@ -95,7 +98,7 @@ void Player:: Update(Map& map, Player& player)
 			direction.y += speed;
 		}
 
-		Move(map, direction);
+		Move(map, direction);// move the player on the map
 	}
 }
 

@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CombatSystem.cpp" />
+    <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="InfoGenerator.cpp" />
     <ClCompile Include="PlayerParty.cpp" />
@@ -142,12 +143,14 @@
     <ClInclude Include="CombatSystem.h" />
     <ClInclude Include="Elements.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FileIO.h" />
     <ClInclude Include="HitResult.h" />
     <ClInclude Include="InfoGenerator.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="PlayerChoice.h" />
     <ClInclude Include="PlayerParty.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes.h" />
     <ClInclude Include="Symbols.h" />
     <ClInclude Include="Game.h" />
@@ -161,13 +164,18 @@
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="FireElemental.txt" />
     <Text Include="FireNames.txt" />
+    <Text Include="GrassElemental.txt" />
     <Text Include="Level1_Map.txt" />
     <Text Include="Level2_Map.txt" />
     <Text Include="Level3_Map.txt" />
-    <Text Include="Monster.txt" />
     <Text Include="GrassNames.txt" />
+    <Text Include="LoseScreen.txt" />
+    <Text Include="OpeningScreen.txt" />
+    <Text Include="WaterElemental.txt" />
     <Text Include="WaterNames.txt" />
+    <Text Include="WinScreen.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
