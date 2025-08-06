@@ -75,7 +75,7 @@ void Ui::Tutorials()
 {
 	system("cls");
 
-	std::cout << "Elementia\n"
+	std::cout << "Elementia \n"
 		<< "Created by - Pe'er Malul & Thai Lazover Besher\n\n"
 		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
 
