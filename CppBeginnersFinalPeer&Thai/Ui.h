@@ -11,7 +11,8 @@
 class Ui
 {
 private:
-	static const int NOTIFICATION_LINE_INDEX = 50;
+	static COORD notificationLineIndex;
+	static int lastNotificationLength;
 	static void MapDraw(Map& map);
 
 public:
@@ -20,10 +21,11 @@ public:
 	static void RequireEnterPressToProgress();
 	static const WORD GetColorForChar(char ch) ;
 	static void PrintOpeningScreen();
-	static void PrintCombatVisual ();
+	static void PrintCombatVisual(Elements enemyElement);
 	static void PrintWinScreen();
 	static void PrintLoseScreen();
 	static void PrintLevelTransition();
 	static void PrintNotification(const Items Item);
+	static void PrintNotification(const std::string message);
 	static void PrintPlayerPartyInfo(Player& player);
 };

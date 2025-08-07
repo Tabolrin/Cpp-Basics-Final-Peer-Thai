@@ -9,7 +9,7 @@ PlayerParty::PlayerParty()
 	partyMembers.emplace_back(nameGen.GetRandomName(Elements::FIRE), 100, 15, 20, Elements::FIRE, partyMemberPosition);
 	partyMembers.emplace_back(nameGen.GetRandomName(Elements::WATER), 80, 17, 17, Elements::WATER, partyMemberPosition);
 	partyMembers.emplace_back(nameGen.GetRandomName(Elements::GRASS), 90, 22, 18, Elements::GRASS, partyMemberPosition);
-	//todo: emplace_back(...): directly constructs a new element at the end of the container
+	//todo: delete at end, emplace_back(...): directly constructs a new element at the end of the container
 	// by forwarding the given arguments to its constructor—no temporary object,
 	// copy, or move is needed. DELETE
 }

@@ -5,7 +5,7 @@
 #include "PlayerChoice.h"
 #include <iostream>
 #include <cstdlib>
-#include <limits>      
+#include <limits> 
 #include <vector>      
 
 float GetElementMultiplier(Elements attacker, Elements defender)
@@ -30,20 +30,20 @@ float GetElementMultiplier(Elements attacker, Elements defender)
 
 void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
 {
-
-	Ui::PrintCombatVisual();
-
     std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";
+    Ui::PrintCombatVisual(enemy.GetElement());
 
+    //  Choose who goes first
     std::cout << "Choose your starting unit:\n";
-	//todo: print party members with their index using ui
     Unit* currentUnit = ChoosePartyUnit(party);
 
+    //  Main loop
     while (!party.IsDefeated() && enemy.GetHp() > 0)
     {
-		system("cls");
-        Ui::PrintCombatVisual();
+        system("cls");
+        Ui::PrintCombatVisual(enemy.GetElement());
 
+        // -- Player's turn --
         if (currentUnit->GetHp() <= 0)
         {
             std::cout << currentUnit->GetName() << " is down. Please switch to another unit.\n";
@@ -51,32 +51,50 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             continue;
         }
 
-        std::cout << "\n " << currentUnit->GetName() << "'s turn:\n";
-        std::cout << "Choose action:\n1. Attack\n2. Use Item\n3. Switch Unit\nChoice: ";
+        std::cout << "\n " << currentUnit->GetName() << "'s turn:\n"
+            << "Choose action:\n"
+            << "1. Attack\n"
+            << "2. Use Item\n"
+            << "3. Switch Unit\n"
+            << "Choice: ";
+
         int choice;
         std::cin >> choice;
+        std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+        // todo: delete  Discard everything in the input buffer up to (and including) the next newline.
+        // Wrapping max in parentheses prevents the Windows max macro from interfering.
 
         switch (static_cast<PlayerChoice>(choice))
         {
         case PlayerChoice::ATTACK:
         {
-            std::cout << "Choose attack type:\n1. Normal Attack\n2. Elemental Attack\nChoice: ";
+            std::cout << "Choose attack type:\n"
+                << "1. Normal Attack\n"
+                << "2. Elemental Attack\n"
+                << "Choice: ";
             int attackType;
             std::cin >> attackType;
+            std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
             HitResult result = currentUnit->HitOrMiss();
+            int        baseDmg = (attackType == 1)
+                ? currentUnit->GetNormalDmg()
+                : static_cast<int>(currentUnit->GetElementalDmg()
+                    * GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement()));
+            int        damage = 0;
 
-            int baseDamage = (attackType == 1) ? currentUnit->GetNormalDmg() : static_cast<int>(currentUnit->GetElementalDmg() * GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement()));
-
+            // print and apply damage
             switch (result)
             {
             case HitResult::CRIT:
-                std::cout << "[CRIT] ";
-                enemy.TakeDamage(baseDamage * 2);
+                damage = baseDmg * 2;
+                std::cout << "[CRIT] Dealt " << damage << " damage!\n";
+                enemy.TakeDamage(damage);
                 break;
             case HitResult::HIT:
-                std::cout << "[HIT] ";
-                enemy.TakeDamage(baseDamage);
+                damage = baseDmg;
+                std::cout << "[HIT] Dealt " << damage << " damage!\n";
+                enemy.TakeDamage(damage);
                 break;
             case HitResult::MISS:
                 std::cout << "[MISS] Attack missed!\n";
@@ -84,6 +102,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             }
             std::cout << "Enemy HP: " << enemy.GetHp() << "\n";
 
+            // check for victory
             if (enemy.GetHp() <= 0)
             {
                 std::cout << "\n Enemy defeated!\n";
@@ -94,69 +113,134 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
                 if (currentUnit->GetLevel() * 10 <= currentUnit->GetExp())
                 {
                     currentUnit->PlayerLevelUp();
-                    std::cout << currentUnit->GetName() << " leveled up to level " << currentUnit->GetLevel() << "!\n";
+                    std::cout << currentUnit->GetName()
+                        << " leveled up to level "
+                        << currentUnit->GetLevel() << "!\n";
                 }
                 return;
             }
             break;
         }
+
         case PlayerChoice::USE_ITEM:
             UseItemMenu(inventory, currentUnit);
             break;
+
         case PlayerChoice::SWITCH_UNIT:
             currentUnit = ChoosePartyUnit(party);
             break;
+
+            /*case PlayerChoice::FLEE:   // Example logic addition
+            {
+                if (rand() % 4 == 0) {
+                    std::cout << "You fled successfully!\n";
+                    return;
+                } else {
+                    std::cout << "Flee attempt failed!\n";
+                }
+                break;
+            }*/
+
         default:
             std::cout << "Invalid choice, turn skipped.\n";
             break;
         }
 
+        // -- Enemy's turn (only attacks current unit) --
         std::cout << "\nEnemy's turn:\n";
-        for (Unit& member : party.GetAll())
+        if (currentUnit->GetHp() > 0)
         {
-            if (member.GetHp() <= 0) continue;
-
             HitResult result = enemy.HitOrMiss();
-            std::cout << enemy.GetName() << " attacks " << member.GetName() << "! ";
+            int damage = 0;
+            std::cout << enemy.GetName() << " attacks " << currentUnit->GetName() << "! ";
 
-            int totalDamage = enemy.GetNormalDmg() + static_cast<int>(enemy.GetElementalDmg() * GetElementMultiplier(enemy.GetElement(), member.GetElement()));
+            damage = enemy.GetNormalDmg()
+                + static_cast<int>(enemy.GetElementalDmg()
+                    * GetElementMultiplier(enemy.GetElement(), currentUnit->GetElement()));
+
             switch (result)
             {
             case HitResult::CRIT:
+                damage *= 2;
                 std::cout << "[CRIT] ";
-                member.TakeDamage(totalDamage * 2);
                 break;
             case HitResult::HIT:
                 std::cout << "[HIT] ";
-                member.TakeDamage(totalDamage);
                 break;
             case HitResult::MISS:
                 std::cout << "[MISS] Attack missed!\n";
-                continue;
+                damage = 0;
+                break;
             }
-            std::cout << member.GetName() << " HP: " << member.GetHp() << "\n";
+            if (damage > 0)
+            {
+                currentUnit->TakeDamage(damage);
+                std::cout << "Dealt " << damage << " damage! ";
+            }
+            std::cout << currentUnit->GetName()
+                << " HP: " << currentUnit->GetHp() << "\n";
+
+            if (currentUnit->GetHp() <= 0)
+            {
+                std::cout << currentUnit->GetName() << " has fallen! Choose another unit.\n";
+                currentUnit = ChoosePartyUnit(party);
+            }
             if (party.IsDefeated())
             {
-                std::cout << "\n Your party was defeated!\n";
+                std::cout << "\nYour party was defeated!\n";
                 return;
             }
+        }
+        else
+        {
+            std::cout << currentUnit->GetName()
+                << " is down, skipping enemy attack.\n";
         }
     }
 }
 
+
 Unit* CombatSystem::ChoosePartyUnit(PlayerParty& party)
 {
-    std::cout << "\nAvailable Units:\n";
+    int choice;
+    bool validChoice = false;
     auto& members = party.GetAll();
 
-    int choice;
-    bool validChoice = false;  // fixed typo here
+    std::cout << "\nAvailable Units:\n";
+
+    auto partyUnits = party.GetAll();
+    for (int i = 0; i < partyUnits.size(); ++i)
+    {
+        if (partyUnits[i].GetHp() > 0)
+        {
+            std::cout << i + 1 << ". " << partyUnits[i].GetName() << ", Element: ";
+
+            switch (partyUnits[i].GetElement())
+            {
+            case Elements::FIRE:
+                std::cout << "FIRE";
+                break;
+            case Elements::WATER:
+                std::cout << "WATER";
+                break;
+            case Elements::GRASS:
+                std::cout << "GRASS";
+                break;
+            default:
+                std::cout << "UNKNOWN";
+                break;
+            }
+
+            std::cout << " (HP: " << partyUnits[i].GetHp() << ")\n";
+        }
+    }
 
     do
     {
         char ch;
         std::cout << "Choose unit index: ";
         std::cin >> choice;
+
         if (std::cin.fail() || choice < 1 || choice > static_cast<int>(members.size()))
         {
             std::cin.clear();

@@ -1,9 +1,9 @@
 #include "Inventory.h" 
+#include "Items.h"
 #include "Player.h"
 #include "Ui.h"
 #include <conio.h> 
 #include <iostream>
-#include "Items.h"
 
 Player::Player(const Vector2& pos) : GameObject(position)
 {
@@ -21,8 +21,8 @@ void Player::Move(Map& map, Vector2& direction)
 
 	// TODO: Check if the new position is within the bounds of the map and make sure player cant step on a chest (discuss with Thai
 	if (map.GetCharAt(tempPos) == Symbols::CLEAR || map.GetCharAt(tempPos) == Symbols::FULL_CHEST
-		|| map.GetCharAt(tempPos) == Symbols::KEY)
-	{
+		|| map.GetCharAt(tempPos) == Symbols::KEY || map.GetCharAt(tempPos) == Symbols::EXIT)
+	
 		map.UpdatePosition(position, Symbols::CLEAR, Ui::GetColorForChar(Symbols::PLAYER));
 		position = tempPos;
 		map.UpdatePosition(position, Symbols::PLAYER, Ui::GetColorForChar(Symbols::CLEAR));
@@ -38,18 +38,28 @@ void Player::Move(Map& map, Vector2& direction)
 
 			case Symbols::FULL_CHEST:
 			{
-				// Random item (HP_POTION..SMOKE_BOMB)
+				// Random item
 				Items randomItem = static_cast<Items>(rand() % 4);
 				inventory->AddItem(randomItem);
 				Ui::PrintNotification(randomItem);
 
+				//todo: delete if gave up on it
 				// Turn chest to empty
 				map.UpdatePosition(position, Symbols::EMPTY_CHEST, Ui::GetColorForChar(Symbols::EMPTY_CHEST));
 				break;
 			}
+
+			case Symbols::EXIT:
+			{
+				if (KeyAcquired)
+					IsAtExit = true;
+				else
+					std::cout << "You need to acquire the key first!\n";
+				break;
+			}
 		}
-	}
 }
+
 
 void Player::PickUpChest(Map& map)
 { 

@@ -12,8 +12,8 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 {
 	//if the player is in combat- skip frame print
 	if (player.InCombat) return;
-	
-	system("cls"); 
+
+	system("cls");
 
 	// Draw the whole map once at start
 	MapDraw(LevelObj.GetMap());
@@ -37,23 +37,32 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 	std::cout << "Key On Player: ";
 	if (player.IsKeyAcquired())
 	{
-		SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN); 
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN);
 		std::cout << "V" << std::endl;
 	}
 	else
 	{
-		SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED); 
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED);
 		std::cout << "X" << std::endl;
 	}
 
-	// TODO:
-//---------------Replace with player party units status using their display 
 	PlayerParty party = *player.GetParty();
 	std::cout << "Player Party Info:\n";
 	party.PrintParty();
 
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
+
+	std::cout << "Notifications:" << std::endl;
+
+	// getting and setting the console cursor position for notifications
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	if (GetConsoleScreenBufferInfo(hConsole, &csbi))
+		notificationLineIndex = csbi.dwCursorPosition;
+
 }
+
 
 void Ui::MapDraw(Map& map) 
 {
@@ -184,13 +193,23 @@ void Ui::PrintOpeningScreen()
 }
 
 
-void Ui::PrintCombatVisual()
+void Ui::PrintCombatVisual(Elements enemyElement)
 {
-	system("cls");
-	std::cout << "message" << std::endl;
-	std::cout << "Press Enter to continue..." << std::endl;
-
-	RequireEnterPressToProgress();
+	switch (enemyElement)
+	{
+		case Elements::FIRE:
+			FileIO::PrintLines(FileIO::LoadFileLines("FireElemental.txt"));
+			break;
+		case Elements::WATER:
+			FileIO::PrintLines(FileIO::LoadFileLines("WaterElemental.txt"));
+			break;
+		case Elements::GRASS:
+			FileIO::PrintLines(FileIO::LoadFileLines("GrassElemental.txt"));
+			break;
+		default:
+			break;
+	}
+	FileIO::PrintLines(FileIO::LoadFileLines("CombatVisual.txt"));
 }
 
 
@@ -224,6 +243,9 @@ void Ui::PrintLevelTransition()
 
 void Ui::PrintNotification(const Items Item)
 {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hConsole, {0 , notificationLineIndex.Y });
+
 	switch (Item)
 	{
 		case Items::HP_POTION:
@@ -251,7 +273,26 @@ void Ui::PrintNotification(const Items Item)
 	}
 
 	Sleep(2500);
+
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleCursorPosition(hConsole, { 0, NOTIFICATION_LINE_INDEX });
-	std::cout << "                                                                                                                  "; // Clear the notification line
+	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
+	std::cout << '\r' << std::string(lastNotificationLength, ' ') << '\r'; // Clear the notification line
+
+	lastNotificationLength = 80;
+}
+
+void Ui::PrintNotification(const std::string message)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
+
+	std::cout << message;
+
+	Sleep(2500);
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
+	std::cout << '\r'	<< std::string(lastNotificationLength, ' ') << '\r'; // Clear the notification line
+
+	lastNotificationLength = message.size();
 }

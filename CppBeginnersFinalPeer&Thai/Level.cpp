@@ -109,8 +109,7 @@ void Level::Update()
 
 bool Level::CheckWin() 
 {
-	//add if, or use function from player to check
-	//if player is next to the exit tile, set playerAtExit to true
+	player.
 	return playerAtExit;
 }
 

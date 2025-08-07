@@ -20,6 +20,7 @@ private:
 
 public:
 	bool KeyAcquired = false;
+	bool IsAtExit = false;
 	bool InCombat = false;
 	Player(const Vector2& location);
 	void Move(Map& map, Vector2& direction);
