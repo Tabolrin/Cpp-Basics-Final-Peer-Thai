@@ -93,19 +93,26 @@ void Ui::Tutorials()
 	RequireEnterPressToProgress();
 
 	std::cout << "Tutorials:\n"
-		<< "Movement: W,A,S,D/arrow keys.\n"
-		<< "To interact with an object just stand right next to it from the right, left, top or beneath.\n"
-		<< "Sign legend:\n"
-		<< Symbols::PLAYER << " = Your avatar.\n"
-		<< Symbols::ENEMY << " = Enemy.\n"
-		<< Symbols::WALL << " = Wall (you can't walk through it).\n"
-		<< Symbols::KEY << " = Key - you must take the key in order for the passage to the next level to work!\n"
-		<< Symbols::EXIT << " = Exit point - if you have the key it will send you to the next level.\n"
-		<< Symbols::FULL_CHEST << " = Full Chest - will let you choose a reward.\n"
-		<< Symbols::EMPTY_CHEST << " = Empty chest - a chest that was already used - useless to you now.\n"
-		<< "Your goal is to survive all 10 levels. Good luck and choose carefully! (;\n\n"
-		<< "Furthermore, I recommend not to make long presses for continuous movement. Too long of a press will result in a long lag.\n"
-		<< "....Oh, almost forgot! - press Enter to start the game.";
+		// Movement
+		<< "Move: W/A/S/D or arrow keys.\n"
+		<< "Interact: step onto objects (chests, keys, exit).\n\n"
+		// Combat
+		<< "Combat:\n"
+		<< "  On your turn choose: 1=Attack, 2=Use Item, 3=Switch Unit\n"
+		<< "  For Attack: 1=Normal or 2=Elemental (strong/weak vs. enemy element)\n\n"
+		// Legend
+		<< "Legend:\n"
+		<< "  " << Symbols::PLAYER << " = Your character\n"
+		<< "  " << Symbols::ENEMY << " = Enemy (enter battle range to fight)\n"
+		<< "  " << Symbols::WALL << " = Wall (impassable)\n"
+		<< "  " << Symbols::FULL_CHEST << " = Full Chest (move on it for a random reward)\n"
+		<< "  " << Symbols::EMPTY_CHEST << " = Empty Chest (already looted)\n"
+		<< "  " << Symbols::KEY << " = Key (must pick up to open exit)\n"
+		<< "  " << Symbols::EXIT << " = Exit (leaves level if you have a key)\n\n"
+		<< "Goal: Survive all 3 levels. Good luck!\n";
+
+		Sleep(1500);
+		std::cout << "....Oh, almost forgot! - press Enter to return to the opening screen.";
 
 	RequireEnterPressToProgress();
 
@@ -209,7 +216,6 @@ void Ui::PrintCombatVisual(Elements enemyElement)
 		default:
 			break;
 	}
-	FileIO::PrintLines(FileIO::LoadFileLines("CombatVisual.txt"));
 }
 
 
@@ -232,11 +238,11 @@ void Ui::PrintLoseScreen()
 void Ui::PrintLevelTransition()
 {
 	system("cls");
-	for(int i = 0; i < 20; ++i)
+	for(int i = 0; i < 60; ++i)
 	{
 		std::cout << "Loading next level...\n";
 		Sleep(200);
-		std::cout << "###############################################" << std::endl;
+		std::cout << "##########################################################################" << std::endl;
 	}
 }
 

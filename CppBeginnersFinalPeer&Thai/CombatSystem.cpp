@@ -28,7 +28,7 @@ float GetElementMultiplier(Elements attacker, Elements defender)
     return 1.0f;
 }
 
-void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
+bool CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
 {
     std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";
     Ui::PrintCombatVisual(enemy.GetElement());
@@ -72,6 +72,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
                 << "1. Normal Attack\n"
                 << "2. Elemental Attack\n"
                 << "Choice: ";
+
             int attackType;
             std::cin >> attackType;
             std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
@@ -117,7 +118,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
                         << " leveled up to level "
                         << currentUnit->GetLevel() << "!\n";
                 }
-                return;
+                return true;
             }
             break;
         }
@@ -130,23 +131,12 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
             currentUnit = ChoosePartyUnit(party);
             break;
 
-            /*case PlayerChoice::FLEE:   // Example logic addition
-            {
-                if (rand() % 4 == 0) {
-                    std::cout << "You fled successfully!\n";
-                    return;
-                } else {
-                    std::cout << "Flee attempt failed!\n";
-                }
-                break;
-            }*/
-
         default:
             std::cout << "Invalid choice, turn skipped.\n";
             break;
         }
 
-        // -- Enemy's turn (only attacks current unit) --
+        // -- Enemy's turn --
         std::cout << "\nEnemy's turn:\n";
         if (currentUnit->GetHp() > 0)
         {
@@ -185,6 +175,7 @@ void CombatSystem::StartCombat(PlayerParty& party, Enemy& enemy, Inventory& inve
                 std::cout << currentUnit->GetName() << " has fallen! Choose another unit.\n";
                 currentUnit = ChoosePartyUnit(party);
             }
+
             if (party.IsDefeated())
             {
                 std::cout << "\nYour party was defeated!\n";

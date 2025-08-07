@@ -133,7 +133,8 @@ void Enemy::Update(Map& map, Player& player)
         if (!IsInRange(playerPos, BATTLE_RANGE))
             GoToPoint(map, playerPos);
         else
-            CombatSystem::StartCombat(*player.GetParty(), *this, *player.GetInventory());
+            if(!CombatSystem::Combat(*player.GetParty(), *this, *player.GetInventory()))
+                player.
     }
     else
         Patrol(map);

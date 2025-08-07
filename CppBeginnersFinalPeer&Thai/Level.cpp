@@ -109,17 +109,8 @@ void Level::Update()
 
 bool Level::CheckWin() 
 {
-	player.
-	return playerAtExit;
+	return player.IsAtExit;
 }
-
-void Level::TransitionToNext()
-{
-	system("cls");
-	std::cout<< "Transition to Level " << (levelNum + 1) << "!" << std::endl;
-	std::this_thread::sleep_for(std::chrono::seconds(2));
-}
-
 
 
 void Level::UpdateEnemies()
