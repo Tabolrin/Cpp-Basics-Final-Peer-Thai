@@ -22,7 +22,7 @@ void Player::Move(Map& map, Vector2& direction)
 	// TODO: Check if the new position is within the bounds of the map and make sure player cant step on a chest (discuss with Thai
 	if (map.GetCharAt(tempPos) == Symbols::CLEAR || map.GetCharAt(tempPos) == Symbols::FULL_CHEST
 		|| map.GetCharAt(tempPos) == Symbols::KEY || map.GetCharAt(tempPos) == Symbols::EXIT)
-	
+	{
 		map.UpdatePosition(position, Symbols::CLEAR, Ui::GetColorForChar(Symbols::PLAYER));
 		position = tempPos;
 		map.UpdatePosition(position, Symbols::PLAYER, Ui::GetColorForChar(Symbols::CLEAR));
@@ -58,6 +58,7 @@ void Player::Move(Map& map, Vector2& direction)
 				break;
 			}
 		}
+	}
 }
 
 
@@ -127,7 +128,8 @@ Vector2 Player::GetPlayerPos()
 	return position;
 }
 
-Player::~Player()
+Player::~Player() 
 {
-
+		delete party;
+		delete inventory;
 }

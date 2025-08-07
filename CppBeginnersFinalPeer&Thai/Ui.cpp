@@ -3,9 +3,12 @@
 #include "Player.h"
 #include "Ui.h"
 #include "FileIO.h"
+#include "Game.h"
 #include <conio.h>
 #include <iostream>
 #include <windows.h>
+
+//todo: remaining missions: add patrol point, ADD SCORE SYSTEM
 
 
 void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
@@ -56,7 +59,6 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 
 	// getting and setting the console cursor position for notifications
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	if (GetConsoleScreenBufferInfo(hConsole, &csbi))
 		notificationLineIndex = csbi.dwCursorPosition;
@@ -93,14 +95,11 @@ void Ui::Tutorials()
 	RequireEnterPressToProgress();
 
 	std::cout << "Tutorials:\n"
-		// Movement
 		<< "Move: W/A/S/D or arrow keys.\n"
 		<< "Interact: step onto objects (chests, keys, exit).\n\n"
-		// Combat
 		<< "Combat:\n"
 		<< "  On your turn choose: 1=Attack, 2=Use Item, 3=Switch Unit\n"
 		<< "  For Attack: 1=Normal or 2=Elemental (strong/weak vs. enemy element)\n\n"
-		// Legend
 		<< "Legend:\n"
 		<< "  " << Symbols::PLAYER << " = Your character\n"
 		<< "  " << Symbols::ENEMY << " = Enemy (enter battle range to fight)\n"
@@ -166,7 +165,7 @@ const WORD Ui::GetColorForChar(char ch)
 }
 
 
-void Ui::PrintOpeningScreen()
+Scenes Ui::PrintOpeningScreen()
 {
 	system("cls");
 
@@ -184,13 +183,11 @@ void Ui::PrintOpeningScreen()
 
 		if (input == "T" || input == "t")
 		{
-			Tutorials();
-			return;
+			return Scenes::TUTORIAL; 
 		}
 		else if (input == "S" || input == "s")
 		{
-
-			return; // Start the game
+			return Scenes::LEVEL_1; 
 		}
 		else
 		{
@@ -207,12 +204,15 @@ void Ui::PrintCombatVisual(Elements enemyElement)
 		case Elements::FIRE:
 			FileIO::PrintLines(FileIO::LoadFileLines("FireElemental.txt"));
 			break;
+
 		case Elements::WATER:
 			FileIO::PrintLines(FileIO::LoadFileLines("WaterElemental.txt"));
 			break;
+
 		case Elements::GRASS:
 			FileIO::PrintLines(FileIO::LoadFileLines("GrassElemental.txt"));
 			break;
+
 		default:
 			break;
 	}
@@ -280,7 +280,6 @@ void Ui::PrintNotification(const Items Item)
 
 	Sleep(2500);
 
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
 	std::cout << '\r' << std::string(lastNotificationLength, ' ') << '\r'; // Clear the notification line
 
@@ -296,7 +295,6 @@ void Ui::PrintNotification(const std::string message)
 
 	Sleep(2500);
 
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
 	std::cout << '\r'	<< std::string(lastNotificationLength, ' ') << '\r'; // Clear the notification line
 

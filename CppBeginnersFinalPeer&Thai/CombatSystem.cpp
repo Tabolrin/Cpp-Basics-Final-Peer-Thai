@@ -28,7 +28,7 @@ float GetElementMultiplier(Elements attacker, Elements defender)
     return 1.0f;
 }
 
-bool CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
+void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
 {
     std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";
     Ui::PrintCombatVisual(enemy.GetElement());
@@ -87,19 +87,21 @@ bool CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory
             // print and apply damage
             switch (result)
             {
-            case HitResult::CRIT:
-                damage = baseDmg * 2;
-                std::cout << "[CRIT] Dealt " << damage << " damage!\n";
-                enemy.TakeDamage(damage);
-                break;
-            case HitResult::HIT:
-                damage = baseDmg;
-                std::cout << "[HIT] Dealt " << damage << " damage!\n";
-                enemy.TakeDamage(damage);
-                break;
-            case HitResult::MISS:
-                std::cout << "[MISS] Attack missed!\n";
-                break;
+                case HitResult::CRIT:
+                    damage = baseDmg * 2;
+                    std::cout << "[CRIT] Dealt " << damage << " damage!\n";
+                    enemy.TakeDamage(damage);
+                    break;
+
+                case HitResult::HIT:
+                    damage = baseDmg;
+                    std::cout << "[HIT] Dealt " << damage << " damage!\n";
+                    enemy.TakeDamage(damage);
+                    break;
+
+                case HitResult::MISS:
+                    std::cout << "[MISS] Attack missed!\n";
+                    break;
             }
             std::cout << "Enemy HP: " << enemy.GetHp() << "\n";
 
@@ -118,7 +120,7 @@ bool CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory
                         << " leveled up to level "
                         << currentUnit->GetLevel() << "!\n";
                 }
-                return true;
+                return;
             }
             break;
         }
@@ -200,6 +202,7 @@ Unit* CombatSystem::ChoosePartyUnit(PlayerParty& party)
     std::cout << "\nAvailable Units:\n";
 
     auto partyUnits = party.GetAll();
+
     for (int i = 0; i < partyUnits.size(); ++i)
     {
         if (partyUnits[i].GetHp() > 0)
@@ -234,8 +237,7 @@ Unit* CombatSystem::ChoosePartyUnit(PlayerParty& party)
 
         if (std::cin.fail() || choice < 1 || choice > static_cast<int>(members.size()))
         {
-            std::cin.clear();
-            while (std::cin.get(ch) && ch != '\n');
+            std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
             std::cout << "Invalid choice. Please try again.\n";
         }
         else if (members[choice - 1].GetHp() <= 0)
@@ -245,7 +247,7 @@ Unit* CombatSystem::ChoosePartyUnit(PlayerParty& party)
         else
         {
             validChoice = true;
-            while (std::cin.get(ch) && ch != '\n');
+            std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
         }
     } while (!validChoice);
 
@@ -263,6 +265,7 @@ void CombatSystem::UseItemMenu(Inventory& inventory, Unit* target)
     int itemChoiceInt;
     std::cin >> itemChoiceInt;
     Items itemChoice = static_cast<Items>(itemChoiceInt);
+    std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
     switch (itemChoice)
     {

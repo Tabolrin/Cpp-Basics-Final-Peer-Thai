@@ -79,10 +79,13 @@ std::string Unit::GetElementString() const
 	{
 	case Elements::FIRE:
 		return "Fire";
+
 	case Elements::WATER:
 		return "Water";
+
 	case Elements::GRASS:
 		return "Grass";
+
 	default:
 		return "Unknown";
 	}

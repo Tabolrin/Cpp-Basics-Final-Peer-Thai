@@ -115,10 +115,18 @@ bool Level::CheckWin()
 
 void Level::UpdateEnemies()
 {
-	for (auto* e : enemies)
+	for (auto* enemy : enemies)
 	{
-		e->Update(*map, player);
+		enemy->Update(*map, player);
 	}
 }
 
 Map& Level::GetMap() { return *map; }
+
+Level::~Level()
+{
+	for (Enemy* enemy : enemies)
+		delete enemy; 
+
+	delete map; 
+}

@@ -1,8 +1,9 @@
 #include "Elements.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "Game.h"
 #include <string>
-#include < cmath >
+#include <cmath>
 #include <windows.h>
 #include "CombatSystem.h"
 #include "InfoGenerator.h"
@@ -133,8 +134,7 @@ void Enemy::Update(Map& map, Player& player)
         if (!IsInRange(playerPos, BATTLE_RANGE))
             GoToPoint(map, playerPos);
         else
-            if(!CombatSystem::Combat(*player.GetParty(), *this, *player.GetInventory()))
-                player.
+            CombatSystem::Combat(*player.GetParty(), *this, *player.GetInventory());
     }
     else
         Patrol(map);
@@ -142,17 +142,7 @@ void Enemy::Update(Map& map, Player& player)
 
 bool Enemy::IsInRange(const Vector2& targetPosition, int range)
 {
-    /*
-    if (((playerLocation.x - position.x >= 0 && playerLocation.x - position.x <= range)
-        || (playerLocation.x - position.x < 0 && position.x - playerLocation.x <= range))
-        && ((playerLocation.y - position.y >= 0 && playerLocation.y - position.y <= range)
-            || (playerLocation.y - position.y < 0 && position.y - playerLocation.y <= range)))
-    {
-            return true;
-    }
-    */
-
-    if (abs((position).x - targetPosition.x) <= range /* || targetPosition.x - (position).x <= range)*/
+    if (abs((position).x - targetPosition.x) <= range /* || targetPosition.x - (position).x <= range)*/ //todo: delete?
         && (abs((position).y - targetPosition.y) <= range ))/*|| targetPosition.y - (position).y <= range)*/
         return true;
 

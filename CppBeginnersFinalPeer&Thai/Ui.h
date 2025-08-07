@@ -20,7 +20,7 @@ public:
 	static void Tutorials();
 	static void RequireEnterPressToProgress();
 	static const WORD GetColorForChar(char ch) ;
-	static void PrintOpeningScreen();
+	static Scenes PrintOpeningScreen();
 	static void PrintCombatVisual(Elements enemyElement);
 	static void PrintWinScreen();
 	static void PrintLoseScreen();

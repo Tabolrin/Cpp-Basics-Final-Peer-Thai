@@ -2,13 +2,17 @@
 
 #include "Level.h"
 #include "Player.h"
+#include "Scenes.h"
 
 class Game 
 {
 public:
 	Game();
-	void RunGameLoop();
+	 void RunGameLoop();
+	 void MoveToScene(Scenes targetScene);
+
 private:
-	Level* currentLevel;
-	Player* player;
+	 Scenes currentScene;
+	 Level* currentLevel;
+	 Player* player;
 };

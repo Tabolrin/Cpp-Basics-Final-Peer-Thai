@@ -21,7 +21,6 @@ private:
 	std::vector<Enemy*> enemies;
 	std::vector<std::string> mapLines;
 
-
 	void LoadMapFile();
 
 public:
@@ -42,5 +41,5 @@ public:
 
 	void UpdateEnemies();
 
-	//void InitiateCombat(Player& p, Unit& e);
+	~Level();
 };

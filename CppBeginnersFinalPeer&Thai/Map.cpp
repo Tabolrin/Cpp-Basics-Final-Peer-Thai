@@ -24,7 +24,7 @@ Map::Map(Scenes level)
 		default:
 			Initialize(20, 20);
 			break;
-	}*///----------------------------------------------delete
+	}*/ //todo: delete?
 }
 
 void Map::Initialize(int w, int h)
