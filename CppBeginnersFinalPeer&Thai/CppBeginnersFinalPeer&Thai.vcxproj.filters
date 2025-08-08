@@ -19,9 +19,6 @@
     <Filter Include="Header Files\Util">
       <UniqueIdentifier>{75bd2db7-d215-4f79-9884-1b2394d7c8c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{45dedf5d-fc0b-44be-9f59-e6e79e996ab1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
