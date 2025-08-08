@@ -1,5 +1,6 @@
 #include "Elements.h"
 #include "Level.h"
+#include "PatrolPoints.h"
 #include "FileIO.h" 
 #include "Scenes.h"
 #include "Map.h"
@@ -19,56 +20,88 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
     // Pick file based on level
     switch (levelNum)
     {
-        case Scenes::LEVEL_1:
-            filePath = "Level1_Map.txt";
-            break;
-        case Scenes::LEVEL_2:
-            filePath = "Level2_Map.txt"; 
-            break;
-        case Scenes::LEVEL_3:
-            filePath = "Level3_Map.txt";
-            break;
+    case Scenes::LEVEL_1:
+        filePath = "Level1_Map.txt";
+        break;
+
+    case Scenes::LEVEL_2:
+        filePath = "Level2_Map.txt";
+        break;
+
+    case Scenes::LEVEL_3:
+        filePath = "Level3_Map.txt";
+        break;
     }
 
     LoadMapFile();
     (*map).Initialize(mapWidth, mapHeight);
 
-	Vector2 pos;
+    Vector2 pos;
 
-	for (size_t x = 0; x < mapHeight; ++x)
-	{
-		for (size_t y = 0; y < mapWidth; ++y)
-		{
-			pos = Vector2(x, y);
-			char ch = mapLines[x][y];
-			map->UpdatePosition(pos, ch, Ui::GetColorForChar(ch));
-		}
-	}
+    // ---- draw the map exactly as loaded ----
+    for (size_t x = 0; x < mapHeight; ++x)
+    {
+        for (size_t y = 0; y < mapWidth; ++y)
+        {
+            pos = Vector2(static_cast<int>(x), static_cast<int>(y));
+            char ch = mapLines[x][y];
+            map->UpdatePosition(pos, ch, Ui::GetColorForChar(ch));
+        }
+    }
 
-	for (size_t x = 0; x < mapHeight; ++x)
-	{
-		for (size_t y = 0; y < mapWidth; ++y)
-		{
-			pos = Vector2(x, y);
-			char ch = map->GetCharAt(pos);
+    // ---- place player and spawn enemies (with patrol points) ----
+    size_t enemyIndex = 0; // track which enemy we’re on for this level
 
-			if (ch == Symbols::PLAYER)
-				player.SetPosition(pos);
+    for (size_t x = 0; x < mapHeight; ++x)
+    {
+        for (size_t y = 0; y < mapWidth; ++y)
+        {
+            pos = Vector2(static_cast<int>(x), static_cast<int>(y));
+            char ch = map->GetCharAt(pos);
 
-			else if (ch == Symbols::ENEMY)
-			{
-				InfoGenerator infoGen;
-				Enemy* temp = new Enemy(static_cast<int>(levelNum), pos);
-				(*temp).AddPatrolPoint(*map, Vector2(2, 10));
-				(*temp).AddPatrolPoint(*map, Vector2(7, 10));
-				
-				enemies.push_back(temp);
-			}
-		}
-	}
+            if (ch == Symbols::PLAYER)
+            {
+                player.SetPosition(pos);
+            }
+            else if (ch == Symbols::ENEMY)
+            {
+                InfoGenerator infoGen;
+                Enemy* temp = new Enemy(static_cast<int>(levelNum), pos);
+
+                // Pick the patrol table for this level
+                const Vector2(*patrols)[2] = nullptr;
+                int patrolCount = 0;
+
+                switch (levelNum)
+                {
+                    case Scenes::LEVEL_1:
+                        patrols = LEVEL1_PATROLS; patrolCount = LEVEL1_PATROLS_COUNT; 
+                        break;
+
+                    case Scenes::LEVEL_2:
+                        patrols = LEVEL2_PATROLS; patrolCount = LEVEL2_PATROLS_COUNT;
+                        break;
+
+                    case Scenes::LEVEL_3: patrols = LEVEL3_PATROLS;
+                        patrolCount = LEVEL3_PATROLS_COUNT;
+                        break;
+                }
+                
+                if (patrols && enemyIndex < static_cast<size_t>(patrolCount))
+                {
+                    (*temp).AddPatrolPoint(*map, patrols[enemyIndex][0]);
+                    (*temp).AddPatrolPoint(*map, patrols[enemyIndex][1]);
+                }
+
+                enemies.push_back(temp);
+                ++enemyIndex;
+            }
+        }
+    }
 
     Ui::PrintLevel(*this, levelNum, player);
 }
+
 
 void Level::LoadMapFile()
 {

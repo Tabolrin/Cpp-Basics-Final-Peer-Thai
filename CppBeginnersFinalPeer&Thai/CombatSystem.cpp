@@ -1,6 +1,7 @@
 ﻿#include "CombatSystem.h"
 #include "HitResult.h"
 #include "Items.h"
+#include "Score.h"
 #include "Ui.h"
 #include "PlayerChoice.h"
 #include <iostream>
@@ -30,6 +31,8 @@ float GetElementMultiplier(Elements attacker, Elements defender)
 
 void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
 {
+    system("cls");
+
     std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";
     Ui::PrintCombatVisual(enemy.GetElement());
 
@@ -110,6 +113,7 @@ void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory
             {
                 std::cout << "\n Enemy defeated!\n";
                 int expReward = 10 + enemy.GetLevel() * 5;
+                Score::Add(ScoreValues::ENEMY_DEFEATED_BASE + ScoreValues::ENEMY_LEVEL_BONUS * enemy.GetLevel());
                 std::cout << currentUnit->GetName() << " gains " << expReward << " EXP!\n";
                 currentUnit->AddExp(expReward);
 

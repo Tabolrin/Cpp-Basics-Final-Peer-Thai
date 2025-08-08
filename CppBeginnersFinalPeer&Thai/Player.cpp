@@ -1,5 +1,6 @@
 #include "Inventory.h" 
 #include "Items.h"
+#include "Score.h"
 #include "Player.h"
 #include "Ui.h"
 #include <conio.h> 
@@ -16,47 +17,57 @@ Player::Player(const Vector2& pos) : GameObject(position)
 
 void Player::Move(Map& map, Vector2& direction)
 {
-	bool isDirectionValid = false;
 	Vector2 tempPos = position + direction;
 
-	// TODO: Check if the new position is within the bounds of the map and make sure player cant step on a chest (discuss with Thai
-	if (map.GetCharAt(tempPos) == Symbols::CLEAR || map.GetCharAt(tempPos) == Symbols::FULL_CHEST
-		|| map.GetCharAt(tempPos) == Symbols::KEY || map.GetCharAt(tempPos) == Symbols::EXIT)
+	Symbols dest = map.GetCharAt(tempPos);
+
+	if (dest == Symbols::FULL_CHEST)
+	{
+		Items item = Items::NONE;
+
+		while (item == Items::NONE || item == Items::LEVEL_KEY)
+			item = inventory->GetRandomItemFromChest();
+
+		inventory->AddItem(item);
+		Ui::PrintNotification(item);
+
+		// flip the chest to empty
+		map.UpdatePosition(tempPos, Symbols::EMPTY_CHEST, Ui::GetColorForChar(Symbols::EMPTY_CHEST));
+		return;
+	}
+
+	// Allow stepping only onto CLEAR / KEY / EXIT
+	if (dest == Symbols::CLEAR || dest == Symbols::KEY || dest == Symbols::EXIT)
 	{
 		map.UpdatePosition(position, Symbols::CLEAR, Ui::GetColorForChar(Symbols::PLAYER));
 		position = tempPos;
 		map.UpdatePosition(position, Symbols::PLAYER, Ui::GetColorForChar(Symbols::CLEAR));
 
-		switch (map.GetCharAt(tempPos))
+		// Apply tile effect based on what was there originally
+		switch (dest)
 		{
 			case Symbols::KEY:
 			{
 				KeyAcquired = true;
-				(*inventory).AddItem(Items::LEVEL_KEY);
-				break;
-			}
-
-			case Symbols::FULL_CHEST:
-			{
-				// Random item
-				Items randomItem = static_cast<Items>(rand() % 4);
-				inventory->AddItem(randomItem);
-				Ui::PrintNotification(randomItem);
-
-				//todo: delete if gave up on it
-				// Turn chest to empty
-				map.UpdatePosition(position, Symbols::EMPTY_CHEST, Ui::GetColorForChar(Symbols::EMPTY_CHEST));
+				inventory->AddItem(Items::LEVEL_KEY);
 				break;
 			}
 
 			case Symbols::EXIT:
 			{
 				if (KeyAcquired)
+				{
 					IsAtExit = true;
+				}
 				else
+				{
 					std::cout << "You need to acquire the key first!\n";
+				}
 				break;
 			}
+
+			default:
+				break;
 		}
 	}
 }

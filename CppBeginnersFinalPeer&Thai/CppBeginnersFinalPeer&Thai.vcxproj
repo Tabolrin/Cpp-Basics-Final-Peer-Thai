@@ -148,10 +148,12 @@
     <ClInclude Include="InfoGenerator.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Items.h" />
+    <ClInclude Include="PatrolPoints.h" />
     <ClInclude Include="PlayerChoice.h" />
     <ClInclude Include="PlayerParty.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Symbols.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

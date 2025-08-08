@@ -2,18 +2,21 @@
 #include "Map.h"
 #include "Player.h"
 #include "Ui.h"
+#include "Score.h"
 #include "FileIO.h"
 #include "Game.h"
 #include <conio.h>
 #include <iostream>
 #include <windows.h>
 
-//todo: remaining missions: add patrol point, ADD SCORE SYSTEM
+//todo: remaining missions: add patrol point,
 
+COORD Ui::notificationLineIndex = { 0, 0 };
+int   Ui::lastNotificationLength = 0;
 
 void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 {
-	//if the player is in combat- skip frame print
+	//If the player is in combat- skip frame print
 	if (player.InCombat) return;
 
 	system("cls");
@@ -28,14 +31,16 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::cout << "Current Level: ";
-	SetConsoleTextAttribute(hConsole, Colors::DARK_YELLOW); // DarkYellow
+	SetConsoleTextAttribute(hConsole, Colors::DARK_YELLOW); 
 	std::cout << static_cast<int>(level) << std::endl;
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
+
+	std::cout << "Score: " << Score::Get() << std::endl;
 
 	std::cout << "Player coordinates: ";
 	SetConsoleTextAttribute(hConsole, Colors::DARK_BLUE);
 	std::cout << player.GetPosition().x << " , " << player.GetPosition().y << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::cout << "Key On Player: ";
 	if (player.IsKeyAcquired())
@@ -57,7 +62,7 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
 
 	std::cout << "Notifications:" << std::endl;
 
-	// getting and setting the console cursor position for notifications
+	// Getting and setting the console cursor position for notifications
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
 	if (GetConsoleScreenBufferInfo(hConsole, &csbi))
@@ -85,14 +90,8 @@ void Ui::Tutorials()
 {
 	system("cls");
 
-	std::cout << "Elementia \n"
-		<< "Created by - Pe'er Malul & Thai Lazover Besher\n\n"
-		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
-
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
-
-	RequireEnterPressToProgress();
 
 	std::cout << "Tutorials:\n"
 		<< "Move: W/A/S/D or arrow keys.\n"
@@ -222,7 +221,16 @@ void Ui::PrintCombatVisual(Elements enemyElement)
 void Ui::PrintWinScreen()
 {
 	system("cls");
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN);
+	std::cout << "-----------------------------------------------------" << std::endl;
+	std::cout << "--==Final Score: " << Score::Get() << "==--" << std::endl;
+	std::cout << "-----------------------------------------------------" << std::endl;
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
+
 	FileIO::PrintLines(FileIO::LoadFileLines("WinScreen.txt"));
+
 	RequireEnterPressToProgress();
 }
 
@@ -230,7 +238,16 @@ void Ui::PrintWinScreen()
 void Ui::PrintLoseScreen()
 {
 	system("cls");
+
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN);
+	std::cout << "-----------------------------------------------------" << std::endl;
+	std::cout << "--==Final Score: " << Score::Get() << "==--" << std::endl;
+	std::cout << "-----------------------------------------------------" << std::endl;
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
+
 	FileIO::PrintLines(FileIO::LoadFileLines("LoseScreen.txt"));
+
 	RequireEnterPressToProgress();
 }
 
@@ -252,38 +269,41 @@ void Ui::PrintNotification(const Items Item)
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsole, {0 , notificationLineIndex.Y });
 
+	std::string text;
 	switch (Item)
 	{
-		case Items::HP_POTION:
-		std::cout << "You have acquired a Health Potion! Use it wisely.";
+	case Items::HP_POTION:  
+		text = "You have acquired a Health Potion! Use it wisely.";
 		break;
 
-		case Items::NORMAL_ATTACK_POTION:
-			std::cout << "You have acquired a Normal Attack Potion! Use it wisely.";
-			break;
+	case Items::NORMAL_ATTACK_POTION: 
+		text = "You have acquired a Normal Attack Potion! Use it wisely."; 
+		break;
 
-		case Items::ELEMENTAL_ATTACK_POTION:
-			std::cout << "You have acquired an Elemental Attack Potion! Use it wisely.";
-			break;
+	case Items::ELEMENTAL_ATTACK_POTION:
+		text = "You have acquired an Elemental Attack Potion! Use it wisely.";
+		break;
 
-		case Items::LEVEL_KEY:
-			std::cout << "You have acquired a Key! Use it to unlock the exit.";
-			break;
+	case Items::LEVEL_KEY:  
+		text = "You have acquired a Key! Use it to unlock the exit."; 
+		break;
 
-		case Items::SMOKE_BOMB:
-			std::cout << "You have acquired a Smoke Bomb! Use it to escape from combat.";
-			break;
+	case Items::SMOKE_BOMB:    
+		text = "You have acquired a Smoke Bomb! Use it to escape from combat.";
+		break;
 
-		default:
-			break;
+	default:   
+		text = "";
+		break;
 	}
+
+	std::cout << text;
+	lastNotificationLength = static_cast<int>(text.size());  
 
 	Sleep(2500);
 
 	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
-	std::cout << '\r' << std::string(lastNotificationLength, ' ') << '\r'; // Clear the notification line
-
-	lastNotificationLength = 80;
+	std::cout << '\r' << std::string(lastNotificationLength, ' ') << '\r';
 }
 
 void Ui::PrintNotification(const std::string message)
@@ -292,11 +312,10 @@ void Ui::PrintNotification(const std::string message)
 	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
 
 	std::cout << message;
+	lastNotificationLength = static_cast<int>(message.size());
 
 	Sleep(2500);
 
 	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
-	std::cout << '\r'	<< std::string(lastNotificationLength, ' ') << '\r'; // Clear the notification line
-
-	lastNotificationLength = message.size();
+	std::cout << '\r' << std::string(lastNotificationLength, ' ') << '\r';
 }

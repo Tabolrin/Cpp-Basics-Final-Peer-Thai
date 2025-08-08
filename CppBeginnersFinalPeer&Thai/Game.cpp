@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Ui.h"
+#include "Score.h"
 #include <chrono>
 #include <conio.h>
 #include <iostream>
@@ -92,6 +93,7 @@ void Game::MoveToScene(Scenes targetScene)
     switch (currentScene)
     {
     case LEVEL_1:
+        Score::Reset();
 		player = new Player(Vector2(0, 0));
         currentLevel = new Level(Scenes::LEVEL_1, *player);
         RunGameLoop();
