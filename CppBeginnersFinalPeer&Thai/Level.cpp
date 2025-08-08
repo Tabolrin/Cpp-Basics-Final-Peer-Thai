@@ -39,9 +39,9 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
     Vector2 pos;
 
     // ---- draw the map exactly as loaded ----
-    for (size_t x = 0; x < mapHeight; ++x)
+    for (int x = 0; x < mapHeight; ++x)
     {
-        for (size_t y = 0; y < mapWidth; ++y)
+        for (int y = 0; y < mapWidth; ++y)
         {
             pos = Vector2(static_cast<int>(x), static_cast<int>(y));
             char ch = mapLines[x][y];
@@ -50,11 +50,11 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
     }
 
     // ---- place player and spawn enemies (with patrol points) ----
-    size_t enemyIndex = 0; // track which enemy we’re on for this level
+    int enemyIndex = 0; // track which enemy we’re on for this level
 
-    for (size_t x = 0; x < mapHeight; ++x)
+    for (int x = 0; x < mapHeight; ++x)
     {
-        for (size_t y = 0; y < mapWidth; ++y)
+        for (int y = 0; y < mapWidth; ++y)
         {
             pos = Vector2(static_cast<int>(x), static_cast<int>(y));
             char ch = map->GetCharAt(pos);
@@ -99,7 +99,7 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
         }
     }
 
-    Ui::PrintLevel(*this, levelNum, player);
+    Ui::PrintLevel(*this, levelNum, player, true);
 }
 
 
@@ -138,6 +138,8 @@ void Level::Update()
 {
 	if(!player.InCombat)
 		UpdateEnemies();
+
+    Ui::PrintLevel(*this, levelNum, player);
 }
 
 bool Level::CheckWin() 

@@ -13,61 +13,72 @@
 
 COORD Ui::notificationLineIndex = { 0, 0 };
 int   Ui::lastNotificationLength = 0;
+static bool s_mapDrawnOnce = false;
 
-void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player)
+
+void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player, bool fullRedraw)
 {
-	//If the player is in combat- skip frame print
+	//if the player is in combat- skip frame print
 	if (player.InCombat) return;
 
-	system("cls");
-
-	// Draw the whole map once at start
-	MapDraw(LevelObj.GetMap());
-	std::cout << std::endl;
+	static bool s_mapDrawnOnce = false;
 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	if (!s_mapDrawnOnce)
+	{
+		system("cls");
+
+		// Draw the whole map once at start
+		MapDraw(LevelObj.GetMap());
+		std::cout << std::endl;
+
+		s_mapDrawnOnce = true;
+	}
+
+	// move cursor to start of HUD area (just below the map)
+	COORD hudPos = { 0, static_cast<SHORT>(LevelObj.GetMap().GetHeight() + 1) };
+	SetConsoleCursorPosition(hConsole, hudPos);
+
 	SetConsoleTextAttribute(hConsole, Colors::DARK_CYAN);
 	std::cout << "-= Game Status =-" << std::endl;
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::cout << "Current Level: ";
-	SetConsoleTextAttribute(hConsole, Colors::DARK_YELLOW); 
+	SetConsoleTextAttribute(hConsole, Colors::DARK_YELLOW); // DarkYellow
 	std::cout << static_cast<int>(level) << std::endl;
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
-	std::cout << "Score: " << Score::Get() << std::endl;
+	// TODO:
+	//---------------Replace with player party units status using their display 
+	//std::cout << "Attack Power: ";
+	//SetConsoleTextAttribute(hConsole, 5); // Magenta
+	//std::cout << player.GetDamageOutput() << std::endl;
+	//SetConsoleTextAttribute(hConsole, 7);
 
 	std::cout << "Player coordinates: ";
-	SetConsoleTextAttribute(hConsole, Colors::DARK_BLUE);
+	SetConsoleTextAttribute(hConsole, Colors::DARK_BLUE); // DarkBlue
 	std::cout << player.GetPosition().x << " , " << player.GetPosition().y << std::endl;
-	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
+	SetConsoleTextAttribute(hConsole, 7);
 
 	std::cout << "Key On Player: ";
-	if (player.IsKeyAcquired())
+	if (player.IsKeyAcquired())//if player has key
 	{
-		SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN);
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN); // Green
 		std::cout << "V" << std::endl;
 	}
 	else
 	{
-		SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED);
+		SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED); // Red
 		std::cout << "X" << std::endl;
 	}
 
-	PlayerParty party = *player.GetParty();
-	std::cout << "Player Party Info:\n";
-	party.PrintParty();
-
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
-	std::cout << "Notifications:" << std::endl;
-
-	// Getting and setting the console cursor position for notifications
+	// getting and setting the console cursor position for notifications
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-
 	if (GetConsoleScreenBufferInfo(hConsole, &csbi))
 		notificationLineIndex = csbi.dwCursorPosition;
-
 }
 
 

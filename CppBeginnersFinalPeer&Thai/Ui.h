@@ -20,7 +20,7 @@ private:
 	static void MapDraw(Map& map);
 
 public:
-	static void PrintLevel(Level& LevelObj, Scenes level, Player& player);
+	static void PrintLevel(Level& LevelObj, Scenes level, Player& player, bool fullRedraw = false);
 	static void Tutorials();
 	static void RequireEnterPressToProgress();
 	static const WORD GetColorForChar(char ch) ;

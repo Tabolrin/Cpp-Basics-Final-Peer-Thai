@@ -53,7 +53,7 @@ UnitInfo InfoGenerator::GetRandomEnemyInfo(const int level)
     UnitInfo info;
 
     info.level = level;
-    info.maxHp = 10 + level * 10;
+    info.maxHp = 10 + level * 5;
     info.normalDmg = 5 + level;
     info.elementalDmg = 3 + level; 
     info.element = static_cast<Elements>(rand() % ELEMENT_AMOUNT);

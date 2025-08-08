@@ -17,6 +17,7 @@ Enemy::Enemy(int level, const Vector2& location) : Unit(position)
     InfoGenerator infoGen;
     UnitInfo info = infoGen.GetRandomEnemyInfo(level);
     name = info.name;
+	level = info.level;
     maxHp = info.maxHp;
     hp = info.maxHp;
     normalDmg = info.normalDmg;
