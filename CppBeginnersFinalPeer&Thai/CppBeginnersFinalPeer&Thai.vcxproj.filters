@@ -19,6 +19,18 @@
     <Filter Include="Header Files\Util">
       <UniqueIdentifier>{75bd2db7-d215-4f79-9884-1b2394d7c8c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Maps">
+      <UniqueIdentifier>{1156d870-bdfa-440c-b533-46be762e43c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\NameFiles">
+      <UniqueIdentifier>{cd283dfe-5d3a-4113-b9d1-818d848bf46c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Screens">
+      <UniqueIdentifier>{0d02eb65-7dfa-41ce-9271-353732b85c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Creatures">
+      <UniqueIdentifier>{d945181e-aee6-4c01-8468-8cdf20955eb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
@@ -143,40 +155,40 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Level1_Map.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Maps</Filter>
     </Text>
     <Text Include="Level2_Map.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Maps</Filter>
     </Text>
     <Text Include="Level3_Map.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="GrassNames.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Maps</Filter>
     </Text>
     <Text Include="FireNames.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\NameFiles</Filter>
+    </Text>
+    <Text Include="GrassNames.txt">
+      <Filter>Resource Files\NameFiles</Filter>
     </Text>
     <Text Include="WaterNames.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="LoseScreen.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="OpeningScreen.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\NameFiles</Filter>
     </Text>
     <Text Include="FireElemental.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="WaterElemental.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Creatures</Filter>
     </Text>
     <Text Include="GrassElemental.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Creatures</Filter>
+    </Text>
+    <Text Include="WaterElemental.txt">
+      <Filter>Resource Files\Creatures</Filter>
+    </Text>
+    <Text Include="LoseScreen.txt">
+      <Filter>Resource Files\Screens</Filter>
+    </Text>
+    <Text Include="OpeningScreen.txt">
+      <Filter>Resource Files\Screens</Filter>
     </Text>
     <Text Include="WinScreen.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Screens</Filter>
     </Text>
   </ItemGroup>
 </Project>
