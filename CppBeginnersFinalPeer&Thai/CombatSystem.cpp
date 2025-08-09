@@ -327,7 +327,7 @@ void CombatSystem::UseItemMenu(Inventory& inventory, Unit* target)
         {
             inventory.UseItem(Items::SMOKE_BOMB);
             std::cout << "You escaped using a smoke bomb!\n";
-            std::exit(0);
+			return; // Exit combat
         }
         else
             std::cout << "No smoke bombs left!\n";

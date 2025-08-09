@@ -169,23 +169,31 @@ Scenes Ui::PrintOpeningScreen()
 
 void Ui::PrintCombatVisual(Elements enemyElement)
 {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	switch (enemyElement)
 	{
 		case Elements::FIRE:
+			SetConsoleTextAttribute(hConsole, Colors::LIGHT_RED);
 			FileIO::PrintLines(FileIO::LoadFileLines("FireElemental.txt"));
 			break;
 
 		case Elements::WATER:
+			SetConsoleTextAttribute(hConsole, Colors::LIGHT_BLUE);
+
 			FileIO::PrintLines(FileIO::LoadFileLines("WaterElemental.txt"));
 			break;
 
 		case Elements::GRASS:
+			SetConsoleTextAttribute(hConsole, Colors::LIGHT_GREEN);
 			FileIO::PrintLines(FileIO::LoadFileLines("GrassElemental.txt"));
 			break;
 
 		default:
 			break;
 	}
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
+
 }
 
 
