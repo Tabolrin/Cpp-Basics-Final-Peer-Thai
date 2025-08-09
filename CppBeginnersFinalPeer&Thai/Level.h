@@ -35,7 +35,7 @@ public:
 
 	void SetPlayerAtExit(bool val) { playerAtExit = val; }
 
-	void TransitionToNext();
+	Scenes GetLevelNum() const { return levelNum; }
 
 	Map& GetMap();
 

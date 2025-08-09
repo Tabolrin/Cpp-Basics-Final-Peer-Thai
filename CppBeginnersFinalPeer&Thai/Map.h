@@ -29,7 +29,7 @@ public:
 
 	void Initialize(int w, int h);
 
-	void UpdatePosition(const Vector2& pos, char newChar, int color);
+	void UpdatePosition(const Vector2& pos, char newChar);
 
 	bool IsTileClear(const Vector2& tile) const;
 

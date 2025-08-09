@@ -16,7 +16,7 @@ private:
 	char downButton = 's';
 	char leftButton = 'a';
 	char rightButton = 'd';
-	void PickUpChest(Map& map);
+	void PickUpChest(Map& map, Vector2 chestPos);
 
 public:
 	bool KeyAcquired = false;

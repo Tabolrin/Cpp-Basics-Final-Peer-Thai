@@ -15,7 +15,7 @@ std::vector<std::string> FileIO::LoadFileLines(const std::string& filepath)
 
     std::string line;
 
-    while (std::getline(in, line)) 
+    while (std::getline(in, line))
     {
         lines.push_back(line);
     }

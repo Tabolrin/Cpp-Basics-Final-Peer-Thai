@@ -13,6 +13,7 @@ Unit::Unit(std::string nameIn, int maxHpIn, int normalDmgIn, int elementalDmgIn,
 
 void Unit::PlayerLevelUp()
 {
+	level++;
 	maxHp += 10;
 	hp = maxHp;
 	normalDmg += 3;
@@ -35,17 +36,11 @@ HitResult Unit::HitOrMiss() const
 	return HitResult::MISS;
 }
 
-void Unit::EnemyLevelUp()
-{
-	maxHp += 5;
-	normalDmg += 2;
-	elementalDmg += 1;
-}
-
 
 void Unit::TakeDamage(int damage)
 {
 	hp -= damage;
+
 	if (hp < 0)
 		hp = 0;
 }

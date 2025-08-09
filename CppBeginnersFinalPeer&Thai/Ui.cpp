@@ -9,7 +9,6 @@
 #include <iostream>
 #include <windows.h>
 
-//todo: remaining missions: add patrol point,
 
 COORD Ui::notificationLineIndex = { 0, 0 };
 int   Ui::lastNotificationLength = 0;
@@ -21,19 +20,15 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player, bool fullRedr
 	//if the player is in combat- skip frame print
 	if (player.InCombat) return;
 
-	static bool s_mapDrawnOnce = false;
-
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	if (!s_mapDrawnOnce)
+	if (fullRedraw)
 	{
 		system("cls");
 
-		// Draw the whole map once at start
+		// Draw the whole map 
 		MapDraw(LevelObj.GetMap());
 		std::cout << std::endl;
-
-		s_mapDrawnOnce = true;
 	}
 
 	// move cursor to start of HUD area (just below the map)
@@ -49,17 +44,10 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player, bool fullRedr
 	std::cout << static_cast<int>(level) << std::endl;
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
-	// TODO:
-	//---------------Replace with player party units status using their display 
-	//std::cout << "Attack Power: ";
-	//SetConsoleTextAttribute(hConsole, 5); // Magenta
-	//std::cout << player.GetDamageOutput() << std::endl;
-	//SetConsoleTextAttribute(hConsole, 7);
-
 	std::cout << "Player coordinates: ";
 	SetConsoleTextAttribute(hConsole, Colors::DARK_BLUE); // DarkBlue
 	std::cout << player.GetPosition().x << " , " << player.GetPosition().y << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::cout << "Key On Player: ";
 	if (player.IsKeyAcquired())//if player has key
@@ -74,9 +62,9 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player, bool fullRedr
 	}
 
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
-
 	// getting and setting the console cursor position for notifications
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
+
 	if (GetConsoleScreenBufferInfo(hConsole, &csbi))
 		notificationLineIndex = csbi.dwCursorPosition;
 }
@@ -84,7 +72,15 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player, bool fullRedr
 
 void Ui::MapDraw(Map& map) 
 {
-	FileIO::PrintLines(map.GetMapMatrix());
+	for (int x = 0; x < map.GetHeight(); ++x)
+	{
+		for (int y = 0; y < map.GetWidth(); ++y)
+		{
+			Vector2 pos = Vector2(static_cast<int>(x), static_cast<int>(y));
+			char ch = map.GetMapMatrix()[x][y];
+			map.UpdatePosition(pos, ch);
+		}
+	}
 }
 
 
@@ -96,37 +92,6 @@ void Ui::PrintPlayerPartyInfo(Player& player)
 	party.PrintParty();
 }
 
-
-void Ui::Tutorials()
-{
-	system("cls");
-
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
-
-	std::cout << "Tutorials:\n"
-		<< "Move: W/A/S/D or arrow keys.\n"
-		<< "Interact: step onto objects (chests, keys, exit).\n\n"
-		<< "Combat:\n"
-		<< "  On your turn choose: 1=Attack, 2=Use Item, 3=Switch Unit\n"
-		<< "  For Attack: 1=Normal or 2=Elemental (strong/weak vs. enemy element)\n\n"
-		<< "Legend:\n"
-		<< "  " << Symbols::PLAYER << " = Your character\n"
-		<< "  " << Symbols::ENEMY << " = Enemy (enter battle range to fight)\n"
-		<< "  " << Symbols::WALL << " = Wall (impassable)\n"
-		<< "  " << Symbols::FULL_CHEST << " = Full Chest (move on it for a random reward)\n"
-		<< "  " << Symbols::EMPTY_CHEST << " = Empty Chest (already looted)\n"
-		<< "  " << Symbols::KEY << " = Key (must pick up to open exit)\n"
-		<< "  " << Symbols::EXIT << " = Exit (leaves level if you have a key)\n\n"
-		<< "Goal: Survive all 3 levels. Good luck!\n";
-
-		Sleep(1500);
-		std::cout << "....Oh, almost forgot! - press Enter to return to the opening screen.";
-
-	RequireEnterPressToProgress();
-
-	PrintOpeningScreen();
-}
 
 void Ui::RequireEnterPressToProgress()
 {
@@ -179,31 +144,26 @@ Scenes Ui::PrintOpeningScreen()
 {
 	system("cls");
 
-	std::cout << "Elementia\n"
-		<< "Created by - Pe'er Malul & Thai Lazover Besher\n\n"
-		<< "Welcome to our game! Enjoy and... try not to die too fast (the others didn't have much luck..)\n";
+	FileIO::PrintLines(FileIO::LoadFileLines("OpeningScreen.txt"));
 
 	std::string input;
 
 	do
 	{
 		input = "";
-		std::cout << "Press S to start, or T to see tutorials:\n";
 		std::cin >> input;
+		std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n'); // Clear the input buffer
 
-		if (input == "T" || input == "t")
-		{
-			return Scenes::TUTORIAL; 
-		}
-		else if (input == "S" || input == "s")
+		if (input == "S" || input == "s")
 		{
 			return Scenes::LEVEL_1; 
 		}
 		else
 		{
 			std::cout << "Invalid input. Please try again.\n";
+			Sleep(3000);
 		}
-	} while (input != "S" && input != "s" && input != "T" && input != "t");
+	} while (input != "S" && input != "s" );
 }
 
 
@@ -241,8 +201,6 @@ void Ui::PrintWinScreen()
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	FileIO::PrintLines(FileIO::LoadFileLines("WinScreen.txt"));
-
-	RequireEnterPressToProgress();
 }
 
 
@@ -258,20 +216,20 @@ void Ui::PrintLoseScreen()
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	FileIO::PrintLines(FileIO::LoadFileLines("LoseScreen.txt"));
-
-	RequireEnterPressToProgress();
 }
 
 
 void Ui::PrintLevelTransition()
 {
 	system("cls");
-	for(int i = 0; i < 60; ++i)
+	std::cout << "Loading next level...\n";
+
+	for(int i = 0; i < 20; ++i)
 	{
-		std::cout << "Loading next level...\n";
-		Sleep(200);
-		std::cout << "##########################################################################" << std::endl;
+		Sleep(100);
+		std::cout << "################################################" << std::endl;
 	}
+	system("cls");
 }
 
 
@@ -279,6 +237,7 @@ void Ui::PrintNotification(const Items Item)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsole, {0 , notificationLineIndex.Y });
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::string text;
 	switch (Item)
@@ -321,6 +280,7 @@ void Ui::PrintNotification(const std::string message)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsole, { 0 , notificationLineIndex.Y });
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
 
 	std::cout << message;
 	lastNotificationLength = static_cast<int>(message.size());

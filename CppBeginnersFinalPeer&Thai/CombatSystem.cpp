@@ -29,11 +29,17 @@ float GetElementMultiplier(Elements attacker, Elements defender)
     return 1.0f;
 }
 
-void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory)
+void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
 {
+	PlayerParty& party = *player.GetParty();
+	player.InCombat = true; // Set player to combat mode
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
     system("cls");
 
-    std::cout << "\n  Combat started between your party and " << enemy.GetName() << "!\n\n";
+    std::cout << "\nCombat started between your party and " << enemy.GetName() << "!\n"
+		<< "Enemy Element: " << enemy.GetElementString() << "\n\n";
+
     Ui::PrintCombatVisual(enemy.GetElement());
 
     //  Choose who goes first
@@ -46,7 +52,12 @@ void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory
         system("cls");
         Ui::PrintCombatVisual(enemy.GetElement());
 
-        // -- Player's turn --
+		std::cout << "\n  " << enemy.GetName() 
+            << " (Level " << enemy.GetLevel() 
+            << ") HP: " << enemy.GetHp() << "/" << enemy.GetMaxHp() 
+            << "\n\n";
+
+        // -- player's turn --
         if (currentUnit->GetHp() <= 0)
         {
             std::cout << currentUnit->GetName() << " is down. Please switch to another unit.\n";
@@ -63,83 +74,81 @@ void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory
 
         int choice;
         std::cin >> choice;
-        std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
-        // todo: delete  Discard everything in the input buffer up to (and including) the next newline.
-        // Wrapping max in parentheses prevents the Windows max macro from interfering.
+        std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n'); // clear input buffer
 
         switch (static_cast<PlayerChoice>(choice))
         {
-        case PlayerChoice::ATTACK:
-        {
-            std::cout << "Choose attack type:\n"
-                << "1. Normal Attack\n"
-                << "2. Elemental Attack\n"
-                << "Choice: ";
-
-            int attackType;
-            std::cin >> attackType;
-            std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
-
-            HitResult result = currentUnit->HitOrMiss();
-            int        baseDmg = (attackType == 1)
-                ? currentUnit->GetNormalDmg()
-                : static_cast<int>(currentUnit->GetElementalDmg()
-                    * GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement()));
-            int        damage = 0;
-
-            // print and apply damage
-            switch (result)
+            case PlayerChoice::ATTACK:
             {
-                case HitResult::CRIT:
-                    damage = baseDmg * 2;
-                    std::cout << "[CRIT] Dealt " << damage << " damage!\n";
-                    enemy.TakeDamage(damage);
-                    break;
+                std::cout << "Choose attack type:\n"
+                    << "1. Normal Attack\n"
+                    << "2. Elemental Attack\n"
+                    << "Choice: ";
 
-                case HitResult::HIT:
-                    damage = baseDmg;
-                    std::cout << "[HIT] Dealt " << damage << " damage!\n";
-                    enemy.TakeDamage(damage);
-                    break;
+                int attackType;
+                std::cin >> attackType;
+                std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
 
-                case HitResult::MISS:
-                    std::cout << "[MISS] Attack missed!\n";
-                    break;
-            }
-            std::cout << "Enemy HP: " << enemy.GetHp() << "\n";
+                HitResult result = currentUnit->HitOrMiss();
+                int baseDmg = (attackType == 1) ? currentUnit->GetNormalDmg() : static_cast<int>(currentUnit->GetElementalDmg()
+                        * GetElementMultiplier(currentUnit->GetElement(), enemy.GetElement()));
+                int  damage = 0;
 
-            // check for victory
-            if (enemy.GetHp() <= 0)
-            {
-                std::cout << "\n Enemy defeated!\n";
-                int expReward = 10 + enemy.GetLevel() * 5;
-                Score::Add(ScoreValues::ENEMY_DEFEATED_BASE + ScoreValues::ENEMY_LEVEL_BONUS * enemy.GetLevel());
-                std::cout << currentUnit->GetName() << " gains " << expReward << " EXP!\n";
-                currentUnit->AddExp(expReward);
-
-                if (currentUnit->GetLevel() * 10 <= currentUnit->GetExp())
+                // print and apply damage
+                switch (result)
                 {
-                    currentUnit->PlayerLevelUp();
-                    std::cout << currentUnit->GetName()
-                        << " leveled up to level "
-                        << currentUnit->GetLevel() << "!\n";
+                    case HitResult::CRIT:
+                        damage = baseDmg * 2;
+                        std::cout << "[CRIT] Dealt " << damage << " damage!\n";
+                        enemy.TakeDamage(damage);
+                        break;
+
+                    case HitResult::HIT:
+                        damage = baseDmg;
+                        std::cout << "[HIT] Dealt " << damage << " damage!\n";
+                        enemy.TakeDamage(damage);
+                        break;
+
+                    case HitResult::MISS:
+                        std::cout << "[MISS] Attack missed!\n";
+                        break;
                 }
-                return;
+                std::cout << "Enemy HP: " << enemy.GetHp() << "\n";
+
+                // check for victory
+                if (enemy.GetHp() <= 0)
+                {
+                    std::cout << "\n Enemy defeated!\n";
+
+                    int expReward =  enemy.GetLevel() * 3;
+                    Score::Add(ScoreValues::ENEMY_DEFEATED_BASE + ScoreValues::ENEMY_LEVEL_BONUS * enemy.GetLevel());
+                    std::cout << currentUnit->GetName() << " gains " << expReward << " EXP!\n";
+                    currentUnit->AddExp(expReward);
+
+                    if (currentUnit->GetLevel() * 7 <= currentUnit->GetExp())
+                    {
+                        currentUnit->PlayerLevelUp();
+                        std::cout << currentUnit->GetName() << " leveled up to level " << currentUnit->GetLevel() << "!\n";
+                    }
+
+				    player.InCombat = false; 
+				    Sleep(5000);
+                    return;
+                }
+                break;
             }
-            break;
-        }
 
-        case PlayerChoice::USE_ITEM:
-            UseItemMenu(inventory, currentUnit);
-            break;
+            case PlayerChoice::USE_ITEM:
+                UseItemMenu(inventory, currentUnit);
+                break;
 
-        case PlayerChoice::SWITCH_UNIT:
-            currentUnit = ChoosePartyUnit(party);
-            break;
+            case PlayerChoice::SWITCH_UNIT:
+                currentUnit = ChoosePartyUnit(party);
+                break;
 
-        default:
-            std::cout << "Invalid choice, turn skipped.\n";
-            break;
+            default:
+                std::cout << "Invalid choice, turn skipped.\n";
+                break;
         }
 
         // -- Enemy's turn --
@@ -156,25 +165,27 @@ void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory
 
             switch (result)
             {
-            case HitResult::CRIT:
-                damage *= 2;
-                std::cout << "[CRIT] ";
-                break;
-            case HitResult::HIT:
-                std::cout << "[HIT] ";
-                break;
-            case HitResult::MISS:
-                std::cout << "[MISS] Attack missed!\n";
-                damage = 0;
-                break;
+                case HitResult::CRIT:
+                    damage *= 2;
+                    std::cout << "[CRIT]";
+                    break;
+
+                case HitResult::HIT:
+                    std::cout << "[HIT]";
+                    break;
+
+                case HitResult::MISS:
+                    std::cout << "[MISS] Attack missed!\n";
+                    damage = 0;
+                    break;
             }
+
             if (damage > 0)
             {
                 currentUnit->TakeDamage(damage);
                 std::cout << "Dealt " << damage << " damage! ";
             }
-            std::cout << currentUnit->GetName()
-                << " HP: " << currentUnit->GetHp() << "\n";
+            std::cout << currentUnit->GetName() << " HP: " << currentUnit->GetHp() << "\n";
 
             if (currentUnit->GetHp() <= 0)
             {
@@ -185,14 +196,19 @@ void CombatSystem::Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory
             if (party.IsDefeated())
             {
                 std::cout << "\nYour party was defeated!\n";
+				player.InCombat = false;
+                Sleep(5000); 
                 return;
             }
+
+            Sleep(2000); 
         }
         else
         {
             std::cout << currentUnit->GetName()
                 << " is down, skipping enemy attack.\n";
         }
+        Sleep(4000); // Pause for 2 seconds to show victory message
     }
 }
 

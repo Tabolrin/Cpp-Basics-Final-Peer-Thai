@@ -8,7 +8,7 @@
 class CombatSystem
 {
 public:
-    static void Combat(PlayerParty& party, Enemy& enemy, Inventory& inventory);
+    static void Combat(Player& player, Enemy& enemy, Inventory& inventory);
 
 private:
     static Unit* ChoosePartyUnit(PlayerParty& party);

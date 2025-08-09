@@ -1,17 +1,13 @@
-#include "Elements.h"
-#include "Level.h"
-#include "PatrolPoints.h"
 #include "FileIO.h" 
-#include "Scenes.h"
+#include "Level.h"
+#include "Enemy.h"
 #include "Map.h"
+#include "PatrolPoints.h"
+#include "Scenes.h"
 #include "Symbols.h"
-#include "InfoGenerator.h"
 #include "Ui.h"
-#include <algorithm>
-#include <chrono>
-#include <fstream>
 #include <iostream>
-#include <thread>
+
 
 Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(player)
 {
@@ -45,7 +41,7 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
         {
             pos = Vector2(static_cast<int>(x), static_cast<int>(y));
             char ch = mapLines[x][y];
-            map->UpdatePosition(pos, ch, Ui::GetColorForChar(ch));
+            map->UpdatePosition(pos, ch);
         }
     }
 
@@ -65,7 +61,6 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
             }
             else if (ch == Symbols::ENEMY)
             {
-                InfoGenerator infoGen;
                 Enemy* temp = new Enemy(static_cast<int>(levelNum), pos);
 
                 // Pick the patrol table for this level
@@ -75,19 +70,22 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
                 switch (levelNum)
                 {
                     case Scenes::LEVEL_1:
-                        patrols = LEVEL1_PATROLS; patrolCount = LEVEL1_PATROLS_COUNT; 
+                        patrols = LEVEL1_PATROLS;
+                        patrolCount = LEVEL1_PATROLS_COUNT; 
                         break;
 
                     case Scenes::LEVEL_2:
-                        patrols = LEVEL2_PATROLS; patrolCount = LEVEL2_PATROLS_COUNT;
+                        patrols = LEVEL2_PATROLS;
+                        patrolCount = LEVEL2_PATROLS_COUNT;
                         break;
 
-                    case Scenes::LEVEL_3: patrols = LEVEL3_PATROLS;
+                    case Scenes::LEVEL_3:
+                        patrols = LEVEL3_PATROLS;
                         patrolCount = LEVEL3_PATROLS_COUNT;
                         break;
                 }
                 
-                if (patrols && enemyIndex < static_cast<size_t>(patrolCount))
+                if (patrols && enemyIndex < static_cast<int>(patrolCount))
                 {
                     (*temp).AddPatrolPoint(*map, patrols[enemyIndex][0]);
                     (*temp).AddPatrolPoint(*map, patrols[enemyIndex][1]);
@@ -134,13 +132,16 @@ void Level::LoadMapFile()
 	}
 }
 
+
 void Level::Update()
 {
-	if(!player.InCombat)
+    if (!player.InCombat)
+    {
 		UpdateEnemies();
-
-    Ui::PrintLevel(*this, levelNum, player);
+        Ui::PrintLevel(*this, levelNum, player);
+    }
 }
+
 
 bool Level::CheckWin() 
 {
@@ -152,7 +153,15 @@ void Level::UpdateEnemies()
 {
 	for (auto* enemy : enemies)
 	{
-		enemy->Update(*map, player);
+        if (enemy->GetHp() <= 0)
+        {
+            (*map).UpdatePosition((*enemy).GetPosition(), Symbols::CLEAR);
+			enemies.erase(std::remove(enemies.begin(), enemies.end(), enemy), enemies.end());
+			delete enemy; // Remove defeated enemy
+			Ui::PrintLevel(*this, levelNum, player, true); // Redraw map after enemy removal
+        }
+        else
+		    enemy->Update(*map, player);
 	}
 }
 

@@ -54,7 +54,7 @@ public:
 
 	void PlayerLevelUp();
 
-	void EnemyLevelUp();
+	//void EnemyLevelUp();
 
 	void TakeDamage(int damage);
 

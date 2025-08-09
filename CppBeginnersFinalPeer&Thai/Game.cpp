@@ -1,22 +1,23 @@
 ﻿#include "Game.h"
 #include "Level.h"
 #include "Scenes.h"
-#include "Map.h"
 #include "Player.h"
 #include "Ui.h"
 #include "Score.h"
 #include <chrono>
-#include <conio.h>
-#include <iostream>
 #include <thread>
 
 using namespace std::chrono;
 
 Game::Game() 
 {
-	player = new Player(Vector2(0, 0));
+	player = new Player(Vector2(1, 1));
     currentLevel = nullptr;
-	currentScene = Scenes::OPENING; // Start with the opening scene
+    currentScene = Scenes::OPENING; // Start with the opening scene
+}
+
+void Game::Start()
+{
     MoveToScene(currentScene);
 }
 
@@ -24,14 +25,21 @@ void Game::RunGameLoop()
 {
     using Clock = std::chrono::high_resolution_clock;
 
-    auto lastUpdateTime = Clock::now();          // wall-clock time at last frame
-    float timeAccumulator = 0.0f;                  // how much un-processed time we’ve gathered
-    constexpr float fixedTimeStep = 0.75f;          // tick rate (in seconds)
+    auto lastUpdateTime = Clock::now();        // wall-clock time at last frame
+    float timeAccumulator = 0.0f;                      // how much un-processed time we’ve gathered
+    constexpr float fixedTimeStep = 0.75f;     // tick rate (in seconds)
     bool  isRunning = true;
 
 
     while (isRunning)
     {
+        if(currentScene == Scenes::LOSE || currentScene == Scenes::WIN)
+        {
+			Ui::RequireEnterPressToProgress();
+			system("cls");
+            MoveToScene(Scenes::OPENING);
+		}
+
         if (currentScene == Scenes::LEVEL_1
             || currentScene == Scenes::LEVEL_2
             || currentScene == Scenes::LEVEL_3)
@@ -45,7 +53,7 @@ void Game::RunGameLoop()
 
             while (timeAccumulator >= fixedTimeStep)
             {
-                currentLevel->Update();            // your existing map/AI/physics tick
+                currentLevel->Update();                        // your existing map/AI/physics tick
                 timeAccumulator -= fixedTimeStep;  // consume that slice of time
             }
 
@@ -89,12 +97,13 @@ void Game::RunGameLoop()
 void Game::MoveToScene(Scenes targetScene)
 {
     currentScene = targetScene;
+    system("cls");
 
     switch (currentScene)
     {
     case LEVEL_1:
         Score::Reset();
-		player = new Player(Vector2(0, 0));
+		player = new Player(Vector2(1, 1));
         currentLevel = new Level(Scenes::LEVEL_1, *player);
         RunGameLoop();
         break;
@@ -113,10 +122,6 @@ void Game::MoveToScene(Scenes targetScene)
 
     case OPENING:
 	    MoveToScene( Ui::PrintOpeningScreen());
-        break;
-
-    case TUTORIAL:
-        Ui::Tutorials();
         break;
 
     case WIN:

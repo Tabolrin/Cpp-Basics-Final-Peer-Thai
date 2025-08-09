@@ -7,7 +7,7 @@ enum Symbols : char
 	PLAYER = 'P',
 	ENEMY = 'M',
 	FULL_CHEST = 'O',
-	EMPTY_CHEST = 'Ø',
+	EMPTY_CHEST = '0',
 	EXIT = 'E',
 	KEY = 'K',
 	INVALID = '5'

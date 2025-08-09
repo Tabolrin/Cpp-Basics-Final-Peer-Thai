@@ -43,20 +43,22 @@ void InfoGenerator::LoadAllFiles()
 
 InfoGenerator::InfoGenerator()
 {
-    std::srand(static_cast<unsigned>(std::time(nullptr))); // Seed RNG once
+    std::srand(static_cast<unsigned>(std::time(nullptr))); // Seed RNG
     LoadAllFiles();
 }
 
 
-UnitInfo InfoGenerator::GetRandomEnemyInfo(const int level)
+UnitInfo InfoGenerator::GetRandomEnemyInfo(const int enemyLevel)
 {
+    std::srand(static_cast<unsigned>(std::time(nullptr))); // Seed RNG
+
     UnitInfo info;
 
-    info.level = level;
-    info.maxHp = 10 + level * 5;
-    info.normalDmg = 5 + level;
-    info.elementalDmg = 3 + level; 
-    info.element = static_cast<Elements>(rand() % ELEMENT_AMOUNT);
+    info.level = enemyLevel;
+    info.maxHp = 10 + enemyLevel * 5;
+    info.normalDmg = 5 + enemyLevel;
+    info.elementalDmg = 3 + enemyLevel;
+    info.element = static_cast<Elements>(1 + (rand() % ELEMENT_AMOUNT));
 
     // Get a random name from the corresponding pool
     if (namePools.find(info.element) == namePools.end() || namePools[info.element].empty())
@@ -72,6 +74,8 @@ UnitInfo InfoGenerator::GetRandomEnemyInfo(const int level)
 
 std::string InfoGenerator::GetRandomName(const Elements element)
 {
+    std::srand(static_cast<unsigned>(std::time(nullptr))); // Seed RNG
+
     auto& pool = namePools[element];
 
     if (pool.empty())

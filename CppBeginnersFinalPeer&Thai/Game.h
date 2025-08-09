@@ -8,6 +8,7 @@ class Game
 {
 public:
 	Game();
+	void Start();
 	 void RunGameLoop();
 	 void MoveToScene(Scenes targetScene);
 

@@ -1,8 +1,7 @@
 #include "Inventory.h"
+#include "Items.h"
 #include <iostream>
 #include <unordered_map>
-
-#include "Items.h"
 
 Inventory::Inventory(){}
 
@@ -19,7 +18,7 @@ bool Inventory::IsInInventory(Items item)
 void Inventory::AddItem(Items item)
 {
 	if (!IsInInventory(item))
-		inventory[item] = 1;
+		inventory.insert({ item, 1 }); 
 	else
 	{
 		int itemAmount = inventory.at(item);
@@ -39,16 +38,22 @@ void Inventory::UseItem(Items item)
 	}
 	else
 		std::cout << "Item Not In Inventory" << std::endl;
-	
 }
 
 
 Items Inventory::GetRandomItemFromChest() const
 {
-	if (inventory.empty())
-		return Items::NONE;
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
+	const int possibleItemCount = 4;
 
-	auto it = inventory.begin();
-	std::advance(it, rand() % 4); 
-	return it->first; 
+	const Items pool[possibleItemCount] =
+	{
+		Items::HP_POTION,
+		Items::NORMAL_ATTACK_POTION,
+		Items::ELEMENTAL_ATTACK_POTION,
+		Items::SMOKE_BOMB
+	};
+
+	int idx = std::rand() % possibleItemCount;
+	return pool[idx];
 }

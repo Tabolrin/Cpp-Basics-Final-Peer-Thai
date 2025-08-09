@@ -17,76 +17,74 @@ Player::Player(const Vector2& pos) : GameObject(position)
 
 void Player::Move(Map& map, Vector2& direction)
 {
+	bool shouldMove = false;
+
 	Vector2 tempPos = position + direction;
 
-	Symbols dest = map.GetCharAt(tempPos);
+	Symbols destSymbol = map.GetCharAt(tempPos);
 
-	if (dest == Symbols::FULL_CHEST)
+	// Apply tile effect based on what was there originally
+	switch (destSymbol)
 	{
-		Items item = Items::NONE;
+		case Symbols::CLEAR:
+		{
+			shouldMove = true;
+			break;
+		}
 
-		while (item == Items::NONE || item == Items::LEVEL_KEY)
-			item = inventory->GetRandomItemFromChest();
+		case Symbols::KEY:
+		{
+			shouldMove = true;
+			KeyAcquired = true;
+			inventory->AddItem(Items::LEVEL_KEY);
+			break;
+		}
 
-		inventory->AddItem(item);
-		Ui::PrintNotification(item);
+		case Symbols::EXIT:
+		{
+			if (KeyAcquired)
+			{
+				IsAtExit = true;
+				shouldMove = true;
+			}
+				
+			else
+				std::cout << "You need to acquire the key first!\n";
+			break;
+		}
 
-		// flip the chest to empty
-		map.UpdatePosition(tempPos, Symbols::EMPTY_CHEST, Ui::GetColorForChar(Symbols::EMPTY_CHEST));
-		return;
+		case Symbols::FULL_CHEST:
+		{
+			PickUpChest(map, tempPos);
+			break;
+		}
+
+		default:
+			break;
 	}
 
-	// Allow stepping only onto CLEAR / KEY / EXIT
-	if (dest == Symbols::CLEAR || dest == Symbols::KEY || dest == Symbols::EXIT)
+	if (shouldMove)
 	{
-		map.UpdatePosition(position, Symbols::CLEAR, Ui::GetColorForChar(Symbols::PLAYER));
+		map.UpdatePosition(position, Symbols::CLEAR);
 		position = tempPos;
-		map.UpdatePosition(position, Symbols::PLAYER, Ui::GetColorForChar(Symbols::CLEAR));
-
-		// Apply tile effect based on what was there originally
-		switch (dest)
-		{
-			case Symbols::KEY:
-			{
-				KeyAcquired = true;
-				inventory->AddItem(Items::LEVEL_KEY);
-				break;
-			}
-
-			case Symbols::EXIT:
-			{
-				if (KeyAcquired)
-				{
-					IsAtExit = true;
-				}
-				else
-				{
-					std::cout << "You need to acquire the key first!\n";
-				}
-				break;
-			}
-
-			default:
-				break;
-		}
+		map.UpdatePosition(position, Symbols::PLAYER);
 	}
 }
 
-
-void Player::PickUpChest(Map& map)
+void Player::PickUpChest(Map& map, Vector2 chestPos)
 { 
-	if (map.GetMapMatrix()[((position).x + 1)][(position).y] == Symbols::FULL_CHEST)
-	{
-		map.GetMapMatrix()[((position).x + 1)][ (position).y] = Symbols::EMPTY_CHEST;
-
 		Items item = Items::NONE;
-		while(item == Items::NONE)
+
+		while(item == Items::NONE || item == Items::LEVEL_KEY)
 		{
 			item = inventory->GetRandomItemFromChest();
 		}
 
 		(*inventory).AddItem(item);
-	}
+		Ui::PrintNotification(item);
+
+		// flip the chest to empty
+		map.UpdatePosition(chestPos, Symbols::EMPTY_CHEST);
 }
 
 void Player:: Update(Map& map, Player& player)
@@ -131,6 +129,7 @@ bool Player::IsKeyAcquired() const
 
 void Player::NewLevel()
 {
+	IsAtExit = false;
 	KeyAcquired = false;
 }
 

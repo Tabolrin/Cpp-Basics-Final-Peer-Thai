@@ -3,6 +3,6 @@
 enum class Elements : int
 {
 	FIRE = 1,
-	WATER,
-	GRASS
+	WATER = 2,
+	GRASS = 3
 };

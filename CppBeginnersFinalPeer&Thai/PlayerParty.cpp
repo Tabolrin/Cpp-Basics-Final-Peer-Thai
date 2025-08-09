@@ -6,12 +6,10 @@ PlayerParty::PlayerParty()
 {
 	InfoGenerator nameGen;
 	Vector2 partyMemberPosition(-1, -1); // Placeholder position
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::FIRE), 100, 15, 20, Elements::FIRE, partyMemberPosition);
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::WATER), 80, 17, 17, Elements::WATER, partyMemberPosition);
-	partyMembers.emplace_back(nameGen.GetRandomName(Elements::GRASS), 90, 22, 18, Elements::GRASS, partyMemberPosition);
-	//todo: delete at end, emplace_back(...): directly constructs a new element at the end of the container
-	// by forwarding the given arguments to its constructor—no temporary object,
-	// copy, or move is needed. DELETE
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::FIRE), 30, 7, 8, Elements::FIRE, partyMemberPosition);
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::WATER), 27, 8, 6, Elements::WATER, partyMemberPosition);
+	partyMembers.emplace_back(nameGen.GetRandomName(Elements::GRASS), 25, 10, 5, Elements::GRASS, partyMemberPosition);
+	//adding a nnew unit to the end of the party, so the player got 3 units in the party
 }
 
 void PlayerParty::PrintParty() const

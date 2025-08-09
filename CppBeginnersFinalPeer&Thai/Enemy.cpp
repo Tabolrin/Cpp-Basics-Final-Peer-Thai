@@ -1,13 +1,13 @@
+#include "CombatSystem.h"
 #include "Elements.h"
 #include "Enemy.h"
-#include "Player.h"
-#include "Game.h"
-#include <string>
-#include <cmath>
-#include <windows.h>
-#include "CombatSystem.h"
 #include "InfoGenerator.h"
+#include "Player.h"
+#include "Ui.h"
 #include "UnitInfo.h"
+#include <cmath>
+#include <string>
+#include <windows.h>
 
 #define REACTION_RANGE 4
 #define BATTLE_RANGE 1
@@ -61,8 +61,8 @@ void Enemy::GoToPoint(Map& map, Vector2& point)
 
         if (IsPointValid(map, nextPos))
         {
-            map.UpdatePosition(nextPos, Symbols::ENEMY,  map.GetCharAt(nextPos) == Symbols::ENEMY); 
-            map.UpdatePosition(position, Symbols::CLEAR, map.GetCharAt(nextPos) == Symbols::CLEAR);
+            map.UpdatePosition(nextPos, Symbols::ENEMY); 
+            map.UpdatePosition(position, Symbols::CLEAR);
             position = nextPos;
             return;
         }
@@ -118,9 +118,9 @@ bool Enemy::IsPointValid(Map& map, Vector2& point)
 
 void Enemy::ChangePosition(Map& map, Vector2& nextPos)
 {
-    map.UpdatePosition(nextPos, Symbols::ENEMY, map.GetCharAt(nextPos) == Symbols::ENEMY); //move enemy char to new position
+    map.UpdatePosition(nextPos, Symbols::ENEMY); //move enemy char to new position
 
-    map.UpdatePosition((position), Symbols::CLEAR, map.GetCharAt(nextPos) == Symbols::CLEAR);//delete enemy char from old position
+    map.UpdatePosition((position), Symbols::CLEAR);//delete enemy char from old position
 
     (position) = nextPos;
     return;
@@ -135,7 +135,21 @@ void Enemy::Update(Map& map, Player& player)
         if (!IsInRange(playerPos, BATTLE_RANGE))
             GoToPoint(map, playerPos);
         else
-            CombatSystem::Combat(*player.GetParty(), *this, *player.GetInventory());
+        {
+            if (hp > 0)
+            {
+                player.InCombat = true;
+                CombatSystem::Combat(player, *this, *player.GetInventory());
+            }
+            else
+            {
+				player.InCombat = false; // end combat if enemy is defeated
+
+                system("cls");
+                map.UpdatePosition(position, Symbols::CLEAR); // clear enemy position
+                return; 
+			}
+        }
     }
     else
         Patrol(map);
@@ -143,8 +157,7 @@ void Enemy::Update(Map& map, Player& player)
 
 bool Enemy::IsInRange(const Vector2& targetPosition, int range)
 {
-    if (abs((position).x - targetPosition.x) <= range /* || targetPosition.x - (position).x <= range)*/ //todo: delete?
-        && (abs((position).y - targetPosition.y) <= range ))/*|| targetPosition.y - (position).y <= range)*/
+    if (abs((position).x - targetPosition.x) <= range && (abs((position).y - targetPosition.y) <= range ))
         return true;
 
     return false;
