@@ -12,6 +12,7 @@
 Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(player)
 {
     map = new Map(levelNum);
+    InfoGenerator* infoGen = new InfoGenerator();
 
     // Pick file based on level
     switch (levelNum)
@@ -61,7 +62,7 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
             }
             else if (ch == Symbols::ENEMY)
             {
-                Enemy* temp = new Enemy(static_cast<int>(levelNum), pos);
+                Enemy* temp = new Enemy(static_cast<int>(levelNum), pos, *infoGen);
 
                 // Pick the patrol table for this level
                 const Vector2(*patrols)[2] = nullptr;
@@ -98,6 +99,7 @@ Level::Level(Scenes mapLevel, Player& player) : levelNum(mapLevel), player(playe
     }
 
     Ui::PrintLevel(*this, levelNum, player, true);
+    delete infoGen;
 }
 
 
@@ -113,18 +115,19 @@ void Level::LoadMapFile()
 
 	mapLines = std::move(lines);
 
-	//  Compute mapHeight as the number of lines
+	//  set mapHeight as the number of lines
 	mapHeight = static_cast<size_t>(mapLines.size());
 
-	// Compute mapWidth as the longest line
+	// find mapWidth as the longest line
 	mapWidth = 0;
+
 	for (const auto& line : mapLines)
 	{
 		if (line.size() > mapWidth) 
 			mapWidth = line.size();
 	}
 
-	// Pad any shorter lines with 'CLEAR' symbol so all rows have equal length
+	// Pad any shorter lines with 'CLEAR' symbol so all rows have the same length
 	for (auto& line : mapLines)
 	{
 		if (line.size() < mapWidth)

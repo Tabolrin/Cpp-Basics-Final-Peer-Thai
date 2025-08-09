@@ -50,8 +50,6 @@ InfoGenerator::InfoGenerator()
 
 UnitInfo InfoGenerator::GetRandomEnemyInfo(const int enemyLevel)
 {
-    std::srand(static_cast<unsigned>(std::time(nullptr))); // Seed RNG
-
     UnitInfo info;
 
     info.level = enemyLevel;
@@ -74,8 +72,6 @@ UnitInfo InfoGenerator::GetRandomEnemyInfo(const int enemyLevel)
 
 std::string InfoGenerator::GetRandomName(const Elements element)
 {
-    std::srand(static_cast<unsigned>(std::time(nullptr))); // Seed RNG
-
     auto& pool = namePools[element];
 
     if (pool.empty())

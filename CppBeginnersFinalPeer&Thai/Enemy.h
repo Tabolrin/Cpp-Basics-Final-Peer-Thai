@@ -2,6 +2,7 @@
 #include "Elements.h"
 #include "Player.h"
 #include "Unit.h"
+#include "InfoGenerator.h"
 #include "Vector2.h"
 #include <vector>
 
@@ -20,7 +21,7 @@ private:
 	bool IsInRange(const Vector2& playerLocation, int range);
 	void Patrol(Map& map);
 public:
-	Enemy(int level, const Vector2& location);
+	Enemy(int level, const Vector2& location, InfoGenerator& infoGen);
 	void AddPatrolPoint(Map& map, Vector2 point);
 	void Update(Map& map, Player& player);
 };

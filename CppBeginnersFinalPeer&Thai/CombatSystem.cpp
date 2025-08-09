@@ -58,7 +58,16 @@ void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
             << "\n\n";
 
         // -- player's turn --
-        if (currentUnit->GetHp() <= 0)
+        if(player.GetParty()->IsDefeated())
+        {
+            std::cout << "-----------------------------------------" << std::endl;
+
+            std::cout << "Your party has been defeated! Game over.\n";
+            player.InCombat = false; // end combat
+            Sleep(5000); // wait before exiting
+            return;
+		}
+        else if (currentUnit->GetHp() <= 0)
         {
             std::cout << currentUnit->GetName() << " is down. Please switch to another unit.\n";
             currentUnit = ChoosePartyUnit(party);
@@ -76,6 +85,8 @@ void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
         std::cin >> choice;
         std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n'); // clear input buffer
 
+		std::cout << "-----------------------------------------" << std::endl;
+
         switch (static_cast<PlayerChoice>(choice))
         {
             case PlayerChoice::ATTACK:
@@ -88,6 +99,8 @@ void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
                 int attackType;
                 std::cin >> attackType;
                 std::cin.ignore((std::numeric_limits<std::streamsize>::max)(), '\n');
+
+                std::cout << "-----------------------------------------" << std::endl;
 
                 HitResult result = currentUnit->HitOrMiss();
                 int baseDmg = (attackType == 1) ? currentUnit->GetNormalDmg() : static_cast<int>(currentUnit->GetElementalDmg()
@@ -118,6 +131,8 @@ void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
                 // check for victory
                 if (enemy.GetHp() <= 0)
                 {
+                    std::cout << "-----------------------------------------" << std::endl;
+
                     std::cout << "\n Enemy defeated!\n";
 
                     int expReward =  enemy.GetLevel() * 3;
@@ -152,6 +167,9 @@ void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
         }
 
         // -- Enemy's turn --
+
+        std::cout << "-----------------------------------------" << std::endl;
+
         std::cout << "\nEnemy's turn:\n";
         if (currentUnit->GetHp() > 0)
         {
@@ -195,6 +213,8 @@ void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
 
             if (party.IsDefeated())
             {
+                std::cout << "-----------------------------------------" << std::endl;
+
                 std::cout << "\nYour party was defeated!\n";
 				player.InCombat = false;
                 Sleep(5000); 
@@ -208,7 +228,7 @@ void CombatSystem::Combat(Player& player, Enemy& enemy, Inventory& inventory)
             std::cout << currentUnit->GetName()
                 << " is down, skipping enemy attack.\n";
         }
-        Sleep(4000); // Pause for 2 seconds to show victory message
+        Sleep(2500); 
     }
 }
 

@@ -12,10 +12,9 @@
 #define REACTION_RANGE 4
 #define BATTLE_RANGE 1
 
-Enemy::Enemy(int level, const Vector2& location) : Unit(position)
+Enemy::Enemy(int levelNum, const Vector2& location, InfoGenerator& infoGen) : Unit(position)
 {
-    InfoGenerator infoGen;
-    UnitInfo info = infoGen.GetRandomEnemyInfo(level);
+    UnitInfo info = infoGen.GetRandomEnemyInfo(levelNum);
     name = info.name;
 	level = info.level;
     maxHp = info.maxHp;
