@@ -61,10 +61,17 @@ void Ui::PrintLevel(Level& LevelObj, Scenes level, Player& player, bool fullRedr
 		std::cout << "X" << std::endl;
 	}
 
+	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE); // Red
+
+	std::cout << "Party status:\n";
+	player.GetParty()->PrintParty();
+
 	SetConsoleTextAttribute(hConsole, Colors::BRIGHT_WHITE);
+
+	std::cout << "Notifications:" << std::endl;
+
 	// getting and setting the console cursor position for notifications
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
-
 	if (GetConsoleScreenBufferInfo(hConsole, &csbi))
 		notificationLineIndex = csbi.dwCursorPosition;
 }
